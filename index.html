@@ -13,26 +13,20 @@
 
     <style>
         :root {
-          /* --- DESIGN TOKENS (Figma Approach) --- */
-          /* NAYA CHANGE: Tokens ko behtar group kiya hai */
+          /* --- DESIGN TOKENS (Figma/Apple Approach) --- */
           --bg-primary: #0a0a0b;
           --text-primary: #f0f6fc;
           --text-secondary: #c9d1d9;
           --primary: #6366f1;
-          --primary-light: #818cf8;
           
-          /* NAYA CHANGE: Glass effects ke liye alag tokens */
-          --header-glass: rgba(10, 10, 11, 0.7); /* Thoda dark glass header ke liye */
-          --card-glass: rgba(30, 30, 35, 0.5); /* Halka transparent glass cards ke liye */
+          --header-glass: rgba(10, 10, 11, 0.7);
+          --card-glass: rgba(30, 30, 35, 0.5);
           --card-glass-hover: rgba(40, 40, 45, 0.7);
           --card-border: rgba(255, 255, 255, 0.1);
 
-          /* NAYA CHANGE: Consistent spacing/radius tokens */
-          --spacing-unit: 8px;
-          --spacing-medium: calc(var(--spacing-unit) * 2); /* 16px */
-          --spacing-large: calc(var(--spacing-unit) * 3);  /* 24px */
+          --spacing-medium: 16px;
+          --spacing-large: 24px;
           --radius-card: 16px;
-          --radius-btn: 10px;
         }
 
         * {
@@ -44,6 +38,7 @@
         body {
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           background-color: var(--bg-primary);
+          /* Glass effect ke liye background gradient */
           background-image: radial-gradient(at 50% 0%, hsla(228,100%,74%,0.1) 0, transparent 50%);
           color: var(--text-primary);
           min-height: 100vh;
@@ -54,7 +49,6 @@
           top: 0;
           width: 100%;
           padding: 15px 20px;
-          /* NAYA CHANGE (Apple): Header glass effect */
           background: var(--header-glass);
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px);
@@ -108,7 +102,7 @@
 
         .hero-section {
           text-align: center;
-          padding: 40px 20px;
+          padding: 40px 20px 20px 20px; /* Niche ki padding kam ki */
         }
 
         .hero-section h1 {
@@ -118,94 +112,91 @@
           margin-bottom: 10px;
         }
 
-        .hero-section .subtitle {
-          font-size: 1.1rem;
-          color: var(--text-secondary);
-        }
-
+        /* --- PROJECT GRID (Figma/Google: Responsive Grid) --- */
         .project-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-          /* NAYA CHANGE (Figma): Spacing ko 24px kiya (8*3) */
-          gap: var(--spacing-large); 
+          /* Mobile-first: 1 column */
+          grid-template-columns: 1fr; 
+          gap: var(--spacing-large);
           margin-top: 20px;
+          /* Desktop par max width set ki */
+          max-width: 800px; 
+          margin-left: auto;
+          margin-right: auto;
         }
 
+        /* Tablet aur upar 2 column layout */
+        @media (min-width: 640px) {
+          .project-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        /* --- PROJECT CARD (Apple/Google: Clickable, Glass Effect) --- */
+        /* Card ko <a> tag banaya hai JS mein, isliye yahan style kiya */
         .project-card {
-          /* NAYA CHANGE (Apple): Glass effect */
+          /* Glass effect */
           background: var(--card-glass);
           backdrop-filter: blur(8px);
           -webkit-backdrop-filter: blur(8px);
           border: 1px solid var(--card-border);
           border-radius: var(--radius-card);
-
-          /* NAYA CHANGE (Figma): Padding 24px kiya */
+          
           padding: var(--spacing-large);
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-          transition: all 0.3s ease;
+          
+          /* Clickable banana */
+          display: block;
+          text-decoration: none;
+          color: var(--text-primary);
+          
+          /* Content (icon + title) ko center karna */
           display: flex;
           flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-height: 250px; /* Tappable area */
+          
+          transition: all 0.3s ease;
         }
 
         .project-card:hover {
-          /* NAYA CHANGE (Google): Hover par scale effect */
-          transform: translateY(-5px) scale(1.02);
+          /* Google: Material hover effect */
+          transform: translateY(-5px) scale(1.03);
           background: var(--card-glass-hover);
           border-color: var(--primary);
           box-shadow: 0 8px 30px rgba(99, 102, 241, 0.1);
         }
+        
+        .project-card:active {
+            transform: scale(0.98); /* Click feedback */
+        }
 
+        /* --- Bada Icon (Apple: Visual) --- */
         .card-icon {
-          width: 40px;
-          height: 40px;
-          /* NAYA CHANGE (Figma): Consistent spacing */
+          width: 72px;
+          height: 72px;
           margin-bottom: var(--spacing-medium);
         }
 
         .card-icon svg {
           width: 100%;
           height: 100%;
-          fill: var(--primary);
+          /* Minimal stroke icon */
+          stroke: var(--primary);
+          fill: none;
+          stroke-width: 1.5;
         }
 
+        /* Card Title */
         .project-card h3 {
-          margin-top: 0;
+          margin: 0;
           color: var(--text-primary);
-          font-size: 1.3rem;
-          margin-bottom: 10px;
-        }
-
-        .project-card p {
-          color: var(--text-secondary);
-          font-size: 0.95rem;
-          line-height: 1.5;
-          margin-bottom: 20px;
-          flex-grow: 1; 
-        }
-
-        .project-card a {
-          display: inline-block;
-          background: linear-gradient(135deg, var(--primary), var(--primary-light));
-          color: #fff;
-          padding: 12px 20px;
-          border-radius: var(--radius-btn);
-          text-decoration: none;
+          font-size: 1.25rem;
           font-weight: 600;
-          font-size: 0.9rem;
-          transition: all 0.2s ease;
           text-align: center;
         }
-
-        .project-card a:hover {
-          transform: scale(1.03);
-          box-shadow: 0 5px 20px rgba(99, 102, 241, 0.2);
-        }
-
-        /* NAYA CHANGE (Google): Click par feedback */
-        .project-card a:active {
-            transform: scale(0.98);
-        }
-
+        
         .app-footer {
           text-align: center;
           padding: 40px 20px;
@@ -233,12 +224,13 @@
 
     <main class="main-content">
         <section class="hero-section">
-            <h1>Project Hub</h1>
-            <p class="subtitle">Tools and utilities built by me.</p>
+            <!-- CHANGE: Title badla, subtitle hataya -->
+            <h1>TOOLS</h1>
         </section>
 
         <div id="project-list" class="project-grid">
-            </div>
+            <!-- Project cards yahan JS se load honge -->
+        </div>
     </main>
 
     <footer class="app-footer">
@@ -248,29 +240,29 @@
     <script src="imagedata.js"></script>
 
     <script>
-        // --- projects.json का डेटा ---
+        // --- NAYE TITLES AUR ICONS ---
         const projects = [
             {
-                "title": "Price List Generator",
-                "description": "Granicer Ceramica के लिए PDF प्राइस लिस्ट जेनरेटर।",
+                "title": "Price List",
                 "liveUrl": "./project-price/index.html",
-                "icon": "<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='currentColor'><path d='M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6zM8 18h8v-2H8v2zm0-4h8v-2H8v2zm0-4h5v-2H8v2z'/></svg>"
+                /* NAYA ICON: File/List */
+                "icon": "<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'></path><polyline points='14 2 14 8 20 8'></polyline><line x1='16' y1='13' x2='8' y2='13'></line><line x1='16' y1='17' x2='8' y2='17'></line><line x1='10' y1='9' x2='8' y2='9'></line></svg>"
             },
             {
-                "title": "TilesPro Calculator",
-                "description": "टाइल्स का एरिया, वज़न और क़ीमत कैलकुलेट करने के लिए।",
+                "title": "Calculator",
                 "liveUrl": "./project-calculator/index.html",
-                "icon": "<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='currentColor'><path d='M7 2v2h10V2H7zm10 4H7v16h10V6zM9 8h6v2H9V8zm0 4h6v2H9v-2zm0 4h6v2H9v-2z'/></svg>"
+                /* NAYA ICON: Calculator */
+                "icon": "<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='2' width='16' height='20' rx='2'></rect><line x1='8' y1='6' x2='16' y2='6'></line><line x1='16' y1='14' x2='16' y2='18'></line><g fill='var(--primary)'><circle cx='8' cy='11' r='1'></circle><circle cx='12' cy='11' r='1'></circle><circle cx='16' cy='11' r='1'></circle><circle cx='8' cy='15' r='1'></circle><circle cx='12' cy='15' r='1'></circle><circle cx='8' cy='19' r='1'></circle><circle cx='12' cy='19' r='1'></circle></g></svg>"
             },
             {
-                "title": "Tile Design Search",
-                "description": "टाइल्स के डिज़ाइन खोजने और शेयर करने के लिए।",
+                "title": "Tiles JPG",
                 "liveUrl": "./project-tilesearch/index.html",
-                "icon": "<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='currentColor'><path d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/></svg>"
+                /* NAYA ICON: Search/Grid */
+                "icon": "<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='7' height='7'></rect><rect x='14' y='3' width='7' height='7'></rect><rect x='14' y='14' width='7' height='7'></rect><rect x='3' y='14' width='7' height='7'></rect><circle cx='11' cy='11' r='3'></circle><line x1='13.2' y1='13.2' x2='15' y2='15'></line></svg>"
             }
         ];
 
-        // --- app.js का कोड ---
+        // --- app.js ka code ---
         window.addEventListener('DOMContentLoaded', () => {
             
             try {
@@ -299,14 +291,17 @@
                 projectListContainer.innerHTML = ''; 
                 
                 projects.forEach(project => {
-                    const projectCard = document.createElement('div');
+                    // --- CHANGE: Card ko DIV ki jagah <a> tag banaya ---
+                    const projectCard = document.createElement('a');
                     projectCard.className = 'project-card';
+                    projectCard.href = project.liveUrl;
+                    // Taki usi tab mein khule
+                    projectCard.setAttribute('target', '_self'); 
                     
+                    // --- CHANGE: Sirf icon aur title dala ---
                     projectCard.innerHTML = `
                         <div class="card-icon">${project.icon}</div>
                         <h3>${project.title}</h3>
-                        <p>${project.description}</p>
-                        <a href="${project.liveUrl}">Launch Tool &rarr;</a>
                     `;
                     
                     projectListContainer.appendChild(projectCard);
