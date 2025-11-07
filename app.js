@@ -1,3 +1,4 @@
+// app.js - (root folder)
 window.addEventListener('DOMContentLoaded', () => {
     fetchProjects();
     registerSW();
@@ -8,24 +9,26 @@ async function fetchProjects() {
         const response = await fetch('projects.json');
         const projects = await response.json();
         const projectListContainer = document.getElementById('project-list');
-
+        
         projectListContainer.innerHTML = ''; // Clear existing
-
+        
         projects.forEach(project => {
             const projectCard = document.createElement('div');
             projectCard.className = 'project-card';
-
+            
+            // SVG आइकॉन, टाइटल, विवरण और लिंक जोड़ें
             projectCard.innerHTML = `
-                <h2>${project.title}</h2>
+                <div class="card-icon">${project.icon}</div>
+                <h3>${project.title}</h3>
                 <p>${project.description}</p>
-                <a href="${project.liveUrl}">प्रोजेक्ट खोलें</a>
+                <a href="${project.liveUrl}">Launch Tool &rarr;</a>
             `;
-
+            
             projectListContainer.appendChild(projectCard);
         });
     } catch (error) {
         console.error('Failed to load projects:', error);
-        document.getElementById('project-list').innerHTML = "<p>प्रोजेक्ट्स लोड करने में विफल।</p>";
+        document.getElementById('project-list').innerHTML = "<p>Projects failed to load.</p>";
     }
 }
 
