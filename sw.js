@@ -1,12 +1,10 @@
-const CACHE_NAME = 'all-my-projects-v2'; // (वर्जन बदला गया है ताकि यह अपडेट हो)
+const CACHE_NAME = 'all-my-projects-v3'; // Version badal diya hai
 
-// ये सभी फ़ाइलें ऑफ़लाइन के लिए सेव हो जाएँगी
 const ASSETS_TO_CACHE = [
     './', 
     './index.html', 
-    // style.css और app.js को यहाँ से हटा दिया गया है, क्योंकि वे index.html में हैं
-    // projects.json को भी हटा दिया गया है
     './manifest.json',
+    './imagedata.js', // <-- YEH NAYA ADD KIYA HAI
     './icon-192.png',
     './icon-512.png',
     
@@ -20,10 +18,9 @@ const ASSETS_TO_CACHE = [
     // --- Project-Calculator (Offline) ---
     './project-calculator/index.html',
 
-    // --- Project-Tilesearch (यह ऑनलाइन है, इसलिए इसे कैशे नहीं करेंगे) ---
+    // --- Project-Tilesearch (Online) ---
 ];
 
-// Install Event: ज़रूरी फ़ाइलों को कैशे करें
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
@@ -41,7 +38,6 @@ self.addEventListener('install', event => {
     );
 });
 
-// Activate Event: पुराने कैशे को डिलीट करें
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
@@ -57,10 +53,7 @@ self.addEventListener('activate', event => {
     );
 });
 
-// Fetch Event: (Network falling back to Cache)
 self.addEventListener('fetch', event => {
-    // index.html के लिए हमेशा नेटवर्क से लाने की कोशिश करें (ताकि अपडेट्स मिलें),
-    // अगर फेल हो तो कैशे से दें।
     if (event.request.url.includes('index.html')) {
         event.respondWith(
             fetch(event.request)
@@ -69,15 +62,12 @@ self.addEventListener('fetch', event => {
         return;
     }
 
-    // बाकी सब चीज़ों के लिए कैशे से दें (अगर मौजूद है)
     event.respondWith(
         caches.match(event.request)
         .then(response => {
-            // अगर कैशे में है, तो उसे दो
             if (response) {
                 return response;
             }
-            // अगर कैशे में नहीं है, तो नेटवर्क से लाओ
             return fetch(event.request);
         })
     );
