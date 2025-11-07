@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    
+    <title>Granicer Ceramica - Price List Generator</title>
+
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#1a1a1e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Granicer PL" />
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <script src="imagedata.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <style>
+        /* Pura CSS wahi hai (V44) */
+        :root {
+          --primary: #6366f1; 
+          --primary-light: #818cf8;
+          --success: #10b981; 
+          --success-light: #34d399;
+          --error: #ef4444; 
+          --error-light: #f87171;
+          --bg-primary: #0a0a0b;
+          --bg-secondary: #1a1a1e;
+          --glass: rgba(255, 255, 255, 0.06);
+          --glass-border: rgba(255, 255, 255, 0.1);
+          --glass-hover: rgba(255, 255, 255, 0.08);
+          --text-primary: #ffffff;
+          --text-secondary: #d1d5db;
+          --text-muted: #9ca3af;
+          --border-radius: 12px;
+          --border-radius-sm: 8px;
+        }
+        .container.advance-theme {
+            --primary: #10b981; 
+            --primary-light: #34d399;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+        
+        /* [बदलाव 3] Notch/Safe-Area के लिए Body Padding को अपडेट किया गया */
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg-primary); 
+            color: var(--text-primary); 
+            min-height: 100vh;
+            
+            /* [MODIFIED] Replaced static padding with dynamic safe-area padding */
+            padding-top: max(10px, env(safe-area-inset-top));
+            padding-bottom: max(10px, env(safe-area-inset-bottom));
+            padding-left: max(10px, env(safe-area-inset-left));
+            padding-right: max(10px, env(safe-area-inset-right));
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--bg-secondary); 
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%; 
+            max-height: 100%; 
+            border: 1px solid var(--glass-border); 
+            transition: all 0.3s ease; 
+        }
+
+        /* --- [MODIFIED V49] Header Styles --- */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            
+            /* [NEW V49] Changed from var(--glass) to a dark, glassy background */
+            background: rgba(0, 0, 0, 0.25); 
+
+            border-bottom: 1px solid var(--glass-border);
+            flex-shrink: 0;
+
+            /* [V48] Glassy effect & Spacing */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); /* For Safari */
+            margin-bottom: 5px; /* Space between header and tabs */
+        }
+        #header-logo {
+            height: 30px; /* Aap height adjust kar sakte hain */
+            width: auto;
+            object-fit: contain;
+        }
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .header-icon-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.1em; /* Icon size */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 5px;
+        }
+        .header-icon-btn:hover {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+        .container.advance-theme .header-icon-btn:hover {
+            color: var(--primary); /* Advance theme (green) hover color */
+        }
+        /* --- [END MODIFIED V49] --- */
+
+        .tabs {
+            display: flex;
+            background: var(--glass); 
+            border-bottom: 1px solid var(--glass-border); 
+            flex-shrink: 0;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 15px 10px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--text-muted); 
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            font-family: 'Inter', sans-serif; 
+        }
+        .tab-btn.active {
+            color: var(--primary); 
+            background: transparent;
+            border-bottom-color: var(--primary); 
+        }
+        .tab-btn:hover {
+            color: var(--primary); 
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            flex-shrink: 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary); 
+            font-weight: 600;
+            font-size: 0.9em; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+        }
+        input[type='text'],
+        input[type='number'],
+        select {
+            width: 100%;
+            padding: 12px;
+            background: var(--glass); 
+            border: 1px solid var(--glass-border); 
+            border-radius: var(--border-radius-sm); 
+            color: var(--text-primary); 
+            font-size: 16px; 
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-family: 'Inter', sans-serif;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        select {
+            background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23d1d5db' stroke-width='2' fill='none'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 12px 8px;
+            cursor: pointer;
+            padding-right: 2.5rem;
+        }
+        select option {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        input[type='text']:focus,
+        input[type='number']:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary); 
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1); 
+            background: var(--glass-hover);
+        }
+        .price-input-container {
+            display: flex;
+            align-items: center;
+            border: none;
+            transition: border-color 0.3s;
+            overflow: hidden;
+            position: relative; 
+        }
+        #basic .price-input-container {
+             border: 1px solid var(--glass-border);
+             border-radius: var(--border-radius-sm);
+        }
+        #basic .price-input-container:focus-within {
+             border-color: var(--primary);
+             box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+        }
+        #basic .price-symbol {
+            padding: 12px 12px;
+            background: var(--glass-hover);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 1.1em;
+            border-right: 1px solid var(--glass-border);
+            flex-shrink: 0;
+        }
+        #basic .price-input-container input {
+            flex: 1;
+            border: none;
+            padding: 12px;
+            font-size: 1em;
+            outline: none;
+            background: transparent;
+            padding-right: 35px; 
+        }
+        .grade-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .grade-buttons input[type="radio"] {
+            display: none; 
+        }
+        .grade-buttons label {
+            flex: 1;
+            text-align: center;
+            padding: 8px 10px;
+            border: 2px solid var(--glass-border);
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            margin-bottom: 0; 
+        }
+        .grade-buttons input[type="radio"]:checked + label {
+            background-color: var(--primary); 
+            color: white;
+            border-color: var(--primary); 
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.1);
+        }
+        .grade-buttons label:hover {
+            border-color: var(--primary-light);
+            background: var(--glass-hover);
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+            margin-top: 5px;
+        }
+        .add-button,
+        .pdf-button {
+            flex: 1;
+            padding: 12px;
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .add-button {
+            background: linear-gradient(135deg, var(--success), var(--success-light)); 
+        }
+        .add-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.2);
+        }
+        .pdf-button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light)); 
+        }
+        .pdf-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.2);
+        }
+        .pdf-button:disabled {
+            background: var(--glass);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary); 
+            border: 1px solid var(--glass-border); 
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .suggestions.show {
+            display: block;
+        }
+        .suggestion-item {
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.9em;
+            color: var(--text-secondary);
+        }
+        .suggestion-item:hover,
+        .suggestion-item.suggestion-active {
+            background: var(--glass-hover);
+            color: var(--text-primary);
+        }
+        .input-wrapper {
+            position: relative;
+        }
+        .items-table {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            border-collapse: collapse;
+            border-spacing: 0;
+            table-layout: fixed;
+            flex-shrink: 0; 
+            border-radius: var(--border-radius);
+            overflow: hidden; 
+            border: 1px solid var(--glass-border);
+        }
+        .items-table h3 {
+            color: var(--text-primary);
+            margin-bottom: 0; 
+            font-size: 1.1em;
+            flex-shrink: 0;
+            padding: 15px; 
+            background: var(--glass);
+            border-bottom: 1px solid var(--glass-border); 
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: transparent;
+            font-size: 0.9em;
+        }
+        thead {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light)); 
+            color: white;
+            flex-shrink: 0;
+        }
+        th {
+            padding: 10px 5px; 
+            text-align: center;
+            font-weight: 600;
+            border: none; 
+            height: 30px;
+        }
+        td {
+            padding: 8px 4px !important; 
+            border: none;
+            border-bottom: 1px solid var(--glass-border);
+            text-align: center;
+            height: 20px !important;
+            max-height: 20px !important;
+            min-height: 20px !important;
+            line-height: 1 !important;
+            overflow: hidden;
+            white-space: nowrap;
+            vertical-align: middle !important;
+            color: var(--text-secondary); 
+        }
+        tbody tr:hover {
+            background: var(--glass-hover);
+            color: var(--text-primary);
+        }
+        tbody tr:hover td {
+            color: var(--text-primary);
+        }
+        tbody tr:nth-child(even) {
+            background: var(--glass);
+        }
+        tbody tr:last-child td {
+             border-bottom: none;
+        }
+        .delete-btn {
+            background: linear-gradient(135deg, var(--error), var(--error-light)); 
+            color: white;
+            width: 30px; 
+            height: 30px; 
+            line-height: 30px; 
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em; 
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+        }
+        .delete-btn:hover {
+            background: #ff5252;
+            transform: scale(1.05);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 20px 10px;
+            color: var(--text-muted);
+            background: var(--glass);
+            margin-top: 0px; 
+            font-size: 0.9em;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            flex: 1;
+        }
+        #advance-form-container {
+            flex-shrink: 0;
+        }
+        #advanceSizeSelect {
+            padding: 14px;
+            font-size: 1.05em;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        #advance-options-container .grade-buttons label {
+            padding: 6px 8px; 
+            font-size: 0.8em;  
+            gap: 8px;          
+        }
+        #advance-options-container {
+             /* Default hidden */
+        }
+        #surfacePriceList {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr; 
+            gap: 0; 
+            border: 1px solid var(--glass-border); 
+            border-radius: 8px;
+            overflow: hidden; 
+        }
+        .surface-item-wrapper {
+            display: flex;
+            flex-direction: column; 
+            gap: 5px;
+            padding: 10px; 
+            border-bottom: 1px solid var(--glass-border); 
+            background: var(--glass);
+        }
+        .surface-item-wrapper:not(:nth-child(3n)) {
+             border-right: 1px solid var(--glass-border);
+        }
+        .surface-item-wrapper:nth-last-child(-n+3) {
+            border-bottom: none;
+        }
+        .surface-item-wrapper:last-child:nth-child(3n-1) {
+             border-bottom: none;
+        }
+        .surface-item-wrapper label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.85em; 
+            margin-bottom: 0;
+        }
+        .surface-item-wrapper .price-input-container {
+            border-radius: 6px; 
+            border-left: none; 
+            border: 1px solid var(--glass-border);
+            background: var(--bg-primary); 
+        }
+        .surface-item-wrapper .price-input-container:focus-within {
+             border-color: var(--primary);
+             box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+             background: var(--bg-primary);
+        }
+        .surface-item-wrapper .price-symbol {
+             display: none; 
+        }
+        .surface-item-wrapper .price-input-container input {
+            padding: 8px 10px; 
+            font-size: 0.9em;  
+            text-align: center; 
+            background: transparent;
+        }
+        .input-wrapper-clearable {
+            position: relative;
+        }
+        .clear-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+            font-size: 0.9em;
+            z-index: 5; 
+        }
+        .clear-btn.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .clear-btn:hover {
+            color: var(--text-primary);
+        }
+        #basic .input-wrapper-clearable input {
+            padding-right: 35px; 
+        }
+        #basic .price-input-container .clear-btn {
+            right: 10px;
+        }
+        #basic .price-input-container input {
+            padding-right: 35px;
+        }
+        .editable-cell {
+            cursor: pointer;
+        }
+        .editable-cell:hover {
+            background: var(--glass-hover);
+        }
+        .edit-input, .edit-select {
+            width: 90%;
+            padding: 4px;
+            font-size: 0.9em;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+        .edit-input {
+            text-align: center;
+        }
+        .edit-select {
+            padding: 3px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container"> 
+
+        <div class="app-header">
+            <img id="header-logo" alt="Granicer Logo" />
+            <div class="header-icons">
+                <button id="clear-all-btn" class="header-icon-btn" title="Clear All">
+                    <i class="fas fa-eraser"></i>
+                </button>
+                <button id="refresh-btn" class="header-icon-btn" title="Refresh Page">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+        </div>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'basic')">Basic</button>
+            <button class="tab-btn" onclick="switchTab(event, 'advance')">Advance</button>
+        </div>
+
+        <div id="basic" class="tab-content active">
+            <div style="flex: 0 0 auto;">
+                
+                <div class="form-group">
+                    <label for="size">Size</label>
+                    <div class="input-wrapper input-wrapper-clearable"> 
+                        <input
+                            type="text"
+                            id="size"
+                            placeholder="Select or type size"
+                            oninput="filterSuggestions('size'); toggleClearButton(this, 'clearSizeBtn');" 
+                            inputmode="numeric" 
+                        />
+                        <span class="clear-btn" id="clearSizeBtn" onclick="clearInput('size', 'clearSizeBtn')">
+                            <i class="fas fa-times-circle"></i>
+                        </span>
+                        <div class="suggestions" id="sizeSuggestions"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="surface">Surface</label>
+                    <div class="input-wrapper input-wrapper-clearable">
+                        <input
+                            type="text"
+                            id="surface"
+                            placeholder="Select or type surface"
+                            oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, ''); filterSuggestions('surface'); toggleClearButton(this, 'clearSurfaceBtn');"
+                            title="Please enter only letters and spaces."
+                        />
+                        <span class="clear-btn" id="clearSurfaceBtn" onclick="clearInput('surface', 'clearSurfaceBtn')">
+                            <i class="fas fa-times-circle"></i>
+                        </span>
+                        <div class="suggestions" id="surfaceSuggestions"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price</label>
+                    <div class="price-input-container">
+                        <span class="price-symbol">₹</span>
+                        <input
+                            type="number"
+                            id="price"
+                            placeholder="Enter price"
+                            min="0"
+                            step="0.01"
+                            oninput="this.value = this.value.replace(/[eE+\-]/g, ''); toggleClearButton(this, 'clearPriceBtn');"
+                        />
+                        <span class="clear-btn" id="clearPriceBtn" onclick="clearInput('price', 'clearPriceBtn')">
+                            <i class="fas fa-times-circle"></i>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Grade</label>
+                    <div class="grade-buttons">
+                        <input type="radio" id="grade_pre" name="grade" value="PRE" checked>
+                        <label for="grade_pre">PRE</label>
+                        <input type="radio" id="grade_std" name="grade" value="STD">
+                        <label for="grade_std">STD</label>
+                        <input type="radio" id="grade_gold" name="grade" value="GOLD">
+                        <label for="grade_gold">GOLD</label>
+                        <input type="radio" id="grade_eco" name="grade" value="ECO">
+                        <label for="grade_eco">ECO</label>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="add-button" onclick="addItem()">
+                        <i class="fas fa-plus"></i> Add
+                    </button>
+                    <button class="pdf-button" onclick="generatePDF()" id="pdfBtn" disabled>
+                        <i class="fas fa-file-pdf"></i> Generate PDF
+                    </button>
+                </div>
+            </div>
+            <div class="items-table">
+                <h3>Added Items</h3>
+                <div class="table-wrapper">
+                    <div id="itemsContainer"></div>
+                </div>
+            </div>
+        </div>
+        <div id="advance" class="tab-content">
+            
+            <div id="advance-form-container">
+                <div class="form-group">
+                    <label for="advanceSizeSelect">1. Select Size</label>
+                    <select id="advanceSizeSelect" onchange="handleAdvanceSizeChange(this)">
+                    </select>
+                </div>
+
+                <div id="advance-options-container" style="display: none;">
+                    <div class="form-group">
+                        <div class="grade-buttons">
+                            <input type="radio" id="adv_grade_pre" name="adv_grade" value="PRE" checked>
+                            <label for="adv_grade_pre">PRE</LAbel>
+                            <input type="radio" id="adv_grade_std" name="adv_grade" value="STD">
+                            <label for="adv_grade_std">STD</LAbel>
+                            <input type="radio" id="adv_grade_gold" name="adv_grade" value="GOLD">
+                            <label for="adv_grade_gold">GOLD</LAbel>
+                            <input type="radio" id="adv_grade_eco" name="adv_grade" value="ECO">
+                            <label for="adv_grade_eco">ECO</LAbel>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div id="surfacePriceList">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="add-button" onclick="addAdvanceItems()">
+                        <i class="fas fa-plus"></i> Add Items
+                    </button>
+                    <button class="pdf-button" onclick="generatePDF()" id="advancePdfBtn" disabled>
+                        <i class="fas fa-file-pdf"></i> Generate PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="items-table">
+                <h3>Added Items</h3>
+                <div class="table-wrapper">
+                    <div id="advanceItemsContainer"></div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+    <script>
+        // --- (V49 - Header Dark Glass) ---
+
+        // --- 1. Global Variables ---
+        const sizes = [
+            '1200x1200x9MM', '1200x1790x9MM', '1200x1800x9MM', '1200x2400x9MM',
+            '1200x2800x6MM', '1200x3180x15MM', '1200x3200x15MM', '1600x1600x9MM',
+            '1600x3200x6MM', '1600x3200x12MM', '1620x3240x12MM', '790x2980x15MM',
+            '800x3000x15MM', '800x2400x15MM', '1000x3000x5MM', '1200x2600x6MM',
+            '1200x3000x9MM', '800x3200x15MM',
+        ];
+
+        const surfaces = [
+            'ELEGANCE', 'REPOSE', 'ALL SURFACES', 'OTHER', 'CARVE TECH',
+            'LUMINOUS', 'GRACE', 'GRAVEL', 'SAHARA', 'SHAPE TECH',
+            'CRYSTAL', 'GAMMA', 'GALAXY',
+        ];
+
+        let items = []; 
+        let itemIdCounter = 0;
+        let activeSuggestionIndex = -1; 
+        let isEditing = false; // [V44] Editing lock
+
+        // --- 2. Function Definitions ---
+
+        // --- BASIC TAB FUNCTIONS ---
+        function filterSuggestions(type) {
+            activeSuggestionIndex = -1; 
+            const inputId = type === 'size' ? 'size' : 'surface';
+            const suggestionsId = type === 'size' ? 'sizeSuggestions' : 'surfaceSuggestions';
+            const data = type === 'size' ? sizes : surfaces;
+            const input = document.getElementById(inputId).value.toUpperCase();
+            const suggestionsDiv = document.getElementById(suggestionsId);
+
+            if (!input) {
+                suggestionsDiv.classList.remove('show');
+                return;
+            }
+            const filtered = data.filter((item) => item.toUpperCase().includes(input));
+            if (filtered.length === 0) {
+                suggestionsDiv.classList.remove('show');
+                return;
+            }
+            suggestionsDiv.innerHTML = filtered
+                .map(
+                    (item) =>
+                        `<div class="suggestion-item" onclick="selectSuggestion('${inputId}', '${item}')">${item}</div>`
+                )
+                .join('');
+            suggestionsDiv.classList.add('show');
+        }
+
+        function selectSuggestion(inputId, value) {
+            activeSuggestionIndex = -1; 
+            document.getElementById(inputId).value = value;
+            document
+                .getElementById(inputId === 'size' ? 'sizeSuggestions' : 'surfaceSuggestions')
+                .classList.remove('show');
+            // [V44] Clear button ko show karo
+            if (inputId === 'size') toggleClearButton(document.getElementById(inputId), 'clearSizeBtn');
+            if (inputId === 'surface') toggleClearButton(document.getElementById(inputId), 'clearSurfaceBtn');
+        }
+        
+        function clearForm() {
+            document.getElementById('size').value = '';
+            document.getElementById('surface').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('grade_pre').checked = true; 
+            document.getElementById('size').focus();
+            
+            // [V44] Clear buttons ko hide karo
+            toggleClearButton(document.getElementById('size'), 'clearSizeBtn');
+            toggleClearButton(document.getElementById('surface'), 'clearSurfaceBtn');
+            toggleClearButton(document.getElementById('price'), 'clearPriceBtn');
+        }
+        
+        // [V44] Clear 'X' button functions
+        function toggleClearButton(input, btnId) {
+            const btn = document.getElementById(btnId);
+            if (input.value) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        }
+
+        function clearInput(inputId, btnId) {
+            document.getElementById(inputId).value = '';
+            document.getElementById(btnId).classList.remove('visible');
+            document.getElementById(inputId).focus();
+            // Agar suggestion box khula tha, to use band karo
+            if (inputId === 'size') filterSuggestions('size');
+            if (inputId === 'surface') filterSuggestions('surface');
+        }
+        
+        function handleSuggestionKeydown(e, type) {
+            const suggestionsId = type ==='size' ? 'sizeSuggestions' : 'surfaceSuggestions';
+            const suggestionsDiv = document.getElementById(suggestionsId);
+            
+            if (!suggestionsDiv || !suggestionsDiv.classList.contains('show')) {
+                activeSuggestionIndex = -1;
+                return;
+            }
+
+            const items = suggestionsDiv.querySelectorAll('.suggestion-item');
+            if (items.length === 0) {
+                activeSuggestionIndex = -1;
+                return;
+            }
+
+            items.forEach(item => item.classList.remove('suggestion-active'));
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault(); 
+                activeSuggestionIndex++;
+                if (activeSuggestionIndex >= items.length) {
+                    activeSuggestionIndex = 0; 
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault(); 
+                activeSuggestionIndex--;
+                if (activeSuggestionIndex < 0) {
+                    activeSuggestionIndex = items.length - 1; 
+                }
+            } else if (e.key === 'Enter') {
+                e.preventDefault(); 
+                if (activeSuggestionIndex > -1 && items[activeSuggestionIndex]) {
+                    items[activeSuggestionIndex].click(); 
+                    activeSuggestionIndex = -1; 
+                }
+            } else if (e.key === 'Escape') {
+                suggestionsDiv.classList.remove('show'); 
+                activeSuggestionIndex = -1;
+            }
+
+            if (activeSuggestionIndex > -1 && items[activeSuggestionIndex]) {
+                items[activeSuggestionIndex].classList.add('suggestion-active');
+                items[activeSuggestionIndex].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest'
+                });
+            }
+        }
+        
+        // --- [NEW V50] Helper Function: PDF बटन की स्थिति अपडेट करने के लिए
+        function updatePdfButtonState() {
+            const isDisabled = items.length === 0;
+            const pdfBtn = document.getElementById('pdfBtn');
+            const advancePdfBtn = document.getElementById('advancePdfBtn');
+            
+            if (pdfBtn) pdfBtn.disabled = isDisabled;
+            if (advancePdfBtn) advancePdfBtn.disabled = isDisabled;
+        }
+
+        // --- [NEW V50] Helper Function: एक नया टेबल रो (Row) बनाने के लिए
+        function createItemRow(item) {
+            const row = document.createElement('tr');
+            row.id = `item-row-${item.id}`; // रो को एक यूनिक ID दें
+
+            // 1. Size Cell
+            const sizeCell = document.createElement('td');
+            sizeCell.textContent = item.size;
+            row.appendChild(sizeCell);
+
+            // 2. Surface Cell
+            const surfaceCell = document.createElement('td');
+            surfaceCell.textContent = item.surface;
+            row.appendChild(surfaceCell);
+
+            // 3. Grade Cell (Editable)
+            const gradeCell = document.createElement('td');
+            gradeCell.textContent = item.grade;
+            gradeCell.className = 'editable-cell';
+            // Click करने पर editCell को कॉल करें, इस सेल (td) को पास करते हुए
+            gradeCell.onclick = () => editCell(gradeCell, item.id, 'grade');
+            row.appendChild(gradeCell);
+
+            // 4. Price Cell (Editable)
+            const priceCell = document.createElement('td');
+            priceCell.textContent = `₹ ${item.price.toFixed(2)}`;
+            priceCell.className = 'editable-cell';
+            // Click करने पर editCell को कॉल करें, इस सेल (td) को पास करते हुए
+            priceCell.onclick = () => editCell(priceCell, item.id, 'price');
+            row.appendChild(priceCell);
+
+            // 5. Action Cell (Delete Button)
+            const actionCell = document.createElement('td');
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+            // Click करने पर deleteItem को कॉल करें
+            deleteBtn.onclick = () => deleteItem(item.id);
+            actionCell.appendChild(deleteBtn);
+            row.appendChild(actionCell);
+
+            return row;
+        }
+        
+        // --- [REPLACED V50] addItem function
+        function addItem() {
+            const size = document.getElementById('size').value.trim();
+            const surface = document.getElementById('surface').value.trim();
+            const price = document.getElementById('price').value.trim();
+            const grade = document.querySelector('input[name="grade"]:checked').value;
+
+            if (!size || !surface || !price || !grade) { 
+                alert('Please fill all fields');
+                return;
+            }
+
+            const isDuplicate = items.some(item => 
+                item.size === size && 
+                item.surface === surface && 
+                item.grade === grade
+            );
+
+            if (isDuplicate) {
+                alert('Error: This item (Size, Surface, Grade) already exists in the list.');
+                return; 
+            }
+
+            const item = {
+                id: itemIdCounter++,
+                size: size,
+                surface: surface,
+                grade: grade, 
+                price: parseFloat(price),
+            };
+            items.push(item);
+            
+            // --- NEW DOM Manipulation (renderItems() को कॉल नहीं करेंगे) ---
+            const container = document.getElementById('itemsContainer');
+            
+            // 1. अगर यह पहला आइटम है, तो "Empty state" हटाएं और टेबल बनाएं
+            if (items.length === 1) {
+                container.innerHTML = ''; // "No items" मैसेज हटाएं
+                const table = document.createElement('table');
+                table.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>Size</th>
+                            <th>Surface</th>
+                            <th>Grade</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                `;
+                const tbody = document.createElement('tbody');
+                table.appendChild(tbody);
+                container.appendChild(table);
+            }
+
+            // 2. नया रो बनाएं और टेबल में जोड़ें
+            const newRow = createItemRow(item);
+            const tbody = container.querySelector('tbody');
+            if (tbody) {
+                tbody.appendChild(newRow);
+            }
+            // --- END NEW ---
+
+            clearForm();
+            updatePdfButtonState(); // PDF बटन को इनेबल करें
+        }
+
+        // --- ADVANCE TAB FUNCTIONS ---
+        function populateSizeDropdown() {
+            const select = document.getElementById('advanceSizeSelect');
+            if (select.options.length > 0) return; 
+            
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.textContent = "Select a Size...";
+            defaultOption.selected = true;
+            select.appendChild(defaultOption);
+
+            sizes.forEach(size => {
+                const option = document.createElement('option');
+                option.value = size;
+                option.textContent = size;
+                select.appendChild(option);
+            });
+        }
+
+        // [MODIFIED V45] Jab size change ho to grade reset karo aur price clear karo
+        function handleAdvanceSizeChange(selectElement) {
+            const optionsContainer = document.getElementById('advance-options-container');
+
+            // --- [V45 FIX] ---
+            // 1. Purane price clear karo
+            clearAdvancePriceInputs(); 
+            // 2. Grade ko 'PRE' par reset karo
+            const gradePre = document.getElementById('adv_grade_pre');
+            if (gradePre) gradePre.checked = true;
+            // --- [FIX END] ---
+
+            if (selectElement.value) {
+                optionsContainer.style.display = 'block';
+                populateSurfaceList(); 
+            } else {
+                optionsContainer.style.display = 'none';
+            }
+        }
+
+        function populateSurfaceList() {
+            const listDiv = document.getElementById('surfacePriceList');
+            if (listDiv.children.length > 0) return; 
+
+            let html = '';
+            surfaces.forEach(surface => {
+                const inputId = `adv_price_${surface.replace(/\s+/g, '_')}`; 
+                html += `
+                    <div class="surface-item-wrapper"> 
+                        <label for="${inputId}">${surface}</label>
+                        <div class="price-input-container">
+                            <input
+                                type="number"
+                                id="${inputId}"
+                                data-surface-name="${surface}"
+                                placeholder="Price" 
+                                min="0"
+                                step="0.01"
+                                oninput="this.value = this.value.replace(/[eE+\-]/g, '');"
+                                style="text-align: center; border-radius: 6px;" 
+                            />
+                        </div>
+                    </div>
+                `;
+            });
+            listDiv.innerHTML = html;
+        }
+
+        function clearAdvancePriceInputs() {
+            const inputs = document.querySelectorAll('#surfacePriceList input[type="number"]');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+        }
+
+        // [REPLACED V50] addAdvanceItems function
+        function addAdvanceItems() {
+            const size = document.getElementById('advanceSizeSelect').value;
+            if (!size) {
+                alert('Please select a size first.');
+                return;
+            }
+            const grade = document.querySelector('input[name="adv_grade"]:checked').value;
+            
+            const priceInputs = document.querySelectorAll('#surfacePriceList input[type="number"]');
+            let itemsAdded = 0;
+            let duplicatesFound = 0;
+            const itemsToAdd = []; // नए आइटम्स को यहाँ इकट्ठा करें
+
+            priceInputs.forEach(input => {
+                const price = input.value.trim();
+                const surface = input.getAttribute('data-surface-name');
+
+                if (price && parseFloat(price) > 0) {
+                    const isDuplicate = items.some(item => 
+                        item.size === size && 
+                        item.surface === surface && 
+                        item.grade === grade
+                    );
+
+                    if (isDuplicate) {
+                        duplicatesFound++; 
+                    } else {
+                        const item = {
+                            id: itemIdCounter++,
+                            size: size,
+                            surface: surface,
+                            grade: grade,
+                            price: parseFloat(price),
+                        };
+                        items.push(item); // मुख्य ऐरे में जोड़ें
+                        itemsToAdd.push(item); // DOM में जोड़ने के लिए इकट्ठा करें
+                        itemsAdded++;
+                    }
+                }
+            });
+
+            // (Alerts वाला लॉजिक वही रहेगा)
+            if (itemsAdded === 0 && duplicatesFound === 0) {
+                alert('Please enter at least one price.');
+                return;
+            }
+            if (duplicatesFound > 0) {
+                alert(`${itemsAdded} new item(s) added.\n${duplicatesFound} duplicate item(s) were skipped.`);
+            }
+
+            // --- NEW DOM Manipulation (renderItems() को कॉल नहीं करेंगे) ---
+            if (itemsAdded > 0) {
+                const container = document.getElementById('advanceItemsContainer');
+                
+                // 1. अगर यह पहला आइटम है, तो "Empty state" हटाएं और टेबल बनाएं
+                if (items.length === itemsAdded) { // (मतलब ऐरे पहले खाली था)
+                    container.innerHTML = ''; // "No items" मैसेज हटाएं
+                    const table = document.createElement('table');
+                    table.innerHTML = `
+                        <thead>
+                            <tr>
+                                <th>Size</th>
+                                <th>Surface</th>
+                                <th>Grade</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    `;
+                    const tbody = document.createElement('tbody');
+                    table.appendChild(tbody);
+                    container.appendChild(table);
+                }
+
+                // 2. सभी नए रो बनाएं और टेबल में जोड़ें
+                const tbody = container.querySelector('tbody');
+                if (tbody) {
+                    itemsToAdd.forEach(item => {
+                        const newRow = createItemRow(item);
+                        tbody.appendChild(newRow);
+                    });
+                }
+            }
+            // --- END NEW ---
+            
+            clearAdvancePriceInputs(); 
+            updatePdfButtonState(); // PDF बटन को इनेबल करें
+        }
+
+        // --- SHARED FUNCTIONS ---
+
+        // --- [REPLACED V50] deleteItem function
+        function deleteItem(id) {
+            // 1. ऐरे (Array) से आइटम हटाएं
+            items = items.filter((item) => item.id !== id);
+            
+            // --- NEW DOM Manipulation (renderItems() को कॉल नहीं करेंगे) ---
+            
+            // 2. DOM से रो (Row) हटाएं
+            const row = document.getElementById(`item-row-${id}`);
+            if (row) {
+                row.remove();
+            }
+
+            // 3. अगर यह आखिरी आइटम था, तो "Empty state" दिखाएं
+            if (items.length === 0) {
+                const activeTab = document.querySelector('.tab-content.active');
+                const activeTabId = activeTab ? activeTab.id : 'basic';
+                const containerId = (activeTabId === 'basic') ? 'itemsContainer' : 'advanceItemsContainer';
+                const container = document.getElementById(containerId);
+                
+                if (container) {
+                    container.innerHTML = '<div class="empty-state">No items added yet</div>';
+                }
+            }
+            // --- END NEW ---
+            
+            updatePdfButtonState(); // PDF बटन की स्थिति अपडेट करें
+        }
+
+        // --- [REPLACED V50] renderItems function
+        // (यह फंक्शन अब सिर्फ टैब बदलने पर या पेज लोड होने पर ही चलेगा)
+        function renderItems() {
+            const activeTab = document.querySelector('.tab-content.active');
+            const activeTabId = activeTab ? activeTab.id : 'basic';
+            
+            const containerId = (activeTabId === 'basic') ? 'itemsContainer' : 'advanceItemsContainer';
+            const container = document.getElementById(containerId);
+
+            if (!container) return; 
+
+            // कंटेनर को खाली करें
+            container.innerHTML = ''; 
+
+            if (items.length === 0) {
+                // "Empty state" दिखाएं
+                container.innerHTML = '<div class="empty-state">No items added yet</div>';
+            } else {
+                // टेबल स्ट्रक्चर बनाएं
+                const table = document.createElement('table');
+                table.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>Size</th>
+                            <th>Surface</th>
+                            <th>Grade</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                `;
+                const tbody = document.createElement('tbody');
+                
+                // सभी आइटम्स के लिए रो (Row) बनाएं
+                items.forEach((item) => {
+                    const row = createItemRow(item); // हमारे नए हेल्पर का उपयोग करें
+                    tbody.appendChild(row);
+                });
+                
+                table.appendChild(tbody);
+                container.appendChild(table);
+            }
+            
+            updatePdfButtonState(); // PDF बटन की स्थिति अपडेट करें
+        }
+        
+        // --- [REPLACED V50] editCell function
+        // (अब यह 'Esc' दबाने पर renderItems() को कॉल नहीं करेगा)
+        function editCell(tdElement, itemId, field) {
+            if (isEditing) return; 
+            isEditing = true;
+
+            const item = items.find(i => i.id === itemId);
+            const originalValue = item[field];
+            
+            const originalOnclick = tdElement.onclick; // ओरिजिनल क्लिक को सेव करें
+            
+            tdElement.innerHTML = ''; 
+            tdElement.onclick = null; // दोबारा क्लिक होने से रोकें
+
+            if (field === 'price') {
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.className = 'edit-input';
+                input.value = originalValue;
+                
+                // 'saveEdit' को यह tdElement पास करें
+                input.onblur = () => saveEdit(tdElement, itemId, field, input.value); 
+                
+                input.onkeydown = (e) => {
+                    if (e.key === 'Enter') input.blur();
+                    if (e.key === 'Escape') {
+                        isEditing = false;
+                        // सेल को मैन्युअल रूप से रीसेट करें (renderItems() के बिना)
+                        tdElement.innerHTML = `₹ ${originalValue.toFixed(2)}`;
+                        tdElement.onclick = originalOnclick; // क्लिक वापस लगाएं
+                    }
+                };
+                tdElement.appendChild(input);
+                input.focus();
+                input.select();
+            } else if (field === 'grade') {
+                const select = document.createElement('select');
+                select.className = 'edit-select';
+                ['PRE', 'STD', 'GOLD', 'ECO'].forEach(grade => {
+                    const option = document.createElement('option');
+                    option.value = grade;
+                    option.text = grade;
+                    if (grade === originalValue) option.selected = true;
+                    select.appendChild(option);
+                });
+                
+                // 'saveEdit' को यह tdElement पास करें
+                select.onblur = () => saveEdit(tdElement, itemId, field, select.value); 
+                select.onchange = () => saveEdit(tdElement, itemId, field, select.value);
+                
+                select.onkeydown = (e) => {
+                     if (e.key === 'Escape') {
+                        isEditing = false;
+                        // सेल को मैन्युअल रूप से रीसेट करें (renderItems() के बिना)
+                        tdElement.innerHTML = originalValue;
+                        tdElement.onclick = originalOnclick; // क्लिक वापस लगाएं
+                    }
+                };
+                tdElement.appendChild(select);
+                select.focus();
+            }
+        }
+
+        // --- [REPLACED V50] saveEdit function
+        // (अब यह renderItems() को कॉल नहीं करेगा)
+        function saveEdit(tdElement, itemId, field, newValue) {
+            const item = items.find(i => i.id === itemId);
+            if (item) {
+                if (field === 'price') {
+                    item.price = parseFloat(newValue) || 0;
+                } else if (field === 'grade') {
+                    item.grade = newValue;
+                }
+            }
+            
+            isEditing = false; // लॉक रिलीज़ करें
+            
+            // --- NEW DOM Manipulation (renderItems() को कॉल नहीं करेंगे) ---
+            
+            // 1. सेल को खाली करें (इनपुट/सिलेक्ट को हटाएं)
+            tdElement.innerHTML = ''; 
+            
+            // 2. नया टेक्स्ट सेट करें
+            if (field === 'price') {
+                tdElement.textContent = `₹ ${item.price.toFixed(2)}`;
+            } else if (field === 'grade') {
+                tdElement.textContent = item.grade;
+            }
+            
+            // 3. 'onclick' इवेंट को वापस लगाएं ताकि इसे फिर से एडिट किया जा सके
+            tdElement.onclick = () => editCell(tdElement, itemId, field);
+            // --- END NEW ---
+        }
+        // [V50] End
+
+
+        // --- V43 PDF LOGIC (Untouched) ---
+        async function generatePDF() {
+            if (items.length === 0) {
+                alert('Please add items first');
+                return;
+            }
+            
+            const activeTabId = document.querySelector('.tab-content.active').id;
+            const pdfBtn = document.getElementById(activeTabId === 'basic' ? 'pdfBtn' : 'advancePdfBtn');
+            pdfBtn.disabled = true;
+            pdfBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+
+            const measurementElement = document.createElement('div');
+            measurementElement.style.width = '210mm'; 
+            measurementElement.style.position = 'absolute';
+            measurementElement.style.left = '-9999px'; 
+            measurementElement.style.top = '-9999px';
+            measurementElement.style.visibility = 'hidden'; 
+            measurementElement.innerHTML = generatePDFContent('auto', activeTabId);
+            document.body.appendChild(measurementElement);
+
+            await new Promise(resolve => setTimeout(resolve, 0)); 
+            
+            const heightInPx = measurementElement.getBoundingClientRect().height;
+            const PXL_TO_MM = 0.264583; 
+            const totalHeight = Math.ceil(heightInPx * PXL_TO_MM) + 5; 
+
+            document.body.removeChild(measurementElement);
+            
+            const element = document.createElement('div');
+            element.innerHTML = generatePDFContent(`${totalHeight}mm`, activeTabId); 
+
+            const opt = {
+                margin: 0,
+                filename: 'Granicer_PriceList_' + new Date().toISOString().slice(0, 10) + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, allowTaint: true, scrollX: 0, scrollY: 0 },
+                jsPDF: {
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: [210, totalHeight]
+                },
+                pagebreak: { mode: ['avoid'] }
+            };
+
+            html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+                while (pdf.internal.getNumberOfPages() > 1) {
+                    pdf.deletePage(pdf.internal.getNumberOfPages());
+                }
+            }).save().then(function() {
+                pdfBtn.disabled = false;
+                pdfBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Generate PDF';
+            });
+        }
+        
+        // --- V45 PDF FONT COLOR FIX (Untouched) ---
+        function generatePDFContent(totalHeight, tabType) { 
+            const currentDate = new Date().toLocaleDateString('en-GB');
+            let pagesHTML = '';
+            let tableContentHTML = ''; 
+            const pdfTextColor = '#333';
+
+            const pinPointLine = `
+                <div style="height: 2px; margin-bottom: 0px; background: linear-gradient(to right, rgba(237, 50, 55, 0) 0%, rgba(237, 50, 55, 1) 10%, rgba(237, 50, 55, 1) 90%, rgba(237, 50, 55, 0) 100%);"></div>
+                <div style="height: 1px; background: linear-gradient(to right, rgba(0, 0, 0, 0) 5%, rgba(0, 0, 0, 0.2) 15%, rgba(0, 0, 0, 0.2) 85%, rgba(0, 0, 0, 0) 95%);"></div>
+            `;
+            
+            const pinPointLineFooter = `
+                <div style="height: 2px; margin-bottom: 0px; background: linear-gradient(to right, rgba(237, 50, 55, 0) 0%, rgba(237, 50, 55, 0) 10%, rgba(237, 50, 55, 1) 20%, rgba(237, 50, 55, 1) 80%, rgba(237, 50, 55, 0) 90%, rgba(237, 50, 55, 0) 100%);"></div>
+                <div style="height: 1px; background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 15%, rgba(0, 0, 0, 0.2) 25%, rgba(0, 0, 0, 0.2) 75%, rgba(0, 0, 0, 0) 85%, rgba(0, 0, 0, 0) 100%);"></div>
+            `;
+            
+            const FOOTER_BLOCK_HEIGHT_MM = 95; 
+
+            // --- Table Generation Logic (Unchanged) ---
+            if (tabType === 'advance') {
+                const groups = {};
+                items.forEach(item => {
+                    if (!groups[item.size]) {
+                        groups[item.size] = [];
+                    }
+                    groups[item.size].push(item);
+                });
+
+                let numGroups = 0;
+                let groupKeys = Object.keys(groups); 
+
+                for (const size of groupKeys) {
+                    numGroups++;
+                    
+                    if (numGroups > 1) {
+                        tableContentHTML += `
+                            <div style="margin-top: 10px; margin-bottom: 8px;">
+                                ${pinPointLine}
+                            </div>
+                        `;
+                    }
+                    
+                    tableContentHTML += `
+                        <div style="font-size: 14pt; font-weight: bold; color: #1a1a1a; 
+                                    margin-top: 0;
+                                    margin-bottom: 10px;">
+                            SIZE: ${size}
+                        </div>
+                    `;
+                    
+                    tableContentHTML += `
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 0;">
+                            <thead>
+                                <tr style="background: linear-gradient(135deg, #ed3237 0%, #b82329 100%); color: white; height: 30px;">
+                                    <th style="padding: 5px; border: 1px solid #ed3237; text-align: center; font-size: 9pt !important; font-weight: 600; height: 30px; width: 10%;">Sr. No.</th>
+                                    <th style="padding: 5px; border: 1px solid #ed3237; text-align: center; font-size: 9pt !important; font-weight: 600; height: 30px; width: 35%;">Size</th>
+                                    <th style="padding: 5px; border: 1px solid #ed3237; text-align: center; font-size: 9pt !important; font-weight: 600; height: 30px; width: 25%;">Surface Type</th>
+                                    <th style="padding: 5px; border: 1px solid #ed3237; text-align: center; font-size: 9pt !important; font-weight: 600; height: 30px; width: 10%;">Grade</th>
+                                    <th style="padding: 5px; border: 1px solid #ed3237; text-align: center; font-size: 9pt !important; font-weight: 600; height: 30px; width: 20%;">Price <span style="font-size: 6pt !important; display: block;">(/sq feet)</span></th>
+                                </tr>
+                            </thead>
+                            <tbody style="background: white;">
+                    `;
+
+                    let groupSrNo = 1;
+                    groups[size].forEach((item, idx) => {
+                        const rowStyle = (idx % 2 === 0) ? 'background: white;' : 'background: #f8f9fa;';
+                        tableContentHTML += `
+                            <tr style="height: 24px; max-height: 24px; min-height: 24px; overflow: hidden; line-height: 1; ${rowStyle}">
+                                <td style="padding: 2px 4px; border: 1px solid #ddd; text-align: center; height: 20px; font-size: 9pt !important; line-height: 1; vertical-align: middle; color: ${pdfTextColor};">${groupSrNo}</td>
+                                <td style="padding: 2px 4px; border: 1px solid #ddd; text-align: center; height: 20px; font-size: 9pt !important; line-height: 1; vertical-align: middle; color: ${pdfTextColor};">${item.size}</td>
+                                <td style="padding: 2px 4px; border: 1px solid #ddd; text-align: center; height: 20px; font-size: 9pt !important; line-height: 1; vertical-align: middle; color: ${pdfTextColor};">${item.surface}</td>
+                                <td style="padding: 2px 4px; border: 1px solid #ddd; text-align: center; height: 20px; font-size: 9pt !important; line-height: 1; vertical-align: middle; color: ${pdfTextColor};">${item.grade}</td>
+                                <td style="padding: 2px 4px; border: 1px solid #ddd; text-align: center; height: 20px; font-size: 9pt !important; line-height: 1; vertical-align: middle; color: ${pdfTextColor};">₹ ${item.price.toFixed(2)}</td>
+                            </tr>
+                        `;
+                        groupSrNo++;
+                    });
+                    
+                    tableContentHTML += '</tbody></table>';
+                } 
+            } 
+            else {
+                let tableRows = ''; 
+                items.forEach((item, idx) => {
+                    const actualIndex = idx + 1;
+                    const rowStyle = (idx % 2 === 0) ? 'background: white;' : 'background: #f8f9fa;';
+                    tableRows += `
+                        <tr style="height: 24px; max-height: 24px; min-height: 24px; overflow: hidden; line-height: 1; ${rowStyle}">
+                            <td style="padding: 2px 4px; border: 1px solid #ddd; text-align: center; height: 20px; font-size: 9pt !important; line-height: 1; vertical-align: middle; color: ${pdfTextColor};">${actualIndex}</td>
+                            <td style="padding: 2px 4px; border: 1px solid #ddd; text-align: center; height: 20px; font-size: 9pt !important; line-height: 1; vertical-align: middle; color: ${pdfTextColor};">${item.size}</td>
+                            <td style="padding: 2px 4px; border: 1px solid #ddd; text-align: center; height: 20px; font-size: 9pt !important; line-height: 1; vertical-align: middle; color: ${pdfTextColor};">${item.surface}</td>
+                            <td style="padding: 2px 4px; border: 1px solid #ddd; text-align: center; height: 20px; font-size: 9pt !important; line-height: 1; vertical-align: middle; color: ${pdfTextColor};">${item.grade}</td>
+                            <td style="padding: 2px 4px; border: 1px solid #ddd; text-align: center; height: 20px; font-size: 9pt !important; line-height: 1; vertical-align: middle; color: ${pdfTextColor};">₹ ${item.price.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+
+                tableContentHTML = `
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+                        <thead>
+                            <tr style="background: linear-gradient(135deg, #ed3237 0%, #b82329 100%); color: white; height: 30px;">
+                                <th style="padding: 5px; border: 1px solid #ed3237; text-align: center; font-size: 9pt !important; font-weight: 600; height: 30px; width: 10%;">Sr. No.</th>
+                                <th style="padding: 5px; border: 1px solid #ed3237; text-align: center; font-size: 9pt !important; font-weight: 600; height: 30px; width: 35%;">Size</th>
+                                <th style="padding: 5px; border: 1px solid #ed3237; text-align: center; font-size: 9pt !important; font-weight: 600; height: 30px; width: 25%;">Surface Type</th>
+                                <th style="padding: 5px; border: 1px solid #ed3237; text-align: center; font-size: 9pt !important; font-weight: 600; height: 30px; width: 10%;">Grade</th>
+                                <th style="padding: 5px; border: 1px solid #ed3237; text-align: center; font-size: 9pt !important; font-weight: 600; height: 30px; width: 20%;">Price <span style="font-size: 6pt !important; display: block;">(/sq feet)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody style="background: white;">
+                            ${tableRows}
+                        </tbody>
+                    </table>
+                `;
+            }
+
+            // --- HTML Page Structure ---
+            // (PDF ka baaki content wahi hai... yahaan short kar raha hoon)
+            pagesHTML = `
+                <div style="font-family: 'Arial', sans-serif; width: 210mm; 
+                            height: ${totalHeight}; 
+                            margin: 0; background: white; 
+                            position: relative; 
+                            overflow: hidden; -webkit-text-size-adjust: none; text-size-adjust: none;">
+                    
+                    <div style="position: absolute; top: 0; right: 0; width: 75px; height: 90px; overflow: hidden; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); z-index: 1;">
+                        <img src="${logoA_base64}" style="width: 100%; height: 100%; object-fit: contain; transform: rotate(180deg); display: block;" />
+                    </div>
+                    <div style="position: absolute; left: 0mm; bottom: 0mm; width: 75px; height: 90px; overflow: hidden; z-index: 1;">
+                        <img src="${logoA_base64}" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+                    </div>
+
+                    <div style="padding: 20px 25px 20px 25px; 
+                                position: relative; z-index: 10;
+                    ">
+                        
+                        <div style="padding-bottom: 10px; margin-bottom: 15px; text-align: center;">
+                            <img
+                                src="${logoGranicer_base64}"
+                                style="height: 80px; width: auto; object-fit: contain; margin-bottom: 15px;"
+                            />
+                            ${pinPointLine}
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 9pt !important; color: ${pdfTextColor}; line-height: 1.8; margin-bottom: 20px;">
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 8px; color: #1a1a1a;">Company Details:</div>
+                                <div>COMET GRANITO PVT.LTD.</div>
+                                <div style="color: #666; font-size: 8pt !important;">C.I. No.: U26914GJ2006PTC049091</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 8px; color: #1a1a1a;">Registered Office:</div>
+                                <div style="font-size: 8pt !important;">Survey No. 118, National Highway No. 8-A</div>
+                                <div style="font-size: 8pt !important;">Tal. Morbi, Nava Jambudiya,</div>
+                                <div style="font-size: 8pt !important;">GJ 363642, INDIA</div>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 9pt !important; color: ${pdfTextColor}; margin-bottom: 20px; line-height: 1.8;">
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 8px; color: #1a1a1a;">Contact:</div>
+                                <div style="font-size: 8pt !important;">📧 Email: info@granicer.in</div>
+                                <div style="font-size: 8pt !important;">🌐 Web: www.granicer.in</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 8px; color: #1a1a1a;">Unit - 2:</div>
+                                <div style="font-size: 8pt !important;">Revenue Survey No. 168 P1 and P2</div>
+                                <div style="font-size: 8pt !important;">Revenue Survey No. 169 P1 and P6</div>
+                                <div style="font-size: 8pt !important;">At Ratavirda, Wankaner, Morbi-Guj. -363621</div>
+                            </div>
+                        </div>
+                        <div style="padding: 12px 0; margin-bottom: 20px; text-align: center;">
+                            <div style="margin-bottom: 12px;">${pinPointLine}</div>
+                            <div style="font-size: 16pt !important; font-weight: bold; color: #1a1a1a;">PRICE LIST</div>
+                            <div style="margin-top: 12px; margin-bottom: 5px;">${pinPointLine}</div>
+                        </div>
+                        
+                        ${tableContentHTML}
+
+                        <div style="height: 10mm;"></div>
+
+                        <div style="padding-top: 12px; margin-top: 0px;">
+                            <div style="margin-bottom: 12px;">${pinPointLine}</div>
+                            <div style="font-size: 9pt !important; font-weight: bold; color: #ed3237; margin-bottom: 8px;">
+                                Terms & Conditions:
+                            </div>
+                            <ul style="font-size: 8pt !important; color: ${pdfTextColor}; margin: 0; padding-left: 18px; line-height: 1.6;">
+                                <li>All prices are ex-factory and exclusive of GST unless stated otherwise.</li>
+                                <li>Prices are subject to change without prior notice depending on market conditions.</li>
+                                <li>Delivery period will be confirmed after order placement.</li>
+                                <li>The company is not responsible for delays due to transport or unforeseen events.</li>
+                                <li>The company is not liable once goods leave the factory.</li>
+                                <li>GST and any other government levies will be charged extra as applicable at the time of billing.</li>
+                                <li>No return or replacement will be accepted once goods are sold, except for genuine manufacturing defects verified by the company.</li>
+                                <li>Placing an order implies acceptance of the above terms & conditions.</li>
+                            </ul>
+                        </div>
+
+                        <div style="margin-top: 20px; padding-top: 10px; text-align: center;">
+                            ${pinPointLineFooter} 
+                            <div style="font-size: 7pt !important; color: #999; line-height: 1.4; margin-top: 10px;">
+                                <p style="margin: 2px 0;">This is an electronically generated price list. For further information, please contact our sales team.</p>
+                                <p style="margin: 2px 0;">Generated on: ${currentDate}</p>
+                                <p style="margin: 2px 0; color: #ef4444; font-weight: 600;">GRANICER CERAMICA INDIA - Asia's Largest Porcelain Slabs & Tiles Manufacturer</p>
+                            </div>
+                        </div>
+                        
+                    </div> </div> `;
+            
+            return pagesHTML;
+        }
+        
+        // --- [NEW V47] Clear Active Tab Function ---
+        function clearActiveTabContent() {
+            const activeTab = document.querySelector('.tab-content.active');
+            if (!activeTab) return;
+
+            if (activeTab.id === 'basic') {
+                clearBasicTab();
+            } else if (activeTab.id === 'advance') {
+                clearAdvanceTab();
+            }
+        }
+        // --- [END NEW V47] ---
+
+        function clearBasicTab() {
+            clearForm(); // Ab clearForm() clear buttons ko bhi handle karta hai
+            items = [];
+            renderItems(); 
+        }
+
+        function clearAdvanceTab() {
+            items = [];
+            
+            const sizeSelect = document.getElementById('advanceSizeSelect');
+            if (sizeSelect) sizeSelect.value = ""; 
+            
+            const gradePre = document.getElementById('adv_grade_pre');
+            if (gradePre) gradePre.checked = true;
+            
+            const optionsContainer = document.getElementById('advance-options-container');
+            if(optionsContainer) optionsContainer.style.display = 'none';
+
+            clearAdvancePriceInputs();
+            renderItems(); 
+        }
+
+        function switchTab(event, tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tab-btn');
+            const container = document.querySelector('.container');
+
+            tabs.forEach((tab) => tab.classList.remove('active'));
+            buttons.forEach((btn) => btn.classList.remove('active'));
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active'); 
+
+            if (tabName === 'advance') {
+                container.classList.add('advance-theme'); // Green theme
+                clearBasicTab();
+                populateSizeDropdown();
+            } else if (tabName === 'basic') {
+                container.classList.remove('advance-theme'); // Default (Purple) theme
+                clearAdvanceTab();
+            }
+        }
+        
+        // --- 3. Event Listeners & Initial Calls ---
+
+        // --- [NEW V47] Header Listeners ---
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set logo
+            try {
+                if (typeof logoGranicer1_base64 !== 'undefined') {
+                    document.getElementById('header-logo').src = logoGranicer1_base64;
+                } else {
+                    console.error('logoGranicer1_base64 is not defined. Make sure imagedata.js is loaded.');
+                }
+            } catch (e) {
+                console.error('Error loading logo:', e);
+            }
+            
+            // Add event listeners for new buttons
+            document.getElementById('clear-all-btn').addEventListener('click', clearActiveTabContent);
+            
+            document.getElementById('refresh-btn').addEventListener('click', function() {
+                location.reload();
+            });
+        });
+        // --- [END NEW V47] ---
+
+
+        document.addEventListener('click', function (event) {
+            if (!event.target.closest('.input-wrapper')) {
+                const sizeSuggestions = document.getElementById('sizeSuggestions');
+                const surfaceSuggestions = document.getElementById('surfaceSuggestions');
+                if (sizeSuggestions) sizeSuggestions.classList.remove('show');
+                if (surfaceSuggestions) surfaceSuggestions.classList.remove('show');
+                activeSuggestionIndex = -1; 
+            }
+        });
+
+        document.getElementById('size').addEventListener('keydown', (e) => handleSuggestionKeydown(e, 'size'));
+        document.getElementById('surface').addEventListener('keydown', (e) => handleSuggestionKeydown(e, 'surface'));
+        
+        // Initial page load
+        renderItems(); 
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js', { scope: './' })
+                    .then(registration => {
+                        console.log('ServiceWorker registered successfully.');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
