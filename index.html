@@ -50,15 +50,43 @@
         }
 
         .app-header {
-          position: sticky;
+          position: relative; 
+          overflow: hidden; 
           top: 0;
           width: 100%;
           padding: 15px 20px;
-          background: var(--header-glass);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
           border-bottom: 1px solid var(--card-border);
           z-index: 100;
+        }
+
+        .app-header::before {
+            content: '';
+            position: absolute;
+            z-index: -2;
+            top: -100%; 
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: conic-gradient(
+                from 180deg at 50% 50%,
+                var(--primary-glow-1) 0%, 
+                var(--primary-glow-2) 33%, 
+                var(--primary-glow-3) 66%, 
+                var(--primary-glow-1) 100%
+            );
+            /* NAYA CHANGE: Rotation animation hata di */
+            /* animation: rotate 10s linear infinite; */
+            opacity: 0.3;
+        }
+
+        .app-header::after {
+            content: '';
+            position: absolute;
+            z-index: -1;
+            inset: 0; 
+            background: var(--header-glass); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .header-content {
@@ -83,14 +111,13 @@
           padding: 20px;
         }
 
-        /* --- CHANGE: "TOOLS" chhota aur upar --- */
         .hero-section {
           text-align: center;
-          padding: 20px 20px 10px 20px; /* Padding kam ki */
+          padding: 10px 20px 10px 20px; /* Padding kam ki */
         }
 
         .hero-section h1 {
-          font-size: 2rem; /* Chhota kiya */
+          font-size: 1.5rem; /* Chhota kiya */
           font-weight: 600; /* Thoda patla */
           color: var(--text-secondary); /* Kam prominent */
           letter-spacing: 0.1em; /* Thodi spacing */
@@ -98,23 +125,19 @@
           margin: 0;
         }
 
-        /* --- PROJECT GRID (Figma/Google: Responsive Grid) --- */
         .project-grid {
           display: grid;
-          /* CHANGE: Mobile par 2 column */
           grid-template-columns: repeat(2, 1fr); 
-          gap: var(--spacing-medium); /* Gap kam kiya mobile ke liye */
+          gap: var(--spacing-medium); 
           margin-top: 20px;
         }
 
-        /* Tablet par gap badhaya */
         @media (min-width: 640px) {
           .project-grid {
             gap: var(--spacing-large);
           }
         }
         
-        /* Desktop par max width */
         @media (min-width: 768px) {
             .project-grid {
                 max-width: 800px; 
@@ -123,33 +146,28 @@
             }
         }
 
-        /* --- PROJECT CARD (Apple/Google: Clickable, 2099 Visual) --- */
         .project-card {
-          position: relative; /* Aurora effect ke liye */
-          overflow: hidden; /* Aurora effect ke liye */
+          position: relative; 
+          overflow: hidden; 
           
           border-radius: var(--radius-card);
           padding: var(--spacing-large);
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
           
-          /* Clickable banana */
           display: block;
           text-decoration: none;
           color: var(--text-primary);
           
-          /* Content (icon + title) ko center karna */
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          min-height: 220px; /* Tappable area */
+          min-height: 220px; 
           
           transition: all 0.3s ease;
           z-index: 1;
         }
 
-        /* --- "2099" Aurora Glow (Figma/Apple) --- */
-        /* Yeh glass ke 'peeche' rahega */
         .project-card::before {
             content: '';
             position: absolute;
@@ -167,18 +185,17 @@
                 var(--primary-glow-1) 100%
             );
             
-            /* Dheere-dheere rotate hoga */
-            animation: rotate 10s linear infinite;
-            opacity: 0.3; /* Subtle glow */
+            /* NAYA CHANGE: Rotation animation hata di */
+            /* animation: rotate 10s linear infinite; */
+            opacity: 0.3; 
             transition: opacity 0.4s ease, transform 0.4s ease;
         }
 
-        /* Yeh actual 'Glass' background hai */
         .project-card::after {
             content: '';
             position: absolute;
             z-index: -1;
-            inset: 0; /* poore card ko cover karega */
+            inset: 0; 
             background: var(--card-glass);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -187,38 +204,36 @@
             transition: background 0.3s ease;
         }
 
-        /* --- Hover Interaction (Google Material) --- */
         .project-card:hover {
-          transform: scale(1.03); /* Zoom */
+          transform: scale(1.03); 
           box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
         }
         
         .project-card:hover::after {
-            background: var(--card-glass-hover); /* Glass thoda bright hoga */
+            background: var(--card-glass-hover); 
         }
         
         .project-card:hover::before {
-            opacity: 0.6; /* Glow tez hoga */
-            animation-duration: 4s; /* Rotation tez hoga */
+            opacity: 0.6; /* Glow ab bhi tez hoga */
+            /* NAYA CHANGE: Rotation animation hata di */
+            /* animation-duration: 4s; */
         }
         
         .project-card:active {
-            transform: scale(0.98); /* Click feedback */
+            transform: scale(0.98); 
         }
 
-        /* Keyframes animation */
-        @keyframes rotate {
+        /* NAYA CHANGE: Rotation animation hata di */
+        /* @keyframes rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
-        }
+        } */
 
 
-        /* --- Bada Icon (Apple: Visual) --- */
         .card-icon {
-          width: 112px; /* Bada icon - 96px se 112px kiya */
-          height: 112px; /* Bada icon - 96px se 112px kiya */
+          width: 112px; 
+          height: 112px; 
           margin-bottom: var(--spacing-medium);
-          /* Icon ko hover se affect nahi hone denge */
           transform: translateZ(10px);
         }
 
@@ -227,20 +242,18 @@
           height: 100%;
         }
 
-        /* Card Title */
         .project-card h3 {
           margin: 0;
           color: var(--text-primary);
-          font-size: 1.1rem; /* Thoda chhota mobile ke liye */
+          font-size: 1.1rem; 
           font-weight: 600;
           text-align: center;
-          /* Title ko bhi hover se affect nahi hone denge */
           transform: translateZ(10px); 
         }
 
         @media (min-width: 640px) {
             .project-card h3 {
-                font-size: 1.25rem; /* Desktop par normal */
+                font-size: 1.25rem; 
             }
         }
         
@@ -271,7 +284,6 @@
 
     <main class="main-content">
         <section class="hero-section">
-            <!-- CHANGE: Title badla -->
             <h1>TOOLS</h1>
         </section>
 
@@ -381,14 +393,11 @@
                 projectListContainer.innerHTML = ''; 
                 
                 projects.forEach(project => {
-                    // --- CHANGE: Card ko DIV ki jagah <a> tag banaya ---
                     const projectCard = document.createElement('a');
                     projectCard.className = 'project-card';
                     projectCard.href = project.liveUrl;
-                    // Taki usi tab mein khule
                     projectCard.setAttribute('target', '_self'); 
                     
-                    // --- CHANGE: Sirf icon aur title dala ---
                     projectCard.innerHTML = `
                         <div class="card-icon">${project.icon}</div>
                         <h3>${project.title}</h3>
