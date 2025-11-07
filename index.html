@@ -59,22 +59,20 @@
           font-weight: 600;
         }
 
-        /* --- नया CSS कोड --- */
-        
-        .branding {
-          font-size: 1.2rem; /* थोड़ा बड़ा */
-          letter-spacing: 0.5px;
-          font-weight: 700;
+        /* --- नया लोगो CSS --- */
+        .logo-container {
+          display: flex;
+          align-items: center;
+          gap: 10px; /* दोनों लोगो के बीच की जगह */
         }
 
-        /* 'A' अक्षर के बाएं हिस्से को लाल करने के लिए */
-        .special-a {
-          background: linear-gradient(to right, #ef4444 40%, var(--text-primary) 40%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          text-fill-color: transparent;
+        .logo-container img {
+          height: 35px; /* लोगो की ऊंचाई */
+          width: auto;
+          object-fit: contain;
         }
+        /* --- खत्म नया CSS --- */
+
 
         /* रिफ्रेश बटन के लिए */
         .header-icon-btn {
@@ -97,8 +95,6 @@
           transform: rotate(90deg);
         }
         
-        /* --- पुराना CSS कोड जारी है --- */
-
         .main-content {
           max-width: 1200px;
           margin: 0 auto;
@@ -204,7 +200,11 @@
 
     <header class="app-header">
         <div class="header-content">
-            <strong class="branding">GR<span class="special-a">A</span>NICER</strong>
+            
+            <div class="logo-container">
+                <img id="logoA" alt="Logo A">
+                <img id="logoGranicer" alt="Granicer Logo">
+            </div>
             
             <button id="refresh-btn" class="header-icon-btn" title="Refresh Page">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -228,6 +228,8 @@
         <p>© 2025 Mayur Matholiya</p>
     </footer>
     
+    <script src="imagedata.js"></script>
+
     <script>
         // --- projects.json का डेटा ---
         const projects = [
@@ -253,6 +255,21 @@
 
         // --- app.js का कोड ---
         window.addEventListener('DOMContentLoaded', () => {
+            
+            // --- नया लोगो कोड ---
+            try {
+                if (typeof logoA_base64 !== 'undefined') {
+                    document.getElementById('logoA').src = logoA_base64;
+                }
+                // (नोट: आपकी फ़ाइल में "logoGranicer_base64" है, "logoGranicer2_base64" नहीं)
+                if (typeof logoGranicer_base64 !== 'undefined') {
+                    document.getElementById('logoGranicer').src = logoGranicer_base64;
+                }
+            } catch (e) {
+                console.error("Logo base64 data not found. Make sure imagedata.js is loaded.", e);
+            }
+            // --- खत्म नया लोगो कोड ---
+
             fetchProjects();
             registerSW();
 
@@ -263,7 +280,6 @@
         
         }); // <-- addEventListener का बंद होने वाला ब्रैकेट
 
-        // अब यह फ़ंक्शन 'projects.json' को फ़ेच नहीं करेगा, बल्कि ऊपर दिए गए 'projects' वेरिएबल का इस्तेमाल करेगा
         function fetchProjects() {
             try {
                 const projectListContainer = document.getElementById('project-list');
