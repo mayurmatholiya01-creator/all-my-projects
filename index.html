@@ -59,14 +59,45 @@
           font-weight: 600;
         }
 
-        .header-content a {
-          color: var(--text-secondary);
-          transition: color 0.2s ease;
+        /* --- नया CSS कोड --- */
+        
+        .branding {
+          font-size: 1.2rem; /* थोड़ा बड़ा */
+          letter-spacing: 0.5px;
+          font-weight: 700;
         }
 
-        .header-content a:hover {
-          color: var(--text-primary);
+        /* 'A' अक्षर के बाएं हिस्से को लाल करने के लिए */
+        .special-a {
+          background: linear-gradient(to right, #ef4444 40%, var(--text-primary) 40%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          text-fill-color: transparent;
         }
+
+        /* रिफ्रेश बटन के लिए */
+        .header-icon-btn {
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          padding: 5px;
+          line-height: 0; 
+        }
+
+        .header-icon-btn svg {
+          width: 20px;
+          height: 20px;
+          stroke: var(--text-secondary); /* आइकॉन का रंग */
+          transition: all 0.3s ease;
+        }
+
+        .header-icon-btn:hover svg {
+          stroke: var(--text-primary);
+          transform: rotate(90deg);
+        }
+        
+        /* --- पुराना CSS कोड जारी है --- */
 
         .main-content {
           max-width: 1200px;
@@ -173,13 +204,16 @@
 
     <header class="app-header">
         <div class="header-content">
-            <strong>Mayur's Project Hub</strong>
-            <a href="https://github.com/mayurmatholiya01-creator/all-my-projects" target="_blank" title="GitHub Repository">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-            </a>
+            <strong class="branding">GR<span class="special-a">A</span>NICER</strong>
+            
+            <button id="refresh-btn" class="header-icon-btn" title="Refresh Page">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 4v6h-6M1 20v-6h6"/>
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                </svg>
+            </button>
         </div>
     </header>
-
     <main class="main-content">
         <section class="hero-section">
             <h1>Project Hub</h1>
@@ -221,7 +255,13 @@
         window.addEventListener('DOMContentLoaded', () => {
             fetchProjects();
             registerSW();
-        });
+
+            // रिफ्रेश बटन को काम करने लायक बनाएँ
+            document.getElementById('refresh-btn').addEventListener('click', () => {
+                location.reload();
+            });
+        
+        }); // <-- addEventListener का बंद होने वाला ब्रैकेट
 
         // अब यह फ़ंक्शन 'projects.json' को फ़ेच नहीं करेगा, बल्कि ऊपर दिए गए 'projects' वेरिएबल का इस्तेमाल करेगा
         function fetchProjects() {
