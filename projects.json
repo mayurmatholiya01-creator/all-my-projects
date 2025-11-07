@@ -1,0 +1,17 @@
+[
+    {
+        "title": "प्राइस लिस्ट जेनरेटर",
+        "description": "Granicer Ceramica के लिए प्राइस लिस्ट जेनरेटर।",
+        "liveUrl": "./project-price/index.html"
+    },
+    {
+        "title": "टाइल्स प्रो कैलकुलेटर",
+        "description": "टाइल्स का एरिया, वज़न और क़ीमत कैलकुलेट करने के लिए।",
+        "liveUrl": "./project-calculator/index.html"
+    },
+    {
+        "title": "टाइल्स डिज़ाइन सर्च",
+        "description": "टाइल्स के डिज़ाइन खोजने और शेयर करने के लिए।",
+        "liveUrl": "./project-tilesearch/index.html"
+    }
+]
