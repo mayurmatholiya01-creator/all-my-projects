@@ -4,9 +4,8 @@ const CACHE_NAME = 'all-my-projects-v2'; // (वर्जन बदला गय
 const ASSETS_TO_CACHE = [
     './', 
     './index.html', 
-    './style.css',  /* <-- नई CSS फ़ाइल जोड़ी गई */
-    './app.js', 
-    './projects.json',
+    // style.css और app.js को यहाँ से हटा दिया गया है, क्योंकि वे index.html में हैं
+    // projects.json को भी हटा दिया गया है
     './manifest.json',
     './icon-192.png',
     './icon-512.png',
@@ -30,10 +29,8 @@ self.addEventListener('install', event => {
         caches.open(CACHE_NAME)
         .then(cache => {
             console.log('Cache opened. Caching core assets...');
-            // हम addAll इस्तेमाल नहीं करेंगे ताकि अगर एक फ़ाइल (जैसे CDN) फेल हो, तो बाकी कैशे हो जाएँ
             return Promise.all(
                 ASSETS_TO_CACHE.map(url => {
-                    // क्रॉस-ओरिजिन (CDN) रिक्वेस्ट के लिए 'no-cors' मोड का इस्तेमाल करें
                     const request = new Request(url, { mode: 'no-cors' });
                     return cache.add(request).catch(err => {
                         console.warn(`Failed to cache ${url}:`, err);
@@ -62,12 +59,26 @@ self.addEventListener('activate', event => {
 
 // Fetch Event: (Network falling back to Cache)
 self.addEventListener('fetch', event => {
+    // index.html के लिए हमेशा नेटवर्क से लाने की कोशिश करें (ताकि अपडेट्स मिलें),
+    // अगर फेल हो तो कैशे से दें।
+    if (event.request.url.includes('index.html')) {
+        event.respondWith(
+            fetch(event.request)
+            .catch(() => caches.match(event.request))
+        );
+        return;
+    }
+
+    // बाकी सब चीज़ों के लिए कैशे से दें (अगर मौजूद है)
     event.respondWith(
-        fetch(event.request)
-        .catch(() => {
-            // नेटवर्क फेल हुआ? कैशे से dhoondo
-            console.log(`Network failed for ${event.request.url}. Trying cache.`);
-            return caches.match(event.request);
+        caches.match(event.request)
+        .then(response => {
+            // अगर कैशे में है, तो उसे दो
+            if (response) {
+                return response;
+            }
+            // अगर कैशे में नहीं है, तो नेटवर्क से लाओ
+            return fetch(event.request);
         })
     );
 });
