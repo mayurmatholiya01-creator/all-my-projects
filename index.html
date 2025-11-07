@@ -44,7 +44,6 @@
         body {
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           background-color: var(--bg-primary);
-          /* Glass effect ke liye background gradient */
           background-image: radial-gradient(at 50% 0%, hsla(228,100%,74%,0.1) 0, transparent 50%);
           color: var(--text-primary);
           min-height: 100vh;
@@ -84,38 +83,33 @@
           padding: 20px;
         }
 
-        /* --- CHANGE: "TOOLS" chhota aur upar --- */
         .hero-section {
           text-align: center;
-          padding: 20px 20px 10px 20px; /* Padding kam ki */
+          padding: 20px 20px 10px 20px; 
         }
 
         .hero-section h1 {
-          font-size: 2rem; /* Chhota kiya */
-          font-weight: 600; /* Thoda patla */
-          color: var(--text-secondary); /* Kam prominent */
-          letter-spacing: 0.1em; /* Thodi spacing */
+          font-size: 2rem; 
+          font-weight: 600; 
+          color: var(--text-secondary); 
+          letter-spacing: 0.1em; 
           text-transform: uppercase;
           margin: 0;
         }
 
-        /* --- PROJECT GRID (Figma/Google: Responsive Grid) --- */
         .project-grid {
           display: grid;
-          /* CHANGE: Mobile par 2 column */
           grid-template-columns: repeat(2, 1fr); 
-          gap: var(--spacing-medium); /* Gap kam kiya mobile ke liye */
+          gap: var(--spacing-medium); 
           margin-top: 20px;
         }
 
-        /* Tablet par gap badhaya */
         @media (min-width: 640px) {
           .project-grid {
             gap: var(--spacing-large);
           }
         }
         
-        /* Desktop par max width */
         @media (min-width: 768px) {
             .project-grid {
                 max-width: 800px; 
@@ -124,33 +118,28 @@
             }
         }
 
-        /* --- PROJECT CARD (Apple/Google: Clickable, 2099 Visual) --- */
         .project-card {
-          position: relative; /* Aurora effect ke liye */
-          overflow: hidden; /* Aurora effect ke liye */
+          position: relative; 
+          overflow: hidden; 
           
           border-radius: var(--radius-card);
           padding: var(--spacing-large);
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
           
-          /* Clickable banana */
           display: block;
           text-decoration: none;
           color: var(--text-primary);
           
-          /* Content (icon + title) ko center karna */
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          min-height: 220px; /* Tappable area */
+          min-height: 220px; 
           
           transition: all 0.3s ease;
           z-index: 1;
         }
 
-        /* --- "2099" Aurora Glow (Figma/Apple) --- */
-        /* Yeh glass ke 'peeche' rahega */
         .project-card::before {
             content: '';
             position: absolute;
@@ -168,18 +157,16 @@
                 var(--primary-glow-1) 100%
             );
             
-            /* Dheere-dheere rotate hoga */
             animation: rotate 10s linear infinite;
-            opacity: 0.3; /* Subtle glow */
+            opacity: 0.3; 
             transition: opacity 0.4s ease, transform 0.4s ease;
         }
 
-        /* Yeh actual 'Glass' background hai */
         .project-card::after {
             content: '';
             position: absolute;
             z-index: -1;
-            inset: 0; /* poore card ko cover karega */
+            inset: 0; 
             background: var(--card-glass);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -188,38 +175,34 @@
             transition: background 0.3s ease;
         }
 
-        /* --- Hover Interaction (Google Material) --- */
         .project-card:hover {
-          transform: scale(1.03); /* Zoom */
+          transform: scale(1.03); 
           box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
         }
         
         .project-card:hover::after {
-            background: var(--card-glass-hover); /* Glass thoda bright hoga */
+            background: var(--card-glass-hover); 
         }
         
         .project-card:hover::before {
-            opacity: 0.6; /* Glow tez hoga */
-            animation-duration: 4s; /* Rotation tez hoga */
+            opacity: 0.6; 
+            animation-duration: 4s; 
         }
         
         .project-card:active {
-            transform: scale(0.98); /* Click feedback */
+            transform: scale(0.98); 
         }
 
-        /* Keyframes animation */
         @keyframes rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
 
-
-        /* --- Bada Icon (Apple: Visual) --- */
+        /* --- CHANGE: Icon ka size bada kiya --- */
         .card-icon {
-          width: 80px; /* Bada icon */
-          height: 80px;
+          width: 96px; /* Bada icon */
+          height: 96px;
           margin-bottom: var(--spacing-medium);
-          /* Icon ko hover se affect nahi hone denge */
           transform: translateZ(10px);
         }
 
@@ -228,20 +211,18 @@
           height: 100%;
         }
 
-        /* Card Title */
         .project-card h3 {
           margin: 0;
           color: var(--text-primary);
-          font-size: 1.1rem; /* Thoda chhota mobile ke liye */
+          font-size: 1.1rem; 
           font-weight: 600;
           text-align: center;
-          /* Title ko bhi hover se affect nahi hone denge */
           transform: translateZ(10px); 
         }
 
         @media (min-width: 640px) {
             .project-card h3 {
-                font-size: 1.25rem; /* Desktop par normal */
+                font-size: 1.25rem; 
             }
         }
         
@@ -286,62 +267,60 @@
     <script src="imagedata.js"></script>
 
     <script>
-        // --- NAYE TITLES AUR ICONS (2099 Design) ---
+        // --- NAYE TITLES AUR 2099 ICONS ---
         const projects = [
             {
                 "title": "Price List",
                 "liveUrl": "./project-price/index.html",
-                /* NAYA ICON: Holographic Document */
-                "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                /* NAYA ICON: Document + Rupee Symbol (₹) */
+                "icon": `<svg viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <defs>
-                                <linearGradient id="g1" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                                <linearGradient id="g1" x1="0" y1="0" x2="96" y2="96" gradientUnits="userSpaceOnUse">
                                 <stop stop-color="var(--primary-glow-1)" stop-opacity="0.8"/>
                                 <stop offset="1" stop-color="var(--primary-glow-3)" stop-opacity="1"/>
                                 </linearGradient>
                             </defs>
-                            <path d="M56.6667 8H23.3333C20.3878 8 18 10.3878 18 13.3333V66.6667C18 69.6122 20.3878 72 23.3333 72H56.6667C59.6122 72 62 69.6122 62 66.6667V24L56.6667 8Z" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M56 8V24H62" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M48.6667 44H31.3333" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
-                            <path d="M48.6667 56H31.3333" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
-                            <path d="M38 32H31.3333" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
+                            <path d="M68 12H28C24.6863 12 22 14.6863 22 18V78C22 81.3137 24.6863 84 28 84H68C71.3137 84 74 81.3137 74 78V30L68 12Z" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M67 12V30H74" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M48 46H38" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
+                            <path d="M58 40H38" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
+                            <path d="M58 52C58 56.4183 54.4183 60 50 60C45.5817 60 42 56.4183 42 52C42 47.5817 45.5817 44 50 44H58" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.9"/>
                         </svg>`
             },
             {
                 "title": "Calculator",
                 "liveUrl": "./project-calculator/index.html",
-                /* NAYA ICON: Geometric/Tile Grid */
-                "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                /* NAYA ICON: Tile + Calculator Buttons */
+                "icon": `<svg viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <defs>
-                                <linearGradient id="g2" x1="40" y1="0" x2="40" y2="80" gradientUnits="userSpaceOnUse">
+                                <linearGradient id="g2" x1="48" y1="0" x2="48" y2="96" gradientUnits="userSpaceOnUse">
                                 <stop stop-color="var(--primary-glow-1)" stop-opacity="1"/>
                                 <stop offset="1" stop-color="var(--primary-glow-2)" stop-opacity="0.8"/>
                                 </linearGradient>
                             </defs>
-                            <path d="M16 16H32V32H16V16Z" stroke="url(#g2)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.4"/>
-                            <path d="M16 48H32V64H16V48Z" stroke="url(#g2)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.4"/>
-                            <path d="M48 16H64V32H48V16Z" stroke="url(#g2)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.4"/>
-                            <path d="M48 48H64V64H48V48Z" stroke="url(#g2)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M40 56V48" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
-                            <path d="M40 32V24" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
-                            <path d="M24 40H32" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
-                            <path d="M48 40H56" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
-                            <path d="M40 40H64" stroke="url(#g2)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.4"/>
+                            <rect x="12" y="12" width="72" height="72" rx="12" stroke="url(#g2)" stroke-width="3"/>
+                            <path d="M36 60H60" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
+                            <path d="M48 48V72" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
+                            <path d="M36 36H48" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
+                            <circle cx="60" cy="36" r="3" fill="white" fill-opacity="0.7"/>
                         </svg>`
             },
             {
                 "title": "Tiles JPG",
                 "liveUrl": "./project-tilesearch/index.html",
-                /* NAYA ICON: Digital Image Search */
-                "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                /* NAYA ICON: Stacked Images (JPG) + Download Arrow */
+                "icon": `<svg viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <defs>
-                                <linearGradient id="g3" x1="0" y1="80" x2="80" y2="0" gradientUnits="userSpaceOnUse">
+                                <linearGradient id="g3" x1="0" y1="96" x2="96" y2="0" gradientUnits="userSpaceOnUse">
                                 <stop stop-color="var(--primary-glow-2)" stop-opacity="0.8"/>
                                 <stop offset="1" stop-color="var(--primary-glow-3)" stop-opacity="1"/>
                                 </linearGradient>
                             </defs>
-                            <path d="M20 12H60C62.2091 12 64 13.7909 64 16V64C64 66.2091 62.2091 68 60 68H20C17.7909 68 16 66.2091 16 64V16C16 13.7909 17.7909 12 20 12Z" stroke="url(#g3)" stroke-width="3" stroke-opacity="0.4"/>
-                            <path d="M52 36C52 42.6274 46.6274 48 40 48C33.3726 48 28 42.6274 28 36C28 29.3726 33.3726 24 40 24C46.6274 24 52 29.3726 52 36Z" stroke="url(#g3)" stroke-width="3"/>
-                            <path d="M46.6667 46.6667L57.3333 57.3333" stroke="url(#g3)" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M22 64V24C22 21.7909 23.7909 20 26 20H66C68.2091 20 70 21.7909 70 24V64C70 66.2091 68.2091 68 66 68H26C23.7909 68 22 66.2091 22 64Z" stroke="url(#g3)" stroke-width="3" stroke-opacity="0.5"/>
+                            <path d="M26 12H70C72.2091 12 74 13.7909 74 16V60C74 62.2091 72.2091 64 70 64H26C23.7909 64 22 62.2091 22 60V16C22 13.7909 23.7909 12 26 12Z" stroke="url(#g3)" stroke-width="3"/>
+                            <path d="M48 34V52" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.8"/>
+                            <path d="M40 44L48 52L56 44" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.8"/>
+                            <path d="M34 76H62" stroke="url(#g3)" stroke-width="3" stroke-linecap="round" stroke-opacity="0.5"/>
                         </svg>`
             }
         ];
@@ -375,14 +354,11 @@
                 projectListContainer.innerHTML = ''; 
                 
                 projects.forEach(project => {
-                    // --- CHANGE: Card ko DIV ki jagah <a> tag banaya ---
                     const projectCard = document.createElement('a');
                     projectCard.className = 'project-card';
                     projectCard.href = project.liveUrl;
-                    // Taki usi tab mein khule
                     projectCard.setAttribute('target', '_self'); 
                     
-                    // --- CHANGE: Sirf icon aur title dala ---
                     projectCard.innerHTML = `
                         <div class="card-icon">${project.icon}</div>
                         <h3>${project.title}</h3>
