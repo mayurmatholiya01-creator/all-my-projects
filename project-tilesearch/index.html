@@ -5,21 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tile Search</title>
   
-  <!-- PWA Meta Tags for Full Screen -->
-  <meta name="theme-color" content="#0d1117">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Tile Search">
-  <meta name="application-name" content="Tile Search">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="msapplication-TileColor" content="#0d1117">
-  <meta name="msapplication-navbutton-color" content="#0d1117">
   
-  <!-- PWA Icons -->
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
   
   <style>
     * { margin:0; padding:0; box-sizing:border-box }
@@ -596,14 +582,7 @@
       if (e.key === 'Escape') closeModal();
     });
 
-    // Service Worker Registration
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('data:text/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgKGUpID0+IHsKICBjb25zb2xlLmxvZygnU1c6IEluc3RhbGxlZCcpOwp9KTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcignZmV0Y2gnLCAoZSkgPT4gewogIGUucmVzcG9uZFdpdGgoZmV0Y2goZS5yZXF1ZXN0KSk7Cn0pOw==')
-          .then(() => console.log('SW: Registered'))
-          .catch(() => console.log('SW: Registration failed'));
-      });
-    }
+
 
     async function loadData() {
       try {
