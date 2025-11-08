@@ -5,50 +5,48 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
   <title>TilesPro Calculator</title>
   
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  
+  
   
   <style>
     :root {
-      /* --- PORTFOLIO DESIGN TOKENS --- */
-      --bg-primary: #0a0a0b;
-      --text-primary: #f0f6fc;
-      --text-secondary: #c9d1d9;
-      --text-muted: #9ca3af; /* Added for calc */
-      
-      /* Primary Colors (Portfolio Palette) */
-      --primary-glow-1: #6366f1;
-      --primary-glow-2: #a855f7;
-      --primary-glow-3: #ec4899;
-      --primary-light: #818cf8; /* From original calc */
-      
-      /* Card/Header Glass (Portfolio) */
-      --header-glass: rgba(10, 10, 11, 0.7);
-      --card-glass: rgba(30, 30, 35, 0.6);
-      --card-glass-hover: rgba(35, 35, 40, 0.75);
-      --card-border: rgba(255, 255, 255, 0.1);
-      
-      /* New Glass for Inputs (Lighter) */
-      --input-glass: rgba(26, 26, 30, 0.6);
-      --input-glass-hover: rgba(30, 30, 35, 0.75);
-
-      /* Grid System (Portfolio) */
-      --spacing-medium: 16px;
-      --spacing-large: 24px;
-      --radius-card: 16px;
-      --border-radius-sm: 8px; /* From original calc */
-
-      /* Colors from original calc (for gradients) */
+      --primary: #6366f1;
+      --primary-light: #818cf8;
       --success: #10b981;
       --warning: #f59e0b;
       --error: #ef4444;
+      
+      --bg-primary: #0a0a0b;
+      --bg-secondary: #1a1a1e;
+      --glass: rgba(255, 255, 255, 0.06);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --glass-hover: rgba(255, 255, 255, 0.08);
+      
+      --text-primary: #ffffff;
+      --text-secondary: #d1d5db;
+      --text-muted: #9ca3af;
+      
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.2);
+      
+      --border-radius: 12px;
+      --border-radius-sm: 8px;
       
       /* Safe area variables */
       --safe-area-top: env(safe-area-inset-top);
       --safe-area-bottom: env(safe-area-inset-bottom);
       --safe-area-left: env(safe-area-inset-left);
       --safe-area-right: env(safe-area-inset-right);
+    }
+
+    /* Advanced mode colors - optimized */
+    .container.advanced-mode {
+      --primary: #10b981;
+      --primary-light: #34d399;
+      --glass: rgba(16, 185, 129, 0.08);
+      --glass-border: rgba(16, 185, 129, 0.15);
+      --glass-hover: rgba(16, 185, 129, 0.12);
     }
 
     * {
@@ -69,111 +67,36 @@
       background-image: radial-gradient(at 50% 0%, hsla(228,100%,74%,0.1) 0, transparent 50%);
       color: var(--text-primary);
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: max(1rem, var(--safe-area-top)) max(1rem, var(--safe-area-right)) max(1rem, var(--safe-area-bottom)) max(1rem, var(--safe-area-left));
       transition: background-image 0.3s ease;
       -webkit-tap-highlight-color: transparent;
-      
-      /* Add padding for header */
-      padding-top: 80px;
-    }
-    
-    /* --- NEW HEADER (FROM PORTFOLIO) --- */
-    .app-header {
-      position: fixed; /* Changed from sticky */
-      top: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      padding: 15px max(20px, var(--safe-area-right)) 15px max(20px, var(--safe-area-left));
-      border-bottom: 1px solid var(--card-border);
-      z-index: 100;
-      overflow: hidden; 
-      transition: transform 0.3s ease-out;
-      will-change: transform;
-    }
-    
-    .app-header.header-hidden {
-        transform: translateY(-100%);
     }
 
-    .app-header::before {
-        content: '';
-        position: absolute;
-        z-index: -2;
-        top: -100%; 
-        left: -100%;
-        width: 300%;
-        height: 300%;
-        background: conic-gradient(
-            from 180deg at 50% 50%,
-            var(--primary-glow-1) 0%, 
-            var(--primary-glow-2) 33%, 
-            var(--primary-glow-3) 66%, 
-            var(--primary-glow-1) 100%
-        );
-        opacity: 0.3;
+    /* Advanced mode background - simplified */
+    body.advanced-bg {
+      background-image: radial-gradient(at 50% 0%, hsla(158,100%,74%,0.12) 0, transparent 50%);
     }
-
-    .app-header::after {
-        content: '';
-        position: absolute;
-        z-index: -1;
-        inset: 0; 
-        background: var(--header-glass); 
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-    }
-
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 600;
-    }
-    
-    .logo-container { display: flex; align-items: center; gap: 10px; }
-    .logo-container img { height: 35px; width: auto; object-fit: contain; }
-    
-    .header-icon-btn { 
-      background: transparent; 
-      border: none; 
-      cursor: pointer; 
-      padding: 5px; 
-      line-height: 0;
-      text-decoration: none;
-    }
-    .header-icon-btn svg { 
-      width: 22px; 
-      height: 22px; 
-      stroke: var(--text-secondary); 
-      transition: all 0.3s ease; 
-    }
-    .header-icon-btn:hover svg { 
-      stroke: var(--text-primary); 
-      transform: scale(1.1);
-    }
-    /* --- END NEW HEADER --- */
-
 
     .container {
       width: 100%;
       max-width: 720px;
       margin: 0 auto;
       transition: all 0.3s ease;
-      padding: max(1rem, var(--safe-area-top)) max(1rem, var(--safe-area-right)) max(1rem, var(--safe-area-bottom)) max(1rem, var(--safe-area-left));
-      padding-top: 1rem; /* Remove extra top padding */
     }
 
-    /* Mode Switch - RESKINNED */
+    /* Mode Switch - optimized */
     .mode-switch {
       display: flex;
-      background: var(--card-glass); /* RESKIN */
+      background: var(--glass);
       border-radius: var(--border-radius-sm);
       padding: 4px;
       margin-bottom: 1.5rem;
       position: relative;
-      border: 1px solid var(--card-border); /* RESKIN */
+      border: 1px solid var(--glass-border);
       transition: all 0.3s ease;
     }
 
@@ -205,19 +128,18 @@
       left: 4px;
       bottom: 4px;
       width: calc(50% - 4px);
-      /* RESKIN: Changed to Purple Gradient */
-      background: linear-gradient(135deg, var(--primary-glow-1), var(--primary-light));
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
       border-radius: calc(var(--border-radius-sm) - 4px);
       transition: transform 0.3s ease;
       z-index: 1;
     }
 
-    /* RESKIN: Changed Advanced mode to use palette */
     .mode-switch.advanced-mode::after {
       transform: translateX(100%);
-      background: linear-gradient(135deg, var(--primary-glow-2), var(--primary-glow-3));
+      background: linear-gradient(135deg, var(--success), #34d399);
     }
 
+    /* Calculator cards - performance optimized */
     .calculator-cards {
       display: flex;
       flex-direction: column;
@@ -225,36 +147,34 @@
       margin-bottom: 1.5rem;
     }
 
-    /* Calculator cards - RESKINNED */
     .calculator-card {
-      background: var(--card-glass); /* RESKIN */
-      border: 1px solid var(--card-border); /* RESKIN */
-      border-radius: var(--radius-card); /* RESKIN */
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--border-radius);
       padding: 1.5rem;
       position: relative;
       transition: all 0.2s ease;
-      opacity: 0; /* For animation */
-      animation: fade-in-up 0.5s ease-out forwards;
-    }
-    
-    /* Staggered animation */
-    .calculator-card:nth-child(2) { animation-delay: 0.1s; }
-    .calculator-card:nth-child(3) { animation-delay: 0.2s; }
-    .calculator-card:nth-child(4) { animation-delay: 0.3s; }
-
-    @keyframes fade-in-up {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      animation: cardSlideIn 0.4s ease-out;
     }
 
+    @keyframes cardSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
     .calculator-card:hover {
-      background: var(--card-glass-hover); /* RESKIN */
+      background: var(--glass-hover);
       transform: translateY(-2px);
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2); /* RESKIN */
+      box-shadow: var(--shadow-lg);
     }
 
-    /* Delete button - RESKINNED */
+    /* Delete button - simplified and performance optimized */
     .delete-card-btn {
       position: absolute;
       top: -10px;
@@ -271,24 +191,43 @@
       justify-content: center;
       transition: transform 0.2s ease;
       z-index: 10;
-      border: 2px solid var(--bg-primary); /* RESKIN */
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* RESKIN */
+      border: 2px solid var(--bg-primary);
+      box-shadow: var(--shadow);
     }
 
-    .delete-card-btn:hover { transform: scale(1.1); }
-    .delete-card-btn:active { transform: scale(0.95); }
-    .container.advanced-mode .delete-card-btn { display: flex; }
+    .delete-card-btn:hover {
+      transform: scale(1.1);
+    }
 
-    .form-section { margin-bottom: 1.5rem; }
+    .delete-card-btn:active {
+      transform: scale(0.95);
+    }
+
+    .container.advanced-mode .delete-card-btn {
+      display: flex;
+    }
+
+    /* Form sections - streamlined */
+    .form-section {
+      margin-bottom: 1.5rem;
+    }
+
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
       margin-bottom: 1rem;
     }
-    .form-group { position: relative; }
-    .form-group.full-width { grid-column: span 2; }
-    
+
+    .form-group {
+      position: relative;
+    }
+
+    .form-group.full-width {
+      grid-column: span 2;
+    }
+
+    /* Labels - simplified */
     .gst-label-centered {
       text-align: center;
       font-size: 0.75rem;
@@ -309,15 +248,15 @@
       letter-spacing: 0.3px;
     }
 
-    /* Inputs - RESKINNED */
+    /* Inputs - performance optimized */
     .form-input, .form-select {
       width: 100%;
       padding: 0.875rem 1rem;
-      background: var(--input-glass); /* RESKIN */
-      border: 1px solid var(--card-border); /* RESKIN */
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
       border-radius: var(--border-radius-sm);
       color: var(--text-primary);
-      font-size: 16px; 
+      font-size: 16px; /* Prevents zoom on mobile */
       font-weight: 500;
       transition: all 0.2s ease;
       outline: none;
@@ -326,6 +265,7 @@
       appearance: none;
     }
 
+    /* Dropdown styling - simplified */
     .form-select {
       background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23d1d5db' stroke-width='2' fill='none'/></svg>");
       background-repeat: no-repeat;
@@ -336,11 +276,16 @@
     }
 
     .form-select option {
-      background: var(--bg-primary); /* RESKIN */
+      background: var(--bg-secondary);
       color: var(--text-primary);
+      padding: 0.5rem;
     }
 
-    .price-input-container { position: relative; }
+    /* Price input */
+    .price-input-container {
+      position: relative;
+    }
+
     .price-input-container::before {
       content: '₹';
       position: absolute;
@@ -353,26 +298,30 @@
       z-index: 2;
       pointer-events: none;
     }
-    .form-input.price-input { padding-left: 2.25rem; }
 
-    /* Focus states - RESKINNED */
+    .form-input.price-input {
+      padding-left: 2.25rem;
+    }
+
+    /* Focus states - simplified */
     .form-input:focus, .form-select:focus {
-      border-color: var(--primary-glow-1); /* RESKIN */
-      background: var(--input-glass-hover); /* RESKIN */
+      border-color: var(--primary);
+      background: var(--glass-hover);
       box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
     }
+
     .form-input:hover, .form-select:hover {
-      background: var(--input-glass-hover); /* RESKIN */
+      background: var(--glass-hover);
     }
 
-    /* Mode toggle - RESKINNED */
+    /* Mode toggle - optimized */
     .mode-toggle {
       display: flex;
-      background: var(--input-glass); /* RESKIN */
+      background: var(--glass);
       border-radius: var(--border-radius-sm);
       padding: 4px;
       position: relative;
-      border: 1px solid var(--card-border); /* RESKIN */
+      border: 1px solid var(--glass-border);
     }
 
     .mode-option {
@@ -390,7 +339,10 @@
       text-transform: uppercase;
       letter-spacing: 0.3px;
     }
-    .mode-option.active { color: var(--text-primary); }
+
+    .mode-option.active {
+      color: var(--text-primary);
+    }
 
     .mode-toggle::after {
       content: '';
@@ -399,26 +351,31 @@
       left: 4px;
       bottom: 4px;
       width: calc(50% - 4px);
-      /* RESKIN: Changed to Purple Gradient */
-      background: linear-gradient(135deg, var(--primary-glow-1), var(--primary-light));
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
       border-radius: calc(var(--border-radius-sm) - 4px);
       transition: transform 0.2s ease;
       z-index: 1;
     }
-    .mode-toggle.pieces-mode::after { transform: translateX(100%); }
 
-    /* Price section - RESKINNED */
+    .mode-toggle.pieces-mode::after {
+      transform: translateX(100%);
+    }
+
+    /* Price section */
     .price-section {
-      background: var(--input-glass); /* RESKIN */
-      border: 1px solid var(--card-border); /* RESKIN */
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
       border-radius: var(--border-radius-sm);
       padding: 1rem;
       margin-bottom: 1.5rem;
       transition: background 0.2s ease;
     }
-    .price-section:hover { background: var(--input-glass-hover); }
 
-    /* Results grid - RESKINNED */
+    .price-section:hover {
+      background: var(--glass-hover);
+    }
+
+    /* Results grid - performance optimized */
     .results-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -427,8 +384,8 @@
     }
 
     .result-item {
-      background: var(--input-glass); /* RESKIN */
-      border: 1px solid var(--card-border); /* RESKIN */
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
       border-radius: var(--border-radius-sm);
       padding: 1rem;
       text-align: center;
@@ -448,15 +405,19 @@
       left: 0;
       right: 0;
       height: 2px;
-      background: var(--primary-glow-1); /* RESKIN */
+      background: var(--primary);
       transform: translateX(-100%);
       transition: transform 0.2s ease;
     }
-    .result-item:hover::before { transform: translateX(0); }
+
+    .result-item:hover::before {
+      transform: translateX(0);
+    }
+
     .result-item:hover {
-      background: var(--input-glass-hover); /* RESKIN */
+      background: var(--glass-hover);
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* RESKIN */
+      box-shadow: var(--shadow);
     }
 
     .result-label {
@@ -475,40 +436,47 @@
       line-height: 1;
     }
 
+    /* Meta info */
     .results-meta {
       color: var(--text-muted);
       font-size: 0.75rem;
       text-align: center;
       padding: 0.75rem;
-      background: var(--input-glass); /* RESKIN */
+      background: var(--glass);
       border-radius: var(--border-radius-sm);
-      border: 1px solid var(--card-border); /* RESKIN */
+      border: 1px solid var(--glass-border);
       margin-bottom: 1rem;
       transition: background 0.2s ease;
     }
-    .results-meta:hover { background: var(--input-glass-hover); }
 
+    .results-meta:hover {
+      background: var(--glass-hover);
+    }
+
+    /* Share sections */
     .basic-share-section {
       display: flex;
       justify-content: center;
       gap: 0.875rem;
       margin-top: 1rem;
       padding: 1rem;
-      background: var(--card-glass); /* RESKIN */
+      background: var(--glass);
       border-radius: var(--border-radius-sm);
-      border: 1px solid var(--card-border); /* RESKIN */
+      border: 1px solid var(--glass-border);
     }
-    .container.advanced-mode .basic-share-section { display: none; }
 
-    /* Add more button - RESKINNED */
+    .container.advanced-mode .basic-share-section {
+      display: none;
+    }
+
+    /* Add more button */
     .add-more-btn {
       width: 100%;
       padding: 0.875rem;
-      /* RESKIN: Changed from Green Dash to Purple Gradient */
-      background: linear-gradient(135deg, var(--primary-glow-1), var(--primary-glow-2));
-      border: none;
+      background: rgba(16, 185, 129, 0.1);
+      border: 2px dashed var(--success);
       border-radius: var(--border-radius-sm);
-      color: white;
+      color: var(--success);
       font-size: 0.875rem;
       font-weight: 600;
       cursor: pointer;
@@ -520,25 +488,34 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    .add-more-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 20px rgba(99, 102, 241, 0.2); /* RESKIN */
-    }
-    .add-more-btn:active { transform: translateY(0); }
-    .container.advanced-mode .add-more-btn { display: flex; }
 
-    /* Grand Total - RESKINNED */
+    .add-more-btn:hover {
+      background: rgba(16, 185, 129, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .add-more-btn:active {
+      transform: translateY(0);
+    }
+
+    .container.advanced-mode .add-more-btn {
+      display: flex;
+    }
+
+    /* Grand Total - optimized */
     .grand-total {
-      /* RESKIN: Changed from Green Gradient to Purple */
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.1));
-      border: 1px solid rgba(99, 102, 241, 0.25);
-      border-radius: var(--radius-card); /* RESKIN */
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: var(--border-radius);
       padding: 1.5rem;
       margin-bottom: 1.5rem;
       display: none;
       transition: all 0.3s ease;
     }
-    .container.advanced-mode .grand-total { display: block; }
+
+    .container.advanced-mode .grand-total {
+      display: block;
+    }
 
     .grand-total-header {
       text-align: center;
@@ -559,12 +536,16 @@
     .grand-total-item {
       text-align: center;
       padding: 0.875rem;
-      background: var(--card-glass-hover); /* RESKIN */
+      background: rgba(255, 255, 255, 0.08);
       border-radius: var(--border-radius-sm);
-      border: 1px solid var(--card-border); /* RESKIN */
+      border: 1px solid rgba(255, 255, 255, 0.15);
       transition: transform 0.2s ease;
     }
-    .grand-total-item:hover { transform: translateY(-2px); }
+
+    .grand-total-item:hover {
+      transform: translateY(-2px);
+    }
+
     .grand-total-label {
       color: var(--text-secondary);
       font-size: 0.625rem;
@@ -573,12 +554,14 @@
       letter-spacing: 0.5px;
       margin-bottom: 0.5rem;
     }
+
     .grand-total-value {
       color: var(--text-primary);
       font-size: 1.125rem;
       font-weight: 700;
     }
 
+    /* Share section */
     .share-section {
       display: none;
       justify-content: center;
@@ -586,57 +569,69 @@
       margin-top: 1rem;
       transition: all 0.3s ease;
     }
-    .container.advanced-mode .share-section { display: flex; }
 
-    /* Share buttons - RESKINNED (Removed Neumorphism) */
+    .container.advanced-mode .share-section {
+      display: flex;
+    }
+
+    /* Share buttons - performance optimized */
     .share-btn {
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      border: 1px solid var(--card-border);
-      background: var(--card-glass);
+      border: none;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
+      transition: transform 0.2s ease;
       position: relative;
       overflow: hidden;
+      box-shadow: var(--shadow);
     }
+
     .share-btn:hover {
-      background: var(--card-glass-hover);
       transform: translateY(-2px) scale(1.05);
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
     }
+
     .share-btn:active {
       transform: translateY(0) scale(1);
     }
+
+    .share-whatsapp {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+    }
+
+    .share-sms {
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+    }
+
+    .share-email {
+      background: linear-gradient(135deg, #ec4899, #db2777);
+    }
+
+    .share-copy {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    }
+
+    .share-clear {
+      background: linear-gradient(135deg, var(--warning), #f97316);
+    }
+
     .share-icon {
       width: 18px;
       height: 18px;
-      fill: var(--text-secondary);
-      transition: fill 0.2s ease;
+      fill: white;
     }
-    .share-btn:hover .share-icon {
-      fill: var(--text-primary);
-    }
-    
-    /* Specific Button Hover Colors */
-    .share-whatsapp:hover .share-icon { fill: #25D366; }
-    .share-sms:hover .share-icon { fill: #06b6d4; }
-    .share-email:hover .share-icon { fill: #ec4899; }
-    .share-copy:hover .share-icon { fill: #6366f1; }
-    .share-clear:hover .share-icon { fill: #f59e0b; }
 
-
+    /* Copy message */
     .copy-message {
       position: fixed;
       top: calc(20px + var(--safe-area-top));
       left: 50%;
       transform: translateX(-50%) translateY(-60px);
       padding: 0.75rem 1.25rem;
-      /* RESKIN: Changed gradient */
-      background: linear-gradient(135deg, var(--primary-glow-1), var(--primary-glow-2));
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(6, 182, 212, 0.95));
       border-radius: var(--border-radius-sm);
       color: white;
       font-size: 0.875rem;
@@ -646,35 +641,69 @@
       z-index: 1000;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      box-shadow: 0 5px 20px rgba(99, 102, 241, 0.2);
     }
+
     .copy-message.show {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
 
+    /* Mobile optimizations */
     @media (max-width: 480px) {
-      body { padding: 0; padding-top: 70px; } /* Adjust padding for fixed header */
       .container {
         padding: 0.5rem;
-        padding-top: 1rem;
       }
-      .app-header {
-        padding: 10px max(1rem, var(--safe-area-right)) 10px max(1rem, var(--safe-area-left));
+      
+      .calculator-card { 
+        padding: 1rem;
       }
-      .calculator-card { padding: 1rem; }
-      .form-input, .form-select { padding: 0.75rem 0.875rem; }
-      .form-select { padding-right: 2.25rem; }
+      
+      .form-input, .form-select {
+        padding: 0.75rem 0.875rem;
+      }
+      
+      .form-select {
+        padding-right: 2.25rem;
+      }
+      
       .delete-card-btn {
         top: -8px;
         right: -8px;
         width: 28px;
         height: 28px;
       }
-      .share-btn { width: 40px; height: 40px; }
-      .share-icon { width: 16px; height: 16px; }
+      
+      .share-btn { 
+        width: 40px; 
+        height: 40px; 
+      }
+      
+      .share-icon { 
+        width: 16px; 
+        height: 16px; 
+      }
     }
 
+    /* Desktop optimizations */
+    @media (min-width: 769px) {
+      .form-input, .form-select {
+        font-size: 1rem;
+        padding: 1rem 1.25rem;
+      }
+      
+      .form-select {
+        padding-right: 3rem;
+      }
+      
+      .delete-card-btn {
+        width: 36px;
+        height: 36px;
+        top: -12px;
+        right: -12px;
+      }
+    }
+
+    /* Remove expensive animations on low-end devices */
     @media (prefers-reduced-motion: reduce) {
       * {
         animation-duration: 0.01ms !important;
@@ -682,31 +711,32 @@
         transition-duration: 0.01ms !important;
       }
     }
+
+    /* Faster loading animation */
+    .loading .result-value {
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Remove orbs and heavy effects for performance */
+    .orb { display: none; }
   </style>
 </head>
 <body>
-
-  <header class="app-header">
-    <div class="header-content">
-      <div class="logo-container">
-          <img id="logoA" alt="Logo A">
-          </div>
-      
-      <a id="back-btn" class="header-icon-btn" href="../index.html" title="Back to Portfolio">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-          <polyline points="9 22 9 12 15 12 15 22"></polyline>
-        </svg>
-      </a>
-    </div>
-  </header>
   <div class="container">
+    <!-- Mode Switch -->
     <div class="mode-switch" id="modeSwitch">
       <button class="mode-switch-option active" data-mode="basic">Basic</button>
       <button class="mode-switch-option" data-mode="advanced">Advanced</button>
     </div>
 
+    <!-- Calculator Cards Container -->
     <div class="calculator-cards" id="calculatorCards">
+      <!-- First calculator card -->
       <div class="calculator-card" data-card-id="0">
         <button class="delete-card-btn" onclick="deleteCard(0)">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -715,12 +745,15 @@
         </button>
 
         <div class="form-section">
+          <!-- Tile Size with thickness combined -->
           <div class="form-row">
             <div class="form-group full-width">
               <label class="form-label">Tile Size & Thickness</label>
               <select class="form-select size-thickness" data-card="0"></select>
             </div>
           </div>
+
+          <!-- Mode Toggle -->
           <div class="form-row">
             <div class="form-group full-width">
               <label class="form-label">Calculation Mode</label>
@@ -730,6 +763,8 @@
               </div>
             </div>
           </div>
+
+          <!-- Quantity Input -->
           <div class="form-row">
             <div class="form-group full-width">
               <label class="form-label input-label">Area (ft²)</label>
@@ -738,6 +773,7 @@
           </div>
         </div>
 
+        <!-- Price Section -->
         <div class="price-section">
           <div class="form-row">
             <div class="form-group">
@@ -758,6 +794,7 @@
           </div>
         </div>
 
+        <!-- Results Grid -->
         <div class="results-grid">
           <div class="result-item">
             <div class="result-label">Pieces</div>
@@ -777,8 +814,10 @@
           </div>
         </div>
 
+        <!-- Meta Information -->
         <div class="results-meta">Select tile specifications to see calculations</div>
 
+        <!-- Basic Mode Share Section -->
         <div class="basic-share-section">
           <button class="share-btn share-whatsapp" onclick="shareWhatsApp()">
             <svg class="share-icon" viewBox="0 0 24 24">
@@ -809,6 +848,7 @@
       </div>
     </div>
 
+    <!-- Add More Button (Advanced Mode Only) -->
     <button class="add-more-btn" id="addMoreBtn">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;">
         <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
@@ -816,6 +856,7 @@
       Add More Item
     </button>
 
+    <!-- Grand Total (Advanced Mode Only) -->
     <div class="grand-total">
       <div class="grand-total-header">Grand Total</div>
       <div class="grand-total-grid">
@@ -838,6 +879,7 @@
       </div>
     </div>
 
+    <!-- Advanced Mode Share Section -->
     <div class="share-section">
       <button class="share-btn share-whatsapp" id="shareWhatsapp">
         <svg class="share-icon" viewBox="0 0 24 24">
@@ -869,533 +911,507 @@
 
   <div class="copy-message" id="copyMessage">✓ Details copied to clipboard!</div>
 
-  <script src="../imagedata.js"></script>
-
   <script>
-    // --- NEW HEADER SCRIPT (FROM PORTFOLIO) ---
-    window.addEventListener('DOMContentLoaded', () => {
-      try {
-        if (typeof logoA_base64 !== 'undefined') {
-            document.getElementById('logoA').src = logoA_base64;
-        }
-      } catch (e) {
-          console.error("Portfolio logo data nahi mila. imagedata.js loaded hai?", e);
+    // SKU Master Data
+    const SKU_MASTER = [
+      {size:"1200x1200",thk:"9MM",pcs:2,kg:"61",ft2:31.0,m2:2.88},
+      {size:"1200x1790",thk:"9MM",pcs:2,kg:"91",ft2:46.242,m2:4.296},
+      {size:"1200x1800",thk:"9MM",pcs:2,kg:"91 TO 96.5",ft2:46.5,m2:4.32},
+      {size:"1200x2400",thk:"9MM",pcs:1,kg:"62",ft2:31.0,m2:2.88},
+      {size:"1200x2800",thk:"6MM",pcs:1,kg:"50.5",ft2:36.167,m2:3.36},
+      {size:"1200x3180",thk:"15MM",pcs:1,kg:"136",ft2:41.075,m2:3.816},
+      {size:"1200x3200",thk:"15MM",pcs:1,kg:"136",ft2:41.337,m2:3.84},
+      {size:"1600x1600",thk:"9MM",pcs:1,kg:"55",ft2:27.556,m2:2.56},
+      {size:"1600x3200",thk:"6MM",pcs:1,kg:"74",ft2:55.116,m2:5.12},
+      {size:"1600x3200",thk:"12MM",pcs:1,kg:"148",ft2:55.116,m2:5.12},
+      {size:"1620x3240",thk:"12MM",pcs:1,kg:"150",ft2:56.5,m2:5.249},
+      {size:"790x2980",thk:"15MM",pcs:1,kg:"87",ft2:25.338,m2:2.354},
+      {size:"800x3000",thk:"15MM",pcs:1,kg:"84.5",ft2:25.834,m2:2.4},
+      {size:"800x2400",thk:"15MM",pcs:1,kg:"67.5",ft2:20.67,m2:1.9},
+      {size:"1000x3000",thk:"5MM",pcs:1,kg:"35.5",ft2:32.29,m2:3.0},
+      {size:"1200x2600",thk:"6MM",pcs:1,kg:"42.5",ft2:33.58,m2:3.1},
+      {size:"1200x3000",thk:"9MM",pcs:1,kg:"77.5",ft2:38.75,m2:3.6},
+      {size:"1200x3200",thk:"15MM",pcs:1,kg:"136",ft2:41.33,m2:3.8},
+      {size:"800x3200",thk:"15MM",pcs:1,kg:"74",ft2:27.56,m2:2.6},
+    ];
+
+    SKU_MASTER.sort((a, b) => a.ft2 - b.ft2);
+
+    const fmt = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 });
+    const fmt3 = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 3 });
+
+    let currentAppMode = 'basic';
+    let cardCounter = 1;
+    let cardModes = { 0: 'area' };
+
+    function parseKgMin(value) {
+      const nums = String(value).match(/[\d.]+/g);
+      return nums && nums.length ? parseFloat(nums[0]) : NaN;
+    }
+
+    function initializeSelect(cardId) {
+      const select = document.querySelector(`[data-card="${cardId}"].size-thickness`);
+      if (select) {
+        select.innerHTML = SKU_MASTER.map((sku, index) => 
+          `<option value="${index}">${sku.size} (${sku.thk})</option>`
+        ).join('');
+        
+        const defaultIndex = SKU_MASTER.findIndex(s => s.size === "800x3000" && s.thk === "15MM");
+        if (defaultIndex >= 0) select.selectedIndex = defaultIndex;
+      }
+    }
+
+    function getSelectedSKU(cardId) {
+      const select = document.querySelector(`[data-card="${cardId}"].size-thickness`);
+      if (!select) return null;
+      const index = parseInt(select.value);
+      return SKU_MASTER[index];
+    }
+
+    function calculateCard(cardId) {
+      const card = document.querySelector(`[data-card-id="${cardId}"]`);
+      if (!card) return;
+
+      const sku = getSelectedSKU(cardId);
+      const quantity = parseFloat(card.querySelector('.quantity').value || 0);
+      const pricePerFt2 = parseFloat(card.querySelector('.price').value || 0);
+      const gstRate = parseFloat(card.querySelector('.gst').value || 0);
+      
+      if (!sku) {
+        resetCardResults(card);
+        return;
       }
 
-      const header = document.querySelector('.app-header');
-      if (header) {
-          let lastScrollY = window.scrollY;
-          window.addEventListener('scroll', () => {
-              const currentScrollY = window.scrollY;
-              if (currentScrollY > lastScrollY && currentScrollY > 50) {
-                  header.classList.add('header-hidden');
-              } else {
-                  header.classList.remove('header-hidden');
-              }
-              lastScrollY = currentScrollY;
-          }, { passive: true });
+      const pcsPerBox = sku.pcs;
+      const ft2PerPc = sku.ft2 / pcsPerBox;
+      const kgPerPc = parseKgMin(sku.kg) / pcsPerBox;
+
+      let pieces = 0, areaFt2 = 0, weight = 0, totalPrice = 0;
+      const mode = cardModes[cardId] || 'area';
+
+      if (quantity > 0) {
+        if (mode === 'area') {
+          areaFt2 = quantity;
+          pieces = Math.ceil(areaFt2 / ft2PerPc);
+        } else {
+          pieces = Math.ceil(quantity);
+          areaFt2 = pieces * ft2PerPc;
+        }
+        weight = (pieces * kgPerPc) / 1000;
+        
+        if (pricePerFt2 > 0) {
+          const basePrice = areaFt2 * pricePerFt2;
+          const gstAmount = basePrice * (gstRate / 100);
+          totalPrice = basePrice + gstAmount;
+        }
+      }
+
+      card.querySelector('.pieces-result').textContent = pieces ? fmt.format(pieces) : '-';
+      card.querySelector('.area-ft2-result').textContent = areaFt2 ? fmt.format(areaFt2) : '-';
+      card.querySelector('.weight-result').textContent = weight ? fmt3.format(weight) : '-';
+      card.querySelector('.total-price-result').textContent = totalPrice > 0 ? '₹' + new Intl.NumberFormat('en-IN').format(Math.round(totalPrice)) : '-';
+      
+      card.querySelector('.results-meta').textContent = `${pcsPerBox} pcs/box • ${sku.ft2} ft²/box • ${sku.m2} m²/box • ~${parseKgMin(sku.kg)} kg/box`;
+      
+      if (currentAppMode === 'advanced') {
+        updateGrandTotal();
+      }
+    }
+
+    function resetCardResults(card) {
+      card.querySelector('.pieces-result').textContent = '-';
+      card.querySelector('.area-ft2-result').textContent = '-';
+      card.querySelector('.weight-result').textContent = '-';
+      card.querySelector('.total-price-result').textContent = '-';
+      card.querySelector('.results-meta').textContent = 'Select tile specifications to see calculations';
+    }
+
+    function updateGrandTotal() {
+      const cards = document.querySelectorAll('.calculator-card');
+      let totalPieces = 0, totalArea = 0, totalWeight = 0, totalFinalAmount = 0;
+
+      cards.forEach(card => {
+        const pieces = parseFloat(card.querySelector('.pieces-result').textContent.replace(/[^0-9.-]+/g,"") || 0);
+        const area = parseFloat(card.querySelector('.area-ft2-result').textContent.replace(/[^0-9.-]+/g,"") || 0);
+        const weight = parseFloat(card.querySelector('.weight-result').textContent.replace(/[^0-9.-]+/g,"") || 0);
+        const finalAmount = parseFloat(card.querySelector('.total-price-result').textContent.replace(/[^0-9.-]+/g,"") || 0);
+        
+        totalPieces += pieces;
+        totalArea += area;
+        totalWeight += weight;
+        totalFinalAmount += finalAmount;
+      });
+
+      document.getElementById('grandTotalPieces').textContent = totalPieces > 0 ? fmt.format(totalPieces) : '-';
+      document.getElementById('grandTotalArea').textContent = totalArea > 0 ? fmt.format(totalArea) + ' ft²' : '-';
+      document.getElementById('grandTotalWeight').textContent = totalWeight > 0 ? fmt3.format(totalWeight) + ' tons' : '-';
+      document.getElementById('grandFinalAmount').textContent = totalFinalAmount > 0 ? '₹' + new Intl.NumberFormat('en-IN').format(Math.round(totalFinalAmount)) : '-';
+    }
+
+    function setCardMode(cardId, mode) {
+      cardModes[cardId] = mode;
+      const card = document.querySelector(`[data-card-id="${cardId}"]`);
+      const modeToggle = card.querySelector('.mode-toggle');
+      const inputLabel = card.querySelector('.input-label');
+      const quantityInput = card.querySelector('.quantity');
+      
+      modeToggle.classList.toggle('pieces-mode', mode === 'pieces');
+      
+      const options = modeToggle.querySelectorAll('.mode-option');
+      options.forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.mode === mode);
+      });
+      
+      inputLabel.textContent = mode === 'area' ? 'Area (ft²)' : 'Pieces';
+      quantityInput.placeholder = mode === 'area' ? 'e.g. 2000' : 'e.g. 25';
+      
+      calculateCard(cardId);
+    }
+
+    function addMoreCard() {
+      if (currentAppMode !== 'advanced') return;
+      
+      const cardId = cardCounter++;
+      const cardsContainer = document.getElementById('calculatorCards');
+      
+      const newCard = document.createElement('div');
+      newCard.className = 'calculator-card';
+      newCard.dataset.cardId = cardId;
+      
+      newCard.innerHTML = `
+        <button class="delete-card-btn" onclick="deleteCard(${cardId})">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+          </svg>
+        </button>
+
+        <div class="form-section">
+          <div class="form-row">
+            <div class="form-group full-width">
+              <label class="form-label">Tile Size & Thickness</label>
+              <select class="form-select size-thickness" data-card="${cardId}"></select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group full-width">
+              <label class="form-label">Calculation Mode</label>
+              <div class="mode-toggle" data-card="${cardId}">
+                <button class="mode-option active" data-mode="area">Area (ft²)</button>
+                <button class="mode-option" data-mode="pieces">Pieces</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group full-width">
+              <label class="form-label input-label">Area (ft²)</label>
+              <input type="number" class="form-input quantity" data-card="${cardId}" placeholder="Enter value..." min="0" step="0.01" inputmode="decimal">
+            </div>
+          </div>
+        </div>
+
+        <div class="price-section">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Price/sq feet</label>
+              <div class="price-input-container">
+                <input type="number" class="form-input price-input price" data-card="${cardId}" placeholder="Enter price..." min="0" step="0.01" inputmode="decimal">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="gst-label-centered">GST</div>
+              <select class="form-select gst" data-card="${cardId}">
+                <option value="0">Without GST</option>
+                <option value="18">18%</option>
+                <option value="12">12%</option>
+                <option value="5">5%</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-item">
+            <div class="result-label">Pieces</div>
+            <div class="result-value pieces-result">-</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Area (ft²)</div>
+            <div class="result-value area-ft2-result">-</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Weight (tons)</div>
+            <div class="result-value weight-result">-</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Total Amount</div>
+            <div class="result-value total-price-result">-</div>
+          </div>
+        </div>
+
+        <div class="results-meta">Select tile specifications to see calculations</div>
+      `;
+      
+      cardsContainer.appendChild(newCard);
+      
+      cardModes[cardId] = 'area';
+      initializeSelect(cardId);
+      setupCardEventListeners(cardId);
+      calculateCard(cardId);
+    }
+
+    function deleteCard(cardId) {
+      if (document.querySelectorAll('.calculator-card').length <= 1) return;
+      
+      const card = document.querySelector(`[data-card-id="${cardId}"]`);
+      if (card) {
+        card.style.animation = 'fadeOut 0.2s ease-out';
+        setTimeout(() => {
+          card.remove();
+          delete cardModes[cardId];
+          updateGrandTotal();
+        }, 200);
+      }
+    }
+
+    function setupCardEventListeners(cardId) {
+      const card = document.querySelector(`[data-card-id="${cardId}"]`);
+      if (!card) return;
+
+      card.querySelector('.size-thickness').addEventListener('change', () => calculateCard(cardId));
+      card.querySelector('.quantity').addEventListener('input', () => calculateCard(cardId));
+      card.querySelector('.price').addEventListener('input', () => calculateCard(cardId));
+      card.querySelector('.gst').addEventListener('change', () => calculateCard(cardId));
+      
+      card.querySelector('.mode-toggle').addEventListener('click', (e) => {
+        const option = e.target.closest('.mode-option');
+        if (option) {
+          setCardMode(cardId, option.dataset.mode);
+        }
+      });
+    }
+
+    function resetAllCards() {
+      const cards = document.querySelectorAll('.calculator-card');
+      cards.forEach((card, index) => {
+        if (index > 0) {
+          card.remove();
+        }
+      });
+      
+      const firstCard = document.querySelector('[data-card-id="0"]');
+      if (firstCard) {
+        firstCard.querySelector('.quantity').value = '';
+        firstCard.querySelector('.price').value = '';
+        firstCard.querySelector('.gst').selectedIndex = 0;
+        cardModes[0] = 'area';
+        setCardMode(0, 'area');
+        calculateCard(0);
       }
       
-      // --- ORIGINAL CALCULATOR SCRIPT (MOVED INSIDE) ---
-      initializeApp();
-    });
-    // --- END NEW HEADER SCRIPT ---
+      cardCounter = 1;
+      cardModes = { 0: 'area' };
+    }
 
-    // Encapsulate all calculator logic in a function
-    function initializeApp() {
-      // SKU Master Data
-      const SKU_MASTER = [
-        {size:"1200x1200",thk:"9MM",pcs:2,kg:"61",ft2:31.0,m2:2.88},
-        {size:"1200x1790",thk:"9MM",pcs:2,kg:"91",ft2:46.242,m2:4.296},
-        {size:"1200x1800",thk:"9MM",pcs:2,kg:"91 TO 96.5",ft2:46.5,m2:4.32},
-        {size:"1200x2400",thk:"9MM",pcs:1,kg:"62",ft2:31.0,m2:2.88},
-        {size:"1200x2800",thk:"6MM",pcs:1,kg:"50.5",ft2:36.167,m2:3.36},
-        {size:"1200x3180",thk:"15MM",pcs:1,kg:"136",ft2:41.075,m2:3.816},
-        {size:"1200x3200",thk:"15MM",pcs:1,kg:"136",ft2:41.337,m2:3.84},
-        {size:"1600x1600",thk:"9MM",pcs:1,kg:"55",ft2:27.556,m2:2.56},
-        {size:"1600x3200",thk:"6MM",pcs:1,kg:"74",ft2:55.116,m2:5.12},
-        {size:"1600x3200",thk:"12MM",pcs:1,kg:"148",ft2:55.116,m2:5.12},
-        {size:"1620x3240",thk:"12MM",pcs:1,kg:"150",ft2:56.5,m2:5.249},
-        {size:"790x2980",thk:"15MM",pcs:1,kg:"87",ft2:25.338,m2:2.354},
-        {size:"800x3000",thk:"15MM",pcs:1,kg:"84.5",ft2:25.834,m2:2.4},
-        {size:"800x2400",thk:"15MM",pcs:1,kg:"67.5",ft2:20.67,m2:1.9},
-        {size:"1000x3000",thk:"5MM",pcs:1,kg:"35.5",ft2:32.29,m2:3.0},
-        {size:"1200x2600",thk:"6MM",pcs:1,kg:"42.5",ft2:33.58,m2:3.1},
-        {size:"1200x3000",thk:"9MM",pcs:1,kg:"77.5",ft2:38.75,m2:3.6},
-        {size:"1200x3200",thk:"15MM",pcs:1,kg:"136",ft2:41.33,m2:3.8},
-        {size:"800x3200",thk:"15MM",pcs:1,kg:"74",ft2:27.56,m2:2.6},
-      ];
-
-      SKU_MASTER.sort((a, b) => a.ft2 - b.ft2);
-
-      const fmt = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 });
-      const fmt3 = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 3 });
-
-      let currentAppMode = 'basic';
-      let cardCounter = 1;
-      let cardModes = { 0: 'area' };
-
-      function parseKgMin(value) {
-        const nums = String(value).match(/[\d.]+/g);
-        return nums && nums.length ? parseFloat(nums[0]) : NaN;
+    function switchMode(mode) {
+      const prevMode = currentAppMode;
+      currentAppMode = mode;
+      const container = document.querySelector('.container');
+      const modeSwitch = document.getElementById('modeSwitch');
+      const body = document.body;
+      
+      if (prevMode !== mode) {
+        resetAllCards();
       }
-
-      function initializeSelect(cardId) {
-        const select = document.querySelector(`[data-card="${cardId}"].size-thickness`);
-        if (select) {
-          select.innerHTML = SKU_MASTER.map((sku, index) => 
-            `<option value="${index}">${sku.size} (${sku.thk})</option>`
-          ).join('');
-          
-          const defaultIndex = SKU_MASTER.findIndex(s => s.size === "800x3000" && s.thk === "15MM");
-          if (defaultIndex >= 0) select.selectedIndex = defaultIndex;
-        }
+      
+      if (mode === 'advanced') {
+        container.classList.add('advanced-mode');
+        modeSwitch.classList.add('advanced-mode');
+        body.classList.add('advanced-bg');
+        setTimeout(() => updateGrandTotal(), 100);
+      } else {
+        container.classList.remove('advanced-mode');
+        modeSwitch.classList.remove('advanced-mode');
+        body.classList.remove('advanced-bg');
       }
+      
+      const options = modeSwitch.querySelectorAll('.mode-switch-option');
+      options.forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.mode === mode);
+      });
+    }
 
-      function getSelectedSKU(cardId) {
-        const select = document.querySelector(`[data-card="${cardId}"].size-thickness`);
-        if (!select) return null;
-        const index = parseInt(select.value);
-        return SKU_MASTER[index];
-      }
+    function getShareText() {
+  const cards = document.querySelectorAll('.calculator-card');
+  let text = '';
+  
+  if (currentAppMode === 'basic') {
+    const card = cards[0];
+    const cardId = parseInt(card.dataset.cardId);
+    const sku = getSelectedSKU(cardId);
+    const pricePerFt2 = parseFloat(card.querySelector('.price').value || 0);
+    const gstRate = parseFloat(card.querySelector('.gst').value || 0);
+    const quantity = card.querySelector('.quantity').value;
+    
+    if (!sku || !quantity) return '';
 
-      function calculateCard(cardId) {
-        const card = document.querySelector(`[data-card-id="${cardId}"]`);
-        if (!card) return;
-
-        const sku = getSelectedSKU(cardId);
-        const quantity = parseFloat(card.querySelector('.quantity').value || 0);
-        const pricePerFt2 = parseFloat(card.querySelector('.price').value || 0);
-        const gstRate = parseFloat(card.querySelector('.gst').value || 0);
-        
-        if (!sku) {
-          resetCardResults(card);
-          return;
-        }
-
-        const pcsPerBox = sku.pcs;
-        const ft2PerPc = sku.ft2 / pcsPerBox;
-        const kgPerPc = parseKgMin(sku.kg) / pcsPerBox;
-
-        let pieces = 0, areaFt2 = 0, weight = 0, totalPrice = 0;
-        const mode = cardModes[cardId] || 'area';
-
-        if (quantity > 0) {
-          if (mode === 'area') {
-            areaFt2 = quantity;
-            pieces = Math.ceil(areaFt2 / ft2PerPc);
-          } else {
-            pieces = Math.ceil(quantity);
-            areaFt2 = pieces * ft2PerPc;
-          }
-          weight = (pieces * kgPerPc) / 1000;
-          
-          if (pricePerFt2 > 0) {
-            const basePrice = areaFt2 * pricePerFt2;
-            const gstAmount = basePrice * (gstRate / 100);
-            totalPrice = basePrice + gstAmount;
-          }
-        }
-
-        card.querySelector('.pieces-result').textContent = pieces ? fmt.format(pieces) : '-';
-        card.querySelector('.area-ft2-result').textContent = areaFt2 ? fmt.format(areaFt2) : '-';
-        card.querySelector('.weight-result').textContent = weight ? fmt3.format(weight) : '-';
-        card.querySelector('.total-price-result').textContent = totalPrice > 0 ? '₹' + new Intl.NumberFormat('en-IN').format(Math.round(totalPrice)) : '-';
-        
-        card.querySelector('.results-meta').textContent = `${pcsPerBox} pcs/box • ${sku.ft2} ft²/box • ${sku.m2} m²/box • ~${parseKgMin(sku.kg)} kg/box`;
-        
-        if (currentAppMode === 'advanced') {
-          updateGrandTotal();
-        }
-      }
-
-      function resetCardResults(card) {
-        card.querySelector('.pieces-result').textContent = '-';
-        card.querySelector('.area-ft2-result').textContent = '-';
-        card.querySelector('.weight-result').textContent = '-';
-        card.querySelector('.total-price-result').textContent = '-';
-        card.querySelector('.results-meta').textContent = 'Select tile specifications to see calculations';
-      }
-
-      function updateGrandTotal() {
-        const cards = document.querySelectorAll('.calculator-card');
-        let totalPieces = 0, totalArea = 0, totalWeight = 0, totalFinalAmount = 0;
-
-        cards.forEach(card => {
-          const pieces = parseFloat(card.querySelector('.pieces-result').textContent.replace(/[^0-9.-]+/g,"") || 0);
-          const area = parseFloat(card.querySelector('.area-ft2-result').textContent.replace(/[^0-9.-]+/g,"") || 0);
-          const weight = parseFloat(card.querySelector('.weight-result').textContent.replace(/[^0-9.-]+/g,"") || 0);
-          const finalAmount = parseFloat(card.querySelector('.total-price-result').textContent.replace(/[^0-9.-]+/g,"") || 0);
-          
-          totalPieces += pieces;
-          totalArea += area;
-          totalWeight += weight;
-          totalFinalAmount += finalAmount;
-        });
-
-        document.getElementById('grandTotalPieces').textContent = totalPieces > 0 ? fmt.format(totalPieces) : '-';
-        document.getElementById('grandTotalArea').textContent = totalArea > 0 ? fmt.format(totalArea) + ' ft²' : '-';
-        document.getElementById('grandTotalWeight').textContent = totalWeight > 0 ? fmt3.format(totalWeight) + ' tons' : '-';
-        document.getElementById('grandFinalAmount').textContent = totalFinalAmount > 0 ? '₹' + new Intl.NumberFormat('en-IN').format(Math.round(totalFinalAmount)) : '-';
-      }
-
-      function setCardMode(cardId, mode) {
-        cardModes[cardId] = mode;
-        const card = document.querySelector(`[data-card-id="${cardId}"]`);
-        const modeToggle = card.querySelector('.mode-toggle');
-        const inputLabel = card.querySelector('.input-label');
-        const quantityInput = card.querySelector('.quantity');
-        
-        modeToggle.classList.toggle('pieces-mode', mode === 'pieces');
-        
-        const options = modeToggle.querySelectorAll('.mode-option');
-        options.forEach(opt => {
-          opt.classList.toggle('active', opt.dataset.mode === mode);
-        });
-        
-        inputLabel.textContent = mode === 'area' ? 'Area (ft²)' : 'Pieces';
-        quantityInput.placeholder = mode === 'area' ? 'e.g. 2000' : 'e.g. 25';
-        
-        calculateCard(cardId);
-      }
-
-      function addMoreCard() {
-        if (currentAppMode !== 'advanced') return;
-        
-        const cardId = cardCounter++;
-        const cardsContainer = document.getElementById('calculatorCards');
-        
-        const newCard = document.createElement('div');
-        newCard.className = 'calculator-card';
-        newCard.dataset.cardId = cardId;
-        
-        newCard.innerHTML = `
-          <button class="delete-card-btn" onclick="deleteCard(${cardId})">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-            </svg>
-          </button>
-          <div class="form-section">
-            <div class="form-row">
-              <div class="form-group full-width">
-                <label class="form-label">Tile Size & Thickness</label>
-                <select class="form-select size-thickness" data-card="${cardId}"></select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group full-width">
-                <label class="form-label">Calculation Mode</label>
-                <div class="mode-toggle" data-card="${cardId}">
-                  <button class="mode-option active" data-mode="area">Area (ft²)</button>
-                  <button class="mode-option" data-mode="pieces">Pieces</button>
-                </div>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group full-width">
-                <label class="form-label input-label">Area (ft²)</label>
-                <input type="number" class="form-input quantity" data-card="${cardId}" placeholder="Enter value..." min="0" step="0.01" inputmode="decimal">
-              </div>
-            </div>
-          </div>
-          <div class="price-section">
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Price/sq feet</label>
-                <div class="price-input-container">
-                  <input type="number" class="form-input price-input price" data-card="${cardId}" placeholder="Enter price..." min="0" step="0.01" inputmode="decimal">
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="gst-label-centered">GST</div>
-                <select class="form-select gst" data-card="${cardId}">
-                  <option value="0">Without GST</option>
-                  <option value="18">18%</option>
-                  <option value="12">12%</option>
-                  <option value="5">5%</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="results-grid">
-            <div class="result-item">
-              <div class="result-label">Pieces</div>
-              <div class="result-value pieces-result">-</div>
-            </div>
-            <div class="result-item">
-              <div class="result-label">Area (ft²)</div>
-              <div class="result-value area-ft2-result">-</div>
-            </div>
-            <div class="result-item">
-              <div class="result-label">Weight (tons)</div>
-              <div class="result-value weight-result">-</div>
-            </div>
-            <div class="result-item">
-              <div class="result-label">Total Amount</div>
-              <div class="result-value total-price-result">-</div>
-            </div>
-          </div>
-          <div class="results-meta">Select tile specifications to see calculations</div>
-        `;
-        
-        cardsContainer.appendChild(newCard);
-        
-        cardModes[cardId] = 'area';
-        initializeSelect(cardId);
-        setupCardEventListeners(cardId);
-        calculateCard(cardId);
-      }
-
-      function deleteCard(cardId) {
-        if (document.querySelectorAll('.calculator-card').length <= 1) return;
-        
-        const card = document.querySelector(`[data-card-id="${cardId}"]`);
-        if (card) {
-          card.style.animation = 'fadeOut 0.2s ease-out';
-          setTimeout(() => {
-            card.remove();
-            delete cardModes[cardId];
-            updateGrandTotal();
-          }, 200);
-        }
-      }
-
-      function setupCardEventListeners(cardId) {
-        const card = document.querySelector(`[data-card-id="${cardId}"]`);
-        if (!card) return;
-
-        card.querySelector('.size-thickness').addEventListener('change', () => calculateCard(cardId));
-        card.querySelector('.quantity').addEventListener('input', () => calculateCard(cardId));
-        card.querySelector('.price').addEventListener('input', () => calculateCard(cardId));
-        card.querySelector('.gst').addEventListener('change', () => calculateCard(cardId));
-        
-        card.querySelector('.mode-toggle').addEventListener('click', (e) => {
-          const option = e.target.closest('.mode-option');
-          if (option) {
-            setCardMode(cardId, option.dataset.mode);
-          }
-        });
-      }
-
-      function resetAllCards() {
-        const cards = document.querySelectorAll('.calculator-card');
-        cards.forEach((card, index) => {
-          if (index > 0) {
-            card.remove();
-          }
-        });
-        
-        const firstCard = document.querySelector('[data-card-id="0"]');
-        if (firstCard) {
-          firstCard.querySelector('.quantity').value = '';
-          firstCard.querySelector('.price').value = '';
-          firstCard.querySelector('.gst').selectedIndex = 0;
-          cardModes[0] = 'area';
-          setCardMode(0, 'area');
-          calculateCard(0);
-        }
-        
-        cardCounter = 1;
-        cardModes = { 0: 'area' };
-      }
-
-      function switchMode(mode) {
-        const prevMode = currentAppMode;
-        currentAppMode = mode;
-        const container = document.querySelector('.container');
-        const modeSwitch = document.getElementById('modeSwitch');
-        const body = document.body;
-        
-        if (prevMode !== mode) {
-          resetAllCards();
-        }
-        
-        if (mode === 'advanced') {
-          container.classList.add('advanced-mode');
-          modeSwitch.classList.add('advanced-mode');
-          body.classList.add('advanced-bg'); // Removed from original, but fits portfolio vibe
-          setTimeout(() => updateGrandTotal(), 100);
-        } else {
-          container.classList.remove('advanced-mode');
-          modeSwitch.classList.remove('advanced-mode');
-          body.classList.remove('advanced-bg'); // Removed from original
-        }
-        
-        const options = modeSwitch.querySelectorAll('.mode-switch-option');
-        options.forEach(opt => {
-          opt.classList.toggle('active', opt.dataset.mode === mode);
-        });
-      }
-
-      function getShareText() {
-        const cards = document.querySelectorAll('.calculator-card');
-        let text = '';
-        
-        if (currentAppMode === 'basic') {
-          const card = cards[0];
-          const cardId = parseInt(card.dataset.cardId);
-          const sku = getSelectedSKU(cardId);
-          const pricePerFt2 = parseFloat(card.querySelector('.price').value || 0);
-          const gstRate = parseFloat(card.querySelector('.gst').value || 0);
-          const quantity = card.querySelector('.quantity').value;
-          
-          if (!sku || !quantity) return '';
-
-          text = `Size: ${sku.size} (${sku.thk})
+    text = `Size: ${sku.size} (${sku.thk})
 Pieces: ${card.querySelector('.pieces-result').textContent}
 Area: ${card.querySelector('.area-ft2-result').textContent} (sq feet)
 Weight: ${card.querySelector('.weight-result').textContent} tons`;
 
-          if (pricePerFt2 > 0 && card.querySelector('.total-price-result').textContent !== '-') {
-            const areaValue = parseFloat(card.querySelector('.area-ft2-result').textContent.replace(/,/g, ''));
-            const basePrice = areaValue * pricePerFt2;
-            text += `\nAmount: ₹${new Intl.NumberFormat('en-IN').format(Math.round(basePrice))}`;
-            
-            if (gstRate > 0) {
-              const gstAmount = basePrice * (gstRate / 100);
-              text += `\nGST (${gstRate}%): ₹${new Intl.NumberFormat('en-IN').format(Math.round(gstAmount))}`;
-              text += `\nAmount (incl. ${gstRate}% GST): ${card.querySelector('.total-price-result').textContent}`;
-            }
-          }
-        } else {
-          text = 'TILE CALCULATION DETAILS\n\n';
-          
-          let hasAnyGst = false;
-          let totalBaseAmount = 0;
-          let totalGstAmount = 0;
-          
-          cards.forEach((card, index) => {
-            const cardId = parseInt(card.dataset.cardId);
-            const sku = getSelectedSKU(cardId);
-            const pricePerFt2 = parseFloat(card.querySelector('.price').value || 0);
-            const gstRate = parseFloat(card.querySelector('.gst').value || 0);
-            const quantity = card.querySelector('.quantity').value;
-            
-            if (sku && quantity) {
-              text += `ITEM ${index + 1}:\n`;
-              text += `Size: ${sku.size} (${sku.thk})\n`;
-              text += `Pieces: ${card.querySelector('.pieces-result').textContent}\n`;
-              text += `Area: ${card.querySelector('.area-ft2-result').textContent} (sq feet)\n`;
-              text += `Weight: ${card.querySelector('.weight-result').textContent} tons\n`;
-              
-              if (pricePerFt2 > 0 && card.querySelector('.total-price-result').textContent !== '-') {
-                const areaValue = parseFloat(card.querySelector('.area-ft2-result').textContent.replace(/,/g, ''));
-                const basePrice = areaValue * pricePerFt2;
-                const gstAmount = basePrice * (gstRate / 100);
-                const finalAmount = basePrice + gstAmount;
-                
-                totalBaseAmount += basePrice;
-                totalGstAmount += gstAmount;
-                
-                text += `Amount: ₹${new Intl.NumberFormat('en-IN').format(Math.round(basePrice))}\n`;
-                
-                if (gstRate > 0) {
-                  text += `GST (${gstRate}%): ₹${new Intl.NumberFormat('en-IN').format(Math.round(gstAmount))}\n`;
-                  text += `Amount (incl. ${gstRate}% GST): ₹${new Intl.NumberFormat('en-IN').format(Math.round(finalAmount))}\n`;
-                  hasAnyGst = true;
-                }
-              }
-              text += '\n';
-            }
-          });
-          
-          text += 'GRAND TOTAL:\n';
-          text += `Total Pieces: ${document.getElementById('grandTotalPieces').textContent}\n`;
-          text += `Total Area: ${document.getElementById('grandTotalArea').textContent}\n`;
-          text += `Total Weight: ${document.getElementById('grandTotalWeight').textContent}\n`;
-          
-          if (totalBaseAmount > 0) {
-            text += `Base Amount: ₹${new Intl.NumberFormat('en-IN').format(Math.round(totalBaseAmount))}\n`;
-            
-            if (hasAnyGst) {
-              text += `Total GST: ₹${new Intl.NumberFormat('en-IN').format(Math.round(totalGstAmount))}\n`;
-              text += `Final Amount (incl. GST): ₹${new Intl.NumberFormat('en-IN').format(Math.round(totalBaseAmount + totalGstAmount))}`;
-            } else {
-              text += `Final Amount: ₹${new Intl.NumberFormat('en-IN').format(Math.round(totalBaseAmount))}`;
-            }
-          }
-        }
-        
-        return text;
-      }
-
-      function copyToClipboard() {
-        const text = getShareText();
-        if (!text) return;
-
-        navigator.clipboard.writeText(text).then(() => {
-          const copyMessage = document.getElementById('copyMessage');
-          copyMessage.classList.add('show');
-          setTimeout(() => {
-            copyMessage.classList.remove('show');
-          }, 1500);
-        }).catch(err => console.error('Copy failed:', err));
-      }
-
-      function clearAll() {
-        const cards = document.querySelectorAll('.calculator-card');
-        cards.forEach(card => {
-          card.querySelector('.quantity').value = '';
-          card.querySelector('.price').value = '';
-          card.querySelector('.gst').selectedIndex = 0;
-          const cardId = parseInt(card.dataset.cardId);
-          calculateCard(cardId);
-        });
-      }
-
-      function shareWhatsApp() {
-        const text = getShareText();
-        if (!text) return;
-        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-      }
-
-      function shareSMS() {
-        const text = getShareText();
-        if (!text) return;
-        const url = navigator.userAgent.match(/iPhone|iPad/) 
-          ? `sms:&body=${encodeURIComponent(text)}` 
-          : `sms:?body=${encodeURIComponent(text)}`;
-        window.location.href = url;
-      }
-
-      function shareEmail() {
-        const text = getShareText();
-        if (!text) return;
-        const subject = encodeURIComponent('TilesPro Calculation Results');
-        const body = encodeURIComponent(text);
-        window.location.href = `mailto:?subject=${subject}&body=${body}`;
-      }
-
-      // Fade out animation
-      const style = document.createElement('style');
-      style.textContent = `
-        @keyframes fadeOut {
-          from { opacity: 1; transform: translateY(0); }
-          to { opacity: 0; transform: translateY(-10px); }
-        }
-      `;
-      document.head.appendChild(style);
-
-      // Event Listeners - optimized
-      document.getElementById('modeSwitch').addEventListener('click', (e) => {
-        const option = e.target.closest('.mode-switch-option');
-        if (option) switchMode(option.dataset.mode);
-      });
-
-      document.getElementById('addMoreBtn').addEventListener('click', addMoreCard);
-      document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
-      document.getElementById('clearBtn').addEventListener('click', clearAll);
-      document.getElementById('shareWhatsapp').addEventListener('click', shareWhatsApp);
-      document.getElementById('shareSMS').addEventListener('click', shareSMS);
-      document.getElementById('shareEmail').addEventListener('click', shareEmail);
-
-      // Initialize
-      initializeSelect(0);
-      setupCardEventListeners(0);
-      calculateCard(0);
+    if (pricePerFt2 > 0 && card.querySelector('.total-price-result').textContent !== '-') {
+      const areaValue = parseFloat(card.querySelector('.area-ft2-result').textContent.replace(/,/g, ''));
+      const basePrice = areaValue * pricePerFt2;
+      text += `\nAmount: ₹${new Intl.NumberFormat('en-IN').format(Math.round(basePrice))}`;
       
-      console.log('TilesPro Calculator - Reskinned Version Ready! 🎨');
+      if (gstRate > 0) {
+        const gstAmount = basePrice * (gstRate / 100);
+        text += `\nGST (${gstRate}%): ₹${new Intl.NumberFormat('en-IN').format(Math.round(gstAmount))}`;
+        text += `\nAmount (incl. ${gstRate}% GST): ${card.querySelector('.total-price-result').textContent}`;
+      }
     }
+  } else {
+    text = 'TILE CALCULATION DETAILS\n\n';
+    
+    let hasAnyGst = false;
+    let totalBaseAmount = 0;
+    let totalGstAmount = 0;
+    
+    cards.forEach((card, index) => {
+      const cardId = parseInt(card.dataset.cardId);
+      const sku = getSelectedSKU(cardId);
+      const pricePerFt2 = parseFloat(card.querySelector('.price').value || 0);
+      const gstRate = parseFloat(card.querySelector('.gst').value || 0);
+      const quantity = card.querySelector('.quantity').value;
+      
+      if (sku && quantity) {
+        text += `ITEM ${index + 1}:\n`;
+        text += `Size: ${sku.size} (${sku.thk})\n`;
+        text += `Pieces: ${card.querySelector('.pieces-result').textContent}\n`;
+        text += `Area: ${card.querySelector('.area-ft2-result').textContent} (sq feet)\n`;
+        text += `Weight: ${card.querySelector('.weight-result').textContent} tons\n`;
+        
+        if (pricePerFt2 > 0 && card.querySelector('.total-price-result').textContent !== '-') {
+          const areaValue = parseFloat(card.querySelector('.area-ft2-result').textContent.replace(/,/g, ''));
+          const basePrice = areaValue * pricePerFt2;
+          const gstAmount = basePrice * (gstRate / 100);
+          const finalAmount = basePrice + gstAmount;
+          
+          totalBaseAmount += basePrice;
+          totalGstAmount += gstAmount;
+          
+          text += `Amount: ₹${new Intl.NumberFormat('en-IN').format(Math.round(basePrice))}\n`;
+          
+          if (gstRate > 0) {
+            text += `GST (${gstRate}%): ₹${new Intl.NumberFormat('en-IN').format(Math.round(gstAmount))}\n`;
+            text += `Amount (incl. ${gstRate}% GST): ₹${new Intl.NumberFormat('en-IN').format(Math.round(finalAmount))}\n`;
+            hasAnyGst = true;
+          }
+        }
+        text += '\n';
+      }
+    });
+    
+    text += 'GRAND TOTAL:\n';
+    text += `Total Pieces: ${document.getElementById('grandTotalPieces').textContent}\n`;
+    text += `Total Area: ${document.getElementById('grandTotalArea').textContent}\n`;
+    text += `Total Weight: ${document.getElementById('grandTotalWeight').textContent}\n`;
+    
+    if (totalBaseAmount > 0) {
+      text += `Base Amount: ₹${new Intl.NumberFormat('en-IN').format(Math.round(totalBaseAmount))}\n`;
+      
+      if (hasAnyGst) {
+        text += `Total GST: ₹${new Intl.NumberFormat('en-IN').format(Math.round(totalGstAmount))}\n`;
+        text += `Final Amount (incl. GST): ₹${new Intl.NumberFormat('en-IN').format(Math.round(totalBaseAmount + totalGstAmount))}`;
+      } else {
+        text += `Final Amount: ₹${new Intl.NumberFormat('en-IN').format(Math.round(totalBaseAmount))}`;
+      }
+    }
+  }
+  
+  return text;
+}
+
+
+    function copyToClipboard() {
+      const text = getShareText();
+      if (!text) return;
+
+      navigator.clipboard.writeText(text).then(() => {
+        const copyMessage = document.getElementById('copyMessage');
+        copyMessage.classList.add('show');
+        setTimeout(() => {
+          copyMessage.classList.remove('show');
+        }, 1500);
+      }).catch(err => console.error('Copy failed:', err));
+    }
+
+    function clearAll() {
+      const cards = document.querySelectorAll('.calculator-card');
+      cards.forEach(card => {
+        card.querySelector('.quantity').value = '';
+        card.querySelector('.price').value = '';
+        card.querySelector('.gst').selectedIndex = 0;
+        const cardId = parseInt(card.dataset.cardId);
+        calculateCard(cardId);
+      });
+    }
+
+    function shareWhatsApp() {
+      const text = getShareText();
+      if (!text) return;
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    function shareSMS() {
+      const text = getShareText();
+      if (!text) return;
+      const url = navigator.userAgent.match(/iPhone|iPad/) 
+        ? `sms:&body=${encodeURIComponent(text)}` 
+        : `sms:?body=${encodeURIComponent(text)}`;
+      window.location.href = url;
+    }
+
+    function shareEmail() {
+      const text = getShareText();
+      if (!text) return;
+      const subject = encodeURIComponent('TilesPro Calculation Results');
+      const body = encodeURIComponent(text);
+      window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    }
+
+    // Fade out animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fadeOut {
+        from { opacity: 1; transform: translateY(0); }
+        to { opacity: 0; transform: translateY(-10px); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Event Listeners - optimized
+    document.getElementById('modeSwitch').addEventListener('click', (e) => {
+      const option = e.target.closest('.mode-switch-option');
+      if (option) switchMode(option.dataset.mode);
+    });
+
+    document.getElementById('addMoreBtn').addEventListener('click', addMoreCard);
+    document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
+    document.getElementById('clearBtn').addEventListener('click', clearAll);
+    document.getElementById('shareWhatsapp').addEventListener('click', shareWhatsApp);
+    document.getElementById('shareSMS').addEventListener('click', shareSMS);
+    document.getElementById('shareEmail').addEventListener('click', shareEmail);
+
+    // Initialize
+    initializeSelect(0);
+    setupCardEventListeners(0);
+    calculateCard(0);
+
+   
+    console.log('TilesPro Calculator - High Performance Version Ready! ⚡🚀');
 
   </script>
 </body>
