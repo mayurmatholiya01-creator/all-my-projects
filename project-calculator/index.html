@@ -6,6 +6,8 @@
   <title>TilesPro Calculator</title>
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+  <script src="imagedata.js"></script>
   
   <style>
     :root {
@@ -48,6 +50,67 @@
       margin: 0;
       padding: 0;
     }
+
+    .app-header {
+  position: sticky; 
+  top: 0;
+  width: 100%;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--card-border);
+  z-index: 100;
+  overflow: hidden; 
+
+  transition: transform 0.3s ease-out;
+  will-change: transform;
+}
+
+.app-header.header-hidden {
+    transform: translateY(-100%);
+}
+
+.app-header::before {
+    content: '';
+    position: absolute;
+    z-index: -2;
+    top: -100%; 
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    background: conic-gradient(
+        from 180deg at 50% 50%,
+        var(--primary-glow-1) 0%, 
+        var(--primary-glow-2) 33%, 
+        var(--primary-glow-3) 66%, 
+        var(--primary-glow-1) 100%
+    );
+    opacity: 0.3;
+}
+
+.app-header::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0; 
+    background: var(--header-glass); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+}
+
+.logo-container { display: flex; align-items: center; gap: 10px; }
+.logo-container img { height: 35px; width: auto; object-fit: contain; }
+
+.header-icon-btn { background: transparent; border: none; cursor: pointer; padding: 5px; line-height: 0; }
+.header-icon-btn svg { width: 20px; height: 20px; stroke: var(--text-secondary); transition: all 0.3s ease; }
+.header-icon-btn:hover svg { stroke: var(--text-primary); transform: rotate(90deg); }
 
     html {
       -webkit-font-smoothing: antialiased;
@@ -771,6 +834,22 @@
   </style>
 </head>
 <body>
+
+  <header class="app-header">
+    <div class="header-content">
+        <div class="logo-container">
+            <img id="logoA" alt="Logo A">
+            <img id="logoGranicer2" alt="Granicer Logo 2"> </div>
+
+        <button id="refresh-btn" class="header-icon-btn" title="Refresh Page">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 4v6h-6M1 20v-6h6"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+        </button>
+    </div>
+</header>
+  
   <div class="container">
     <div class="mode-switch" id="modeSwitch">
       <button class="mode-switch-option active" data-mode="basic">Basic</button>
@@ -941,6 +1020,44 @@
   </div>
 
   <div class="copy-message" id="copyMessage">✓ Details copied to clipboard!</div>
+
+  // --- Naya Header JS ---
+window.addEventListener('DOMContentLoaded', () => {
+
+    try {
+        if (typeof logoA_base64 !== 'undefined') {
+            document.getElementById('logoA').src = logoA_base64;
+        }
+        if (typeof logoGranicer2_base64 !== 'undefined') {
+            document.getElementById('logoGranicer2').src = logoGranicer2_base64;
+        }
+    } catch (e) {
+        console.error("Logo base64 data nahi mila. imagedata.js loaded hai?", e);
+    }
+
+    document.getElementById('refresh-btn').addEventListener('click', () => {
+        location.reload();
+    });
+
+    const header = document.querySelector('.app-header');
+    if (header) {
+        let lastScrollY = window.scrollY;
+
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+
+            if (currentScrollY > lastScrollY && currentScrollY > 50) {
+                header.classList.add('header-hidden');
+            } else {
+                header.classList.remove('header-hidden');
+            }
+
+            lastScrollY = currentScrollY;
+        }, { passive: true });
+    }
+
+}); 
+// --- End Naya Header JS ---
 
   <script>
     // --- ALL JAVASCRIPT IS 100% UNCHANGED ---
