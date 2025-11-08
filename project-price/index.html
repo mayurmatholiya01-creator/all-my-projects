@@ -41,11 +41,11 @@
           --success-light: #34d399;
           --error: #ef4444; 
           --error-light: #f87171;
+          
+          /* [नया] Safe area padding */
+          --safe-area-top: env(safe-area-inset-top);
+          --safe-area-bottom: env(safe-area-inset-bottom);
         }
-        
-        /* DELETED: .container.advance-theme CSS block
-           REASON: User wants one consistent theme.
-        */
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { height: 100%; }
@@ -56,12 +56,12 @@
             color: var(--text-primary); 
             min-height: 100vh;
             
-            /* NEW: Added landing page background effect */
             background-image: radial-gradient(at 50% 0%, hsla(228,100%,74%,0.1) 0, transparent 50%);
             
             /* [बदलाव 3] Notch/Safe-Area के लिए Body Padding को अपडेट किया गया */
-            padding-top: max(10px, env(safe-area-inset-top));
-            padding-bottom: max(10px, env(safe-area-inset-bottom));
+            padding-top: max(10px, var(--safe-area-top));
+            /* [नया] नेविगेशन बार के लिए नीचे जगह छोड़ी गई है */
+            padding-bottom: calc(65px + max(10px, var(--safe-area-bottom)));
             padding-left: max(10px, env(safe-area-inset-left));
             padding-right: max(10px, env(safe-area-inset-right));
         }
@@ -88,19 +88,17 @@
             align-items: center;
             padding: 10px 20px;
             
-            /* NEW: Using theme glass */
             background: rgba(10, 10, 11, 0.7); /* Header glass from landing page */
 
             border-bottom: 1px solid var(--glass-border);
             flex-shrink: 0;
 
-            /* [V48] Glassy effect & Spacing */
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px); /* For Safari */
             margin-bottom: 5px; /* Space between header and tabs */
         }
         #header-logo {
-            height: 30px; /* Aap height adjust kar sakte hain */
+            height: 30px; 
             width: auto;
             object-fit: contain;
         }
@@ -113,7 +111,7 @@
             background: transparent;
             border: none;
             color: var(--text-muted);
-            font-size: 1.1em; /* Icon size */
+            font-size: 1.1em; 
             cursor: pointer;
             transition: all 0.3s ease;
             padding: 5px;
@@ -123,12 +121,6 @@
             transform: scale(1.1);
         }
         
-        /* DELETED: .container.advance-theme .header-icon-btn:hover
-           REASON: Only one theme now.
-        */
-        
-        /* --- [END MODIFIED V49] --- */
-
         .tabs {
             display: flex;
             background: var(--glass); 
@@ -148,7 +140,6 @@
             border-bottom: 3px solid transparent;
             font-family: 'Inter', sans-serif; 
         }
-        /* .active and :hover will update automatically via --primary */
         .tab-btn.active {
             color: var(--primary); 
             background: transparent;
@@ -208,7 +199,6 @@
             background: var(--bg-primary);
             color: var(--text-primary);
         }
-        /* :focus will update automatically via --primary */
         input[type='text']:focus,
         input[type='number']:focus,
         select:focus {
@@ -272,7 +262,6 @@
             transition: all 0.3s ease;
             margin-bottom: 0; 
         }
-        /* :checked will update automatically via --primary */
         .grade-buttons input[type="radio"]:checked + label {
             background-color: var(--primary); 
             color: white;
@@ -306,7 +295,6 @@
             gap: 8px;
         }
         
-        /* NEW: Re-themed Add button to match other apps */
         .add-button {
             background: linear-gradient(135deg, var(--primary), var(--primary-light)); 
         }
@@ -315,7 +303,6 @@
             box-shadow: 0 5px 20px rgba(99, 102, 241, 0.2);
         }
         
-        /* .pdf-button will update automatically via --primary */
         .pdf-button {
             background: linear-gradient(135deg, var(--primary), var(--primary-light)); 
         }
@@ -391,7 +378,6 @@
             background: transparent;
             font-size: 0.9em;
         }
-        /* thead will update automatically via --primary */
         thead {
             background: linear-gradient(135deg, var(--primary), var(--primary-light)); 
             color: white;
@@ -432,7 +418,6 @@
              border-bottom: none;
         }
         
-        /* .delete-btn (functional color) is UNTOUCHED */
         .delete-btn {
             background: linear-gradient(135deg, var(--error), var(--error-light)); 
             color: white;
@@ -587,6 +572,63 @@
         }
         .edit-select {
             padding: 3px;
+        }
+        
+        /* --- [नया] Bottom Navigation Bar Styles --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: calc(65px + var(--safe-area-bottom)); /* iOS safe area के लिए */
+            background: var(--header-glass); /* Aapke header se matching glass */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            z-index: 1000;
+            padding-bottom: var(--safe-area-bottom); /* iOS safe area padding */
+        }
+
+        .nav-link {
+            flex: 1; /* Sabko barabar space dega */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--text-secondary); /* Inactive color */
+            font-size: 10px;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.2s ease, transform 0.1s ease;
+            -webkit-tap-highlight-color: transparent; /* Tap par flash hatayega */
+        }
+
+        .nav-link:active {
+            transform: scale(0.96); /* Tap karne par chhota effect */
+        }
+
+        .nav-icon {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+
+        .nav-link.active {
+            color: var(--primary); /* Active color */
+        }
+
+        /* Active page ke liye chhota indicator */
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 0 0 3px 3px;
         }
         
     </style>
@@ -1707,6 +1749,28 @@
         renderItems(); 
     </script>
 
+
+<nav class="bottom-nav">
+    <a href="../index.html" class="nav-link">
+        <i class="nav-icon fas fa-home"></i>
+        <span>Home</span>
+    </a>
+
+    <a href="../project-price/index.html" class="nav-link active">
+        <i class="nav-icon fas fa-list-alt"></i>
+        <span>Price List</span>
+    </a>
+
+    <a href="../project-calculator/index.html" class="nav-link">
+        <i class="nav-icon fas fa-calculator"></i>
+        <span>Calculator</span>
+    </a>
+
+    <a href="../project-tilesearch/index.html" class="nav-link">
+        <i class="nav-icon fas fa-search"></i>
+        <span>Tiles</span>
+    </a>
+</nav>
 
 </body>
 </html>
