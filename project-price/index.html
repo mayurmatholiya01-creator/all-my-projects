@@ -64,6 +64,12 @@
             padding-bottom: calc(65px + max(10px, var(--safe-area-bottom)));
             padding-left: max(10px, env(safe-area-inset-left));
             padding-right: max(10px, env(safe-area-inset-right));
+
+            /* --- YEH LINES ADD HUI HAIN --- */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* --- YAHAN TAK --- */
         }
 
         .container {
@@ -71,12 +77,7 @@
             margin: 0 auto;
             background: var(--bg-secondary); 
             border-radius: var(--border-radius);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 100%; 
-            max-height: 100%; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); 
             border: 1px solid var(--glass-border); 
             transition: all 0.3s ease; 
         }
@@ -173,8 +174,6 @@
         .tab-content {
             display: none;
             padding: 20px;
-            overflow-y: auto;
-            flex: 1;
         }
         .tab-content.active {
             display: flex;
@@ -656,9 +655,7 @@
     </style>
 </head>
 <body>
-    <div class="container"> 
-
-<header class="app-header">
+    <header class="app-header">
     <div class="header-content">
         <div class="logo-container">
             <img id="logoA" alt="Logo A">
@@ -672,6 +669,9 @@
         </button>
     </div>
 </header>
+    <div class="container"> 
+
+
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab(event, 'basic')">Basic</button>
             <button class="tab-btn" onclick="switchTab(event, 'advance')">Advance</button>
