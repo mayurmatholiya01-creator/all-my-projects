@@ -1,487 +1,619 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mayur's Projects</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tile Search</title>
+  
+  
+  
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box }
+    body {
+      font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',Roboto,sans-serif;
+      background:#0d1117; color:#f0f6fc; padding:20px; min-height:100vh;
+      line-height:1.6; 
+      /* PWA Safe Area Support */
+      padding-top: max(20px, env(safe-area-inset-top));
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
+    }
     
-    <link rel="manifest" href="manifest.json">
+    body.modal-open .app-container { 
+      filter:blur(4px) brightness(0.7); 
+      transition:filter 0.3s ease;
+    }
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    .app-container { 
+      max-width:1200px; margin:0 auto;
+      animation:fadeIn 0.6s ease-out;
+    }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
 
-    <style>
-        :root {
-          /* --- DESIGN TOKENS (Figma/Apple Approach) --- */
-          --bg-primary: #0a0a0b;
-          --text-primary: #f0f6fc;
-          --text-secondary: #c9d1d9;
-          
-          /* Primary Colors */
-          --primary-glow-1: #6366f1;
-          --primary-glow-2: #a855f7;
-          --primary-glow-3: #ec4899;
+    .controls {
+      display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:32px;
+      padding:24px; background:#161b22; border-radius:16px; border:1px solid #30363d;
+    }
+    .control-group { position:relative; }
+    .control-label {
+      display:block; color:#f0f6fc; font-size:14px; font-weight:600;
+      margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;
+    }
+    .control-input {
+      width:100%; padding:14px 20px; background:#0d1117;
+      border:2px solid #30363d; border-radius:12px; color:#f0f6fc;
+      font-size:16px; outline:none; transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .control-input:focus { 
+      border-color:#06d6a0; box-shadow:0 0 0 4px rgba(6,214,160,0.1);
+      background:#161b22; 
+    }
+    .dropdown {
+      appearance:none; cursor:pointer; padding-right:50px;
+      background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%238b949e' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-repeat:no-repeat; background-position:right 16px center; background-size:16px;
+    }
 
-          /* Card/Header Glass */
-          --header-glass: rgba(10, 10, 11, 0.7);
-          --card-glass: rgba(30, 30, 35, 0.6);
-          --card-glass-hover: rgba(35, 35, 40, 0.75);
-          --card-border: rgba(255, 255, 255, 0.1);
+    .search-suggestions {
+      position:absolute; top:100%; left:0; right:0; z-index:1000;
+      background:#161b22; border:1px solid #30363d; border-radius:12px;
+      max-height:300px; overflow-y:auto; display:none; margin-top:4px;
+      box-shadow:0 20px 40px rgba(0,0,0,0.3);
+    }
+    .suggestion-item {
+      padding:12px 20px; cursor:pointer; color:#f0f6fc;
+      border-bottom:1px solid #21262d; transition:all 0.2s;
+    }
+    .suggestion-item:hover { background:#21262d; color:#06d6a0; }
+    .suggestion-item:last-child { border:none; }
 
-          /* Grid System */
-          --spacing-medium: 16px;
-          --spacing-large: 24px;
-          --radius-card: 16px;
-        }
+    .tiles-grid { 
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(400px,1fr)); 
+      gap:20px; margin-bottom:32px;
+    }
+    .tile-card {
+      background:#161b22; border:1px solid #30363d; border-radius:16px;
+      overflow:hidden; transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+      cursor:pointer; position:relative;
+    }
+    .tile-card:hover { 
+      transform:translateY(-4px); 
+      box-shadow:0 20px 40px rgba(0,0,0,0.4);
+      border-color:#06d6a0;
+    }
+    
+    .tile-image {
+      width:100%; height:280px; position:relative; overflow:hidden;
+      background:linear-gradient(45deg,#1e293b,#0f1419);
+    }
+    .tile-image img {
+      width:100%; height:100%; object-fit:cover; 
+      transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .tile-card:hover .tile-image img { transform:scale(1.05); }
+    
+    .tile-content {
+      padding:16px 20px; display:flex; justify-content:space-between; align-items:center;
+    }
+    .tile-info {
+      flex:1; min-width:0;
+    }
+    .tile-info h3 {
+      font-size:1rem; font-weight:600; color:#f0f6fc; margin-bottom:2px;
+      line-height:1.3; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    }
+    .tile-info p { color:#8b949e; font-size:0.85rem; }
+    
+    .tile-actions {
+      display:flex; gap:8px; flex-shrink:0; margin-left:12px;
+    }
+    
+    /* Neumorphic Buttons with SVG Icons */
+    .action-btn {
+      width:40px; height:40px; border:none; border-radius:12px;  
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      position:relative; transition:all 0.15s cubic-bezier(0.4,0,0.2,1);
+      background:#0d1117;
+      box-shadow:6px 6px 12px rgba(0,0,0,0.6), -6px -6px 12px rgba(255,255,255,0.05);
+    }
+    .action-btn:active {
+      transform:scale(0.95);
+      box-shadow:inset 4px 4px 8px rgba(0,0,0,0.6), inset -4px -4px 8px rgba(255,255,255,0.05);
+    }
 
-        * {
-          box-sizing: border-box;
-          margin: 0;
-          padding: 0;
-        }
+    /* Download Icon */
+    .download-btn {
+      background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3e%3cpath d='M12 16l-5-5h3V4h4v7h3l-5 5z'/%3e%3cpath d='M5 20h14v2H5v-2z'/%3e%3c/svg%3e");
+      background-size:18px; background-repeat:no-repeat; background-position:center;
+    }
 
-        body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-          background-color: var(--bg-primary);
-          background-image: radial-gradient(at 50% 0%, hsla(228,100%,74%,0.1) 0, transparent 50%);
-          color: var(--text-primary);
-          min-height: 100vh;
-        }
+    /* WhatsApp Icon */
+    .whatsapp-btn {
+      background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3e%3cpath d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488'/%3e%3c/svg%3e");
+      background-size:18px; background-repeat:no-repeat; background-position:center;
+    }
 
-        .app-header {
-          position: sticky; 
-          top: 0;
-          width: 100%;
-          padding: 15px 20px;
-          border-bottom: 1px solid var(--card-border);
-          z-index: 100;
-          overflow: hidden; 
+    /* Modal buttons with same style */
+    .modal-action-btn {
+      width:40px; height:40px; border:none; border-radius:12px;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      position:relative; transition:all 0.15s cubic-bezier(0.4,0,0.2,1);
+      background:#0d1117;
+      box-shadow:6px 6px 12px rgba(0,0,0,0.6), -6px -6px 12px rgba(255,255,255,0.05);
+    }
+    .modal-action-btn:active {
+      transform:scale(0.95);
+      box-shadow:inset 4px 4px 8px rgba(0,0,0,0.6), inset -4px -4px 8px rgba(255,255,255,0.05);
+    }
+    
+    .modal-download-btn {
+      background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3e%3cpath d='M12 16l-5-5h3V4h4v7h3l-5 5z'/%3e%3cpath d='M5 20h14v2H5v-2z'/%3e%3c/svg%3e");
+      background-size:18px; background-repeat:no-repeat; background-position:center;
+    }
+    
+    .modal-whatsapp-btn {
+      background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3e%3cpath d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488'/%3e%3c/svg%3e");
+      background-size:18px; background-repeat:no-repeat; background-position:center;
+    }
 
-          transition: transform 0.3s ease-out;
-          will-change: transform;
-        }
-        
-        .app-header.header-hidden {
-            transform: translateY(-100%);
-        }
+    .load-more {
+      display:block; margin:0 auto; padding:16px 32px;
+      background:linear-gradient(135deg,#06d6a0,#118ab2);
+      border:none; border-radius:12px; color:#fff; font-size:16px; font-weight:600;
+      cursor:pointer; transition:all 0.3s; text-transform:uppercase; letter-spacing:0.5px;
+    }
+    .load-more:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(6,214,160,0.3); }
+    .load-more:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
 
-        .app-header::before {
-            content: '';
-            position: absolute;
-            z-index: -2;
-            top: -100%; 
-            left: -100%;
-            width: 300%;
-            height: 300%;
-            background: conic-gradient(
-                from 180deg at 50% 50%,
-                var(--primary-glow-1) 0%, 
-                var(--primary-glow-2) 33%, 
-                var(--primary-glow-3) 66%, 
-                var(--primary-glow-1) 100%
-            );
-            opacity: 0.3;
-        }
+    .modal-overlay {
+      position:fixed; top:0; left:0; right:0; bottom:0; z-index:2000;
+      background:rgba(0,0,0,0.8); 
+      display:none; align-items:center; justify-content:center; padding:20px;
+      backdrop-filter:blur(8px);
+    }
+    
+    .modal-content {
+      background:#161b22; border-radius:20px; max-width:90vw; max-height:90vh;
+      border:1px solid #30363d; position:relative; overflow:hidden;
+      animation:modalIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      box-shadow:0 40px 80px rgba(0,0,0,0.6);
+      filter:none !important;
+    }
+    @keyframes modalIn { 
+      from{opacity:0;transform:scale(0.8) translateY(40px)} 
+      to{opacity:1;transform:scale(1) translateY(0)} 
+    }
+    
+    .modal-header {
+      position:absolute; top:0; left:0; right:0; z-index:10;
+      background:rgba(22,27,34,0.9); backdrop-filter:blur(12px);
+      padding:12px 20px; border-bottom:1px solid rgba(48,54,61,0.5);
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    
+    .modal-caption {
+      text-align:center; flex:1;
+      font-size:0.95rem; font-weight:500; color:#f0f6fc;
+      opacity:0.9;
+    }
+    
+    .modal-controls {
+      display:flex; gap:8px; align-items:center;
+    }
+    
+    .close-btn {
+      width:28px; height:28px; border:none; background:rgba(33,38,45,0.8); color:#8b949e;
+      border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+      transition:all 0.2s; font-size:16px; backdrop-filter:blur(8px);
+    }
+    .close-btn:hover { background:rgba(48,54,61,0.9); color:#f0f6fc; }
+    
+    .modal-image {
+      max-width:800px; max-height:600px; width:100%; height:auto;
+      display:block; margin:0 auto; margin-top:52px;
+      filter:none !important;
+    }
 
-        .app-header::after {
-            content: '';
-            position: absolute;
-            z-index: -1;
-            inset: 0; 
-            background: var(--header-glass); 
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
+    .empty-state {
+      text-align:center; padding:80px 20px; color:#8b949e;
+    }
+    .empty-state h3 { font-size:1.5rem; margin-bottom:12px; color:#f0f6fc; }
 
-        .header-content {
-          max-width: 1200px;
-          margin: 0 auto;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          font-weight: 600;
-        }
-        
-        .logo-container { display: flex; align-items: center; gap: 10px; }
-        .logo-container img { height: 35px; width: auto; object-fit: contain; }
-        
-        .header-icon-btn { background: transparent; border: none; cursor: pointer; padding: 5px; line-height: 0; }
-        .header-icon-btn svg { width: 20px; height: 20px; stroke: var(--text-secondary); transition: all 0.3s ease; }
-        .header-icon-btn:hover svg { stroke: var(--text-primary); transform: rotate(90deg); }
+    /* PWA Install Prompt */
+    .install-prompt {
+      position:fixed; bottom:20px; left:20px; right:20px; z-index:1500;
+      background:#161b22; border:1px solid #30363d; border-radius:16px;
+      padding:16px; display:none; animation:slideUp 0.3s ease;
+    }
+    .install-prompt.show { display:flex; }
+    .install-prompt-content {
+      flex:1; margin-right:16px;
+    }
+    .install-prompt h3 {
+      font-size:0.9rem; color:#f0f6fc; margin-bottom:4px;
+    }
+    .install-prompt p {
+      font-size:0.8rem; color:#8b949e;
+    }
+    .install-btn {
+      background:#06d6a0; color:#0d1117; border:none; border-radius:8px;
+      padding:8px 16px; font-size:0.85rem; font-weight:600; cursor:pointer;
+    }
+    .install-dismiss {
+      background:transparent; color:#8b949e; border:none;
+      padding:8px; margin-left:8px; cursor:pointer;
+    }
+    @keyframes slideUp {
+      from { transform:translateY(100%); opacity:0; }
+      to { transform:translateY(0); opacity:1; }
+    }
 
-        .main-content {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 20px;
-        }
-
-        .hero-section {
-          text-align: center;
-          padding: 10px 20px 10px 20px;
-          opacity: 0;
-          animation: fade-in-up 0.6s ease-out 0.1s forwards;
-        }
-
-        .hero-section h1 {
-          font-size: 1.5rem; 
-          font-weight: 600; 
-          color: var(--text-secondary); 
-          letter-spacing: 0.1em; 
-          text-transform: uppercase;
-          margin: 0;
-        }
-
-        .project-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr); 
-          gap: var(--spacing-medium); 
-          margin-top: 20px;
-        }
-
-        @media (min-width: 640px) {
-          .project-grid {
-            gap: var(--spacing-large);
-          }
-        }
-        
-        @media (min-width: 768px) {
-            .project-grid {
-                max-width: 800px; 
-                margin-left: auto;
-                margin-right: auto;
-            }
-        }
-
-        .project-card {
-          position: relative; 
-          overflow: hidden; 
-          
-          border-radius: var(--radius-card);
-          padding: var(--spacing-large);
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-          
-          display: block;
-          text-decoration: none;
-          color: var(--text-primary);
-          
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          min-height: 220px; 
-          
-          transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, opacity 0.5s ease-out;
-          will-change: transform, opacity;
-          z-index: 1;
-
-          opacity: 0; 
-          animation-fill-mode: forwards; 
-        }
-
-        .project-card::before {
-            content: '';
-            position: absolute;
-            z-index: -2;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            
-            background: conic-gradient(
-                from 180deg at 50% 50%,
-                var(--primary-glow-1) 0%, 
-                var(--primary-glow-2) 33%, 
-                var(--primary-glow-3) 66%, 
-                var(--primary-glow-1) 100%
-            );
-            
-            opacity: 0.3; 
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .project-card::after {
-            content: '';
-            position: absolute;
-            z-index: -1;
-            inset: 0; 
-            background: var(--card-glass);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--card-border);
-            border-radius: inherit;
-            transition: background 0.3s ease;
-        }
-
-        .project-card:hover {
-          transform: scale(1.03); 
-          box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
-        }
-        
-        .project-card:hover::after {
-            background: var(--card-glass-hover); 
-        }
-        
-        .project-card:hover::before {
-            opacity: 0.6; 
-            animation: rotate 4s linear infinite;
-        }
-        
-        .project-card:active {
-            transform: scale(0.98);
-            transition-duration: 0.1s; 
-        }
-
-        .card-icon {
-          width: 112px; 
-          height: 112px; 
-          margin-bottom: var(--spacing-medium);
-          transform: translateZ(10px);
-        }
-
-        .card-icon svg {
-          width: 100%;
-          height: 100%;
-        }
-
-        .project-card h3 {
-          margin: 0;
-          color: var(--text-primary);
-          font-size: 1.1rem; 
-          font-weight: 600;
-          text-align: center;
-          transform: translateZ(10px); 
-        }
-        
-        .project-card p {
-          margin-top: 8px;
-          font-size: 0.9rem;
-          color: var(--text-secondary);
-          text-align: center;
-          font-weight: 400;
-          transform: translateZ(10px);
-          line-height: 1.4;
-          min-height: 2.5em; 
-          padding: 0 10px; 
-        }
-
-        @media (min-width: 640px) {
-            .project-card h3 {
-                font-size: 1.25rem; 
-            }
-        }
-        
-        .app-footer {
-          text-align: center;
-          padding: 40px 20px;
-          color: var(--text-secondary);
-          font-size: 0.9rem;
-        }
-
-        @keyframes fade-in-up {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .project-grid .project-card:nth-child(1) {
-            animation: fade-in-up 0.5s ease-out 0.3s forwards;
-        }
-        .project-grid .project-card:nth-child(2) {
-            animation: fade-in-up 0.5s ease-out 0.5s forwards;
-        }
-        .project-grid .project-card:nth-child(3) {
-            animation: fade-in-up 0.5s ease-out 0.7s forwards;
-        }
-        .project-grid .project-card:nth-child(4) {
-            animation: fade-in-up 0.5s ease-out 0.9s forwards;
-        }
-
-    </style>
+    @media(max-width:768px){
+      .controls { grid-template-columns:1fr; }
+      .tiles-grid { grid-template-columns:1fr; }
+      .modal-caption { font-size:0.85rem; }
+      .modal-controls { gap:6px; }
+      .app-container { padding:16px; }
+      .action-btn { width:32px; height:32px; }
+      .modal-action-btn { width:32px; height:32px; }
+      body { 
+        padding:16px; 
+        padding-top: max(16px, env(safe-area-inset-top)); 
+        padding-bottom: max(16px, env(safe-area-inset-bottom));
+      }
+      .install-prompt { left:16px; right:16px; bottom:16px; }
+    }
+  </style>
 </head>
 <body>
+  <div class="app-container">
+    <div class="controls">
+      <div class="control-group">
+        <label class="control-label">Filter by Size</label>
+        <select id="sizeFilter" class="control-input dropdown">
+          <option value="">All Sizes</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Search Designs</label>
+        <input id="searchInput" class="control-input" type="text" 
+               placeholder="Type design name..." autocomplete="off" />
+        <div id="searchSuggestions" class="search-suggestions"></div>
+      </div>
+    </div>
 
-    <header class="app-header">
-        <div class="header-content">
-            <div class="logo-container">
-                <img id="logoA" alt="Logo A">
-                <img id="logoGranicer2" alt="Granicer Logo 2"> </div>
-            
-            <button id="refresh-btn" class="header-icon-btn" title="Refresh Page">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M23 4v6h-6M1 20v-6h6"/>
-                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-                </svg>
-            </button>
-        </div>
-    </header>
-
-    <main class="main-content">
-        <section class="hero-section">
-            <h1>TOOLS</h1>
-        </section>
-
-        <div id="project-list" class="project-grid">
-            <!-- Project cards yahan JS se load honge -->
-        </div>
-    </main>
-
-    <footer class="app-footer">
-        <p>© 2025 Mayur Matholiya</p>
-    </footer>
+    <div id="tilesGrid" class="tiles-grid"></div>
     
-    <script src="imagedata.js"></script>
+    <button id="loadMoreBtn" class="load-more" style="display:none">
+      Load More Designs
+    </button>
 
-    <script>
-        // --- NAYA CHANGE: Descriptions angreji mein aur concise ---
-        const projects = [
-            {
-                "title": "Price List",
-                "liveUrl": "./project-price/index.html",
-                "description": "Generate & share PDF price quotations.",
-                "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="g1" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="var(--primary-glow-1)" stop-opacity="0.8"/>
-                                <stop offset="1" stop-color="var(--primary-glow-3)" stop-opacity="1"/>
-                                </linearGradient>
-                            </defs>
-                            <path d="M56.6667 8H23.3333C20.3878 8 18 10.3878 18 13.3333V66.6667C18 69.6122 20.3878 72 23.3333 72H56.6667C59.6122 72 62 69.6122 62 66.6667V24L56.6667 8Z" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M56 8V24H62" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M48.6667 44H31.3333" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
-                            <path d="M48.6667 56H31.3333" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
-                            <path d="M38 32H31.3333" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
-                        </svg>`
-            },
-            {
-                "title": "Calculator",
-                "liveUrl": "./project-calculator/index.html",
-                "description": "Calculate tile area, weight, and cost.",
-                "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="g2" x1="40" y1="0" x2="40" y2="80" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="var(--primary-glow-1)" stop-opacity="1"/>
-                                <stop offset="1" stop-color="var(--primary-glow-2)" stop-opacity="0.8"/>
-                                </linearGradient>
-                            </defs>
-                            <rect x="20" y="10" width="40" height="60" rx="8" stroke="url(#g2)" stroke-width="3"/>
-                            <rect x="28" y="18" width="24" height="12" rx="3" stroke="white" stroke-width="2" stroke-opacity="0.7"/>
-                            <circle cx="30" cy="40" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
-                            <circle cx="40" cy="40" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
-                            <circle cx="50" cy="40" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
-                            <circle cx="30" cy="50" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
-                            <circle cx="40" cy="50" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
-                            <circle cx="50" cy="50" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
-                            <circle cx="30" cy="60" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
-                            <circle cx="40" cy="60" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
-                            <circle cx="50" cy="60" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
-                        </svg>`
-            },
-            {
-                "title": "Tiles JPG",
-                "liveUrl": "./project-tilesearch/index.html",
-                "description": "Search tile designs by name and filter by size.",
-                "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="g3" x1="0" y1="80" x2="80" y2="0" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="var(--primary-glow-2)" stop-opacity="0.8"/>
-                                <stop offset="1" stop-color="var(--primary-glow-3)" stop-opacity="1"/>
-                                </linearGradient>
-                            </defs>
-                            <path d="M20 12H60C62.2091 12 64 13.7909 64 16V64C64 66.2091 62.2091 68 60 68H20C17.7909 68 16 66.2091 16 64V16C16 13.7909 17.7909 12 20 12Z" stroke="url(#g3)" stroke-width="3" stroke-opacity="0.4"/>
-                            <path d="M52 36C52 42.6274 46.6274 48 40 48C33.3726 48 28 42.6274 28 36C28 29.3726 33.3726 24 40 24C46.6274 24 52 29.3726 52 36Z" stroke="url(#g3)" stroke-width="3"/>
-                            <path d="M46.6667 46.6667L57.3333 57.3333" stroke="url(#g3)" stroke-width="3" stroke-linecap="round"/>
-                        </svg>`
-            }
-        ];
+    <div class="empty-state" id="emptyState" style="display:none">
+      <h3>No tiles found</h3>
+      <p>Try adjusting your search or filter criteria</p>
+    </div>
+  </div>
 
-        // --- app.js ka code ---
-        window.addEventListener('DOMContentLoaded', () => {
-            
-            try {
-                if (typeof logoA_base64 !== 'undefined') {
-                    document.getElementById('logoA').src = logoA_base64;
-                }
-                if (typeof logoGranicer2_base64 !== 'undefined') {
-                    document.getElementById('logoGranicer2').src = logoGranicer2_base64;
-                }
-            } catch (e) {
-                console.error("Logo base64 data nahi mila. imagedata.js loaded hai?", e);
-            }
+  <!-- PWA Install Prompt -->
+  <div class="install-prompt" id="installPrompt">
+    <div class="install-prompt-content">
+      <h3>Install Tile Search</h3>
+      <p>Add to home screen for full screen experience</p>
+    </div>
+    <button class="install-btn" id="installBtn">Install</button>
+    <button class="install-dismiss" id="installDismiss">✕</button>
+  </div>
 
-            fetchProjects();
-            registerSW();
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-caption" id="modalCaption"></div>
+        <div class="modal-controls">
+          <button class="modal-action-btn modal-download-btn" id="modalDownload" title="Download"></button>
+          <button class="modal-action-btn modal-whatsapp-btn" id="modalWhatsapp" title="Share on WhatsApp"></button>
+          <button class="close-btn" onclick="closeModal()">✕</button>
+        </div>
+      </div>
+      <img id="modalImage" class="modal-image" alt="" />
+    </div>
+  </div>
 
-            document.getElementById('refresh-btn').addEventListener('click', () => {
-                location.reload();
-            });
+  <script>
+    const app = {
+      data: [],
+      filteredData: [],
+      displayedCount: 5,
+      loadIncrement: 10,
+      
+      elements: {
+        sizeFilter: document.getElementById('sizeFilter'),
+        searchInput: document.getElementById('searchInput'),
+        suggestions: document.getElementById('searchSuggestions'),
+        tilesGrid: document.getElementById('tilesGrid'),
+        loadMoreBtn: document.getElementById('loadMoreBtn'),
+        emptyState: document.getElementById('emptyState'),
+        modal: document.getElementById('modalOverlay'),
+        modalCaption: document.getElementById('modalCaption'),
+        modalImage: document.getElementById('modalImage'),
+        modalDownload: document.getElementById('modalDownload'),
+        modalWhatsapp: document.getElementById('modalWhatsapp')
+      }
+    };
 
-            const header = document.querySelector('.app-header');
-            if (header) {
-                let lastScrollY = window.scrollY;
+    // PWA Install Logic
+    let deferredPrompt;
+    const installPrompt = document.getElementById('installPrompt');
+    const installBtn = document.getElementById('installBtn');
+    const installDismiss = document.getElementById('installDismiss');
 
-                window.addEventListener('scroll', () => {
-                    const currentScrollY = window.scrollY;
-                    
-                    if (currentScrollY > lastScrollY && currentScrollY > 50) {
-                        header.classList.add('header-hidden');
-                    } else {
-                        header.classList.remove('header-hidden');
-                    }
-                    
-                    lastScrollY = currentScrollY;
-                }, { passive: true });
-            }
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      
+      if (!localStorage.getItem('install-dismissed')) {
+        setTimeout(() => {
+          installPrompt.classList.add('show');
+        }, 3000);
+      }
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        installPrompt.classList.remove('show');
+      }
+    });
+
+    installDismiss.addEventListener('click', () => {
+      installPrompt.classList.remove('show');
+      localStorage.setItem('install-dismissed', 'true');
+    });
+
+    window.addEventListener('appinstalled', () => {
+      installPrompt.classList.remove('show');
+      console.log('PWA installed successfully');
+    });
+
+    function getImageUrl(driveUrl) {
+      const id = driveUrl?.match(/[-\w]{25,}/)?.[0];
+      return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w400` : '';
+    }
+
+    function getDownloadUrl(driveUrl) {
+      const id = driveUrl?.match(/[-\w]{25,}/)?.[0];
+      return id ? `https://drive.google.com/uc?export=download&id=${id}` : driveUrl;
+    }
+
+    function getFullImageUrl(driveUrl) {
+      const id = driveUrl?.match(/[-\w]{25,}/)?.[0];
+      return id ? `https://lh3.googleusercontent.com/d/${id}=w1200` : '';
+    }
+
+    function fuzzySearch(query, text) {
+      query = query.toLowerCase();
+      text = text.toLowerCase();
+      let queryIndex = 0;
+      for (let i = 0; i < text.length && queryIndex < query.length; i++) {
+        if (text[i] === query[queryIndex]) queryIndex++;
+      }
+      return queryIndex === query.length;
+    }
+
+    function getSuggestions(query) {
+      if (!query.trim()) return [];
+      
+      const selectedSize = app.elements.sizeFilter.value;
+      let filteredBySize = app.data;
+      
+      if (selectedSize) {
+        filteredBySize = app.data.filter(tile => tile.dimensions === selectedSize);
+      }
+      
+      return filteredBySize
+        .filter(tile => fuzzySearch(query, tile.design_name))
+        .map(tile => tile.design_name)
+        .filter((name, index, arr) => arr.indexOf(name) === index)
+        .slice(0, 8);
+    }
+
+    function populateSizeFilter() {
+      const sizes = [...new Set(app.data.map(t => t.dimensions))]
+        .filter(Boolean)
+        .sort((a, b) => {
+          const aNum = parseInt(a.match(/\d+/)?.[0] || '0');
+          const bNum = parseInt(b.match(/\d+/)?.[0] || '0');
+          return aNum - bNum;
+        });
+      
+      app.elements.sizeFilter.innerHTML = '<option value="">All Sizes</option>';
+      sizes.forEach(size => {
+        const opt = document.createElement('option');
+        opt.value = size;
+        opt.textContent = size;
+        app.elements.sizeFilter.appendChild(opt);
+      });
+    }
+
+    function showSuggestions(suggestions) {
+      const container = app.elements.suggestions;
+      if (!suggestions.length) {
+        container.style.display = 'none';
+        return;
+      }
+      
+      container.innerHTML = suggestions
+        .map(name => `<div class="suggestion-item" onclick="selectSuggestion('${name}')">${name}</div>`)
+        .join('');
+      container.style.display = 'block';
+    }
+
+    function selectSuggestion(name) {
+      app.elements.searchInput.value = name;
+      app.elements.suggestions.style.display = 'none';
+      applyFilters();
+    }
+
+    function renderTiles() {
+      const tilesToShow = app.filteredData.slice(0, app.displayedCount);
+      
+      if (!tilesToShow.length) {
+        app.elements.tilesGrid.innerHTML = '';
+        app.elements.loadMoreBtn.style.display = 'none';
+        app.elements.emptyState.style.display = 'block';
+        return;
+      }
+
+      app.elements.emptyState.style.display = 'none';
+      app.elements.tilesGrid.innerHTML = tilesToShow.map(tile => {
+        const imageUrl = getImageUrl(tile.url);
+        const downloadUrl = getDownloadUrl(tile.url);
+        const fullUrl = getFullImageUrl(tile.url);
         
-        }); 
+        return `
+          <div class="tile-card" onclick="openModal('${tile.design_name}', '${tile.dimensions}', '${fullUrl}', '${downloadUrl}')">
+            <div class="tile-image">
+              ${imageUrl ? `<img src="${imageUrl}" alt="${tile.design_name}" loading="lazy" />` : 
+                '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#8b949e">No Image</div>'}
+            </div>
+            <div class="tile-content">
+              <div class="tile-info">
+                <h3>${tile.design_name}</h3>
+                <p>${tile.dimensions}</p>
+              </div>
+              <div class="tile-actions">
+                <button class="action-btn download-btn" onclick="event.stopPropagation();window.open('${downloadUrl}','_blank')" 
+                        title="Download"></button>
+                <button class="action-btn whatsapp-btn" onclick="event.stopPropagation();shareToWhatsApp('${tile.design_name}','${fullUrl}')" 
+                        title="Share on WhatsApp"></button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
 
-        function fetchProjects() {
-            try {
-                const projectListContainer = document.getElementById('project-list');
-                projectListContainer.innerHTML = ''; 
-                
-                projects.forEach(project => {
-                    const projectCard = document.createElement('a');
-                    projectCard.className = 'project-card';
-                    projectCard.href = project.liveUrl;
-                    projectCard.setAttribute('target', '_self'); 
-                    
-                    projectCard.innerHTML = `
-                        <div class="card-icon">${project.icon}</div>
-                        <h3>${project.title}</h3>
-                        <p>${project.description || '&nbsp;'}</p> 
-                    `;
-                    
-                    projectListContainer.appendChild(projectCard);
-                });
-            } catch (error) {
-                console.error('Failed to load projects:', error);
-                document.getElementById('project-list').innerHTML = "<p>Projects failed to load.</p>";
-            }
-        }
+      app.elements.loadMoreBtn.style.display = 
+        app.displayedCount < app.filteredData.length ? 'block' : 'none';
+    }
 
-        // Service Worker
-        function registerSW() {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('Service Worker Registered!', reg))
-                    .catch(err => console.error('Service Worker Registration Failed!', err));
-            }
+    function applyFilters() {
+      const searchTerm = app.elements.searchInput.value.toLowerCase().trim();
+      const selectedSize = app.elements.sizeFilter.value;
+      
+      app.filteredData = app.data.filter(tile => {
+        const matchesSearch = !searchTerm || tile.design_name.toLowerCase().includes(searchTerm);
+        const matchesSize = !selectedSize || tile.dimensions === selectedSize;
+        return matchesSearch && matchesSize;
+      });
+      
+      app.displayedCount = 5;
+      renderTiles();
+    }
+
+    function loadMore() {
+      app.displayedCount += app.loadIncrement;
+      renderTiles();
+    }
+
+    function openModal(title, size, imageUrl, downloadUrl) {
+      app.elements.modalCaption.textContent = `${title} - ${size}`;
+      app.elements.modalImage.src = imageUrl;
+      
+      app.elements.modalDownload.onclick = () => window.open(downloadUrl, '_blank');
+      app.elements.modalWhatsapp.onclick = () => shareToWhatsApp(title, imageUrl);
+      
+      app.elements.modal.style.display = 'flex';
+      document.body.classList.add('modal-open');
+    }
+
+    function closeModal() {
+      app.elements.modal.style.display = 'none';
+      document.body.classList.remove('modal-open');
+    }
+
+    async function shareToWhatsApp(name, url) {
+      try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const file = new File([blob], `${name}.jpg`, { type: 'image/jpeg' });
+        
+        if (navigator.share && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file] });
+        } else {
+          window.open(`https://wa.me/?text=${encodeURIComponent(url)}`, '_blank');
         }
-    </script>
+      } catch (error) {
+        console.error('Share failed:', error);
+        window.open(url, '_blank');
+      }
+    }
+
+    app.elements.searchInput.addEventListener('input', (e) => {
+      const query = e.target.value;
+      if (query.length > 1) {
+        const suggestions = getSuggestions(query);
+        showSuggestions(suggestions);
+      } else {
+        app.elements.suggestions.style.display = 'none';
+      }
+      applyFilters();
+    });
+
+    app.elements.sizeFilter.addEventListener('change', () => {
+      app.elements.searchInput.value = '';
+      app.elements.suggestions.style.display = 'none';
+      applyFilters();
+    });
+
+    app.elements.loadMoreBtn.addEventListener('click', loadMore);
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.control-group')) {
+        app.elements.suggestions.style.display = 'none';
+      }
+    });
+
+    app.elements.modal.addEventListener('click', (e) => {
+      if (e.target === app.elements.modal) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+
+
+    async function loadData() {
+      try {
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/1oHpJw-_zLdf_jt2SL5l7Hpiu8nSK9gvXfLEVvLlz5cM/export?format=csv&gid=622851011&_=' + Date.now();
+        const response = await fetch(csvUrl);
+        const text = await response.text();
+        
+        app.data = text.trim().split('\n').slice(1)
+          .filter(line => line.trim())
+          .map(line => {
+            const cols = line.split(',');
+            return {
+              filename: cols[0] || '',
+              dimensions: cols[1] || '',
+              design_name: cols[2] || '',
+              url: cols[3] || ''
+            };
+          })
+          .filter(tile => tile.design_name && tile.url);
+
+        app.filteredData = [...app.data];
+        populateSizeFilter();
+        renderTiles();
+      } catch (error) {
+        console.error('Failed to load data:', error);
+        app.elements.emptyState.style.display = 'block';
+        app.elements.emptyState.innerHTML = '<h3>Failed to load tiles</h3><p>Please check your connection and try again</p>';
+      }
+    }
+
+    loadData();
+  </script>
 </body>
 </html>
