@@ -1,10 +1,10 @@
-const CACHE_NAME = 'all-my-projects-v3'; // Version badal diya hai
+const CACHE_NAME = 'all-my-projects-v3'; // Version wahi rakha hai
 
 const ASSETS_TO_CACHE = [
     './', 
     './index.html', 
     './manifest.json',
-    './imagedata.js', // <-- YEH NAYA ADD KIYA HAI
+    './imagedata.js', 
     './icon-192.png',
     './icon-512.png',
     
@@ -17,8 +17,10 @@ const ASSETS_TO_CACHE = [
     
     // --- Project-Calculator (Offline) ---
     './project-calculator/index.html',
-
-    // --- Project-Tilesearch (Online) ---
+    './project-calculator/imagedata.js' // <-- Calculator ka logo cache kar diya
+    
+    // --- Project-Tilesearch (Online Only) ---
+    // (Yahan se tile search ki files hata di gayi hain)
 ];
 
 self.addEventListener('install', event => {
@@ -28,8 +30,8 @@ self.addEventListener('install', event => {
             console.log('Cache opened. Caching core assets...');
             return Promise.all(
                 ASSETS_TO_CACHE.map(url => {
-                    const request = new Request(url, { mode: 'no-cors' });
-                    return cache.add(request).catch(err => {
+                    // no-cors mode ko hata diya hai taki cross-origin assets bhi sahi se cache ho sakein
+                    return cache.add(url).catch(err => {
                         console.warn(`Failed to cache ${url}:`, err);
                     });
                 })
@@ -54,21 +56,52 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-    if (event.request.url.includes('index.html')) {
-        event.respondWith(
-            fetch(event.request)
-            .catch(() => caches.match(event.request))
-        );
+    const url = new URL(event.request.url);
+
+    // --- NAYA BADLAV ---
+    // Agar request Tile Search page ya Google se related hai, toh hamesha Network se lao
+    if (
+        url.pathname.includes('/project-tilesearch/') || 
+        url.hostname === 'docs.google.com' || 
+        url.hostname === 'googleusercontent.com'
+    ) {
+        event.respondWith(fetch(event.request));
         return;
     }
+    // --- BADLAV KHATAM ---
 
+    // Baaki sab ke liye "Cache first, then network" strategy
     event.respondWith(
         caches.match(event.request)
         .then(response => {
             if (response) {
-                return response;
+                return response; // Cache se mil gaya
             }
-            return fetch(event.request);
+            
+            // Cache mein nahi mila, network se fetch karo
+            return fetch(event.request).then(
+                fetchResponse => {
+                    // Response valid hai toh cache mein daal do
+                    if(!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type !== 'basic') {
+                        // Agar cross-origin (jaise fonts) hai, toh use cache nahi karenge
+                        return fetchResponse;
+                    }
+
+                    // Response ko clone karke cache mein store karo
+                    const responseToCache = fetchResponse.clone();
+                    caches.open(CACHE_NAME)
+                        .then(cache => {
+                            cache.put(event.request, responseToCache);
+                        });
+
+                    return fetchResponse;
+                }
+            );
+        })
+        .catch(() => {
+            // Agar network bhi fail ho jaye (total offline)
+            // Toh homepage dikha do
+            return caches.match('./index.html');
         })
     );
 });
