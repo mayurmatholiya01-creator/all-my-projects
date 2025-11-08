@@ -255,14 +255,22 @@
         
         .project-card p {
           margin-top: 8px;
-          font-size: 0.9rem;
+          font-size: 0.85rem; /* Font chhota kiya */
           color: var(--text-secondary);
           text-align: center;
           font-weight: 400;
           transform: translateZ(10px);
-          line-height: 1.4;
-          min-height: 2.5em; 
+          line-height: 1.3; /* Line height kam ki */
           padding: 0 10px; 
+          
+          /* NAYA CHANGE: Text ko 2 line mein limit karega */
+          max-height: 2.3em; /* 0.85rem * 1.3 * 2 lines (approx) */
+          min-height: 2.3em; /* Consistent height ke liye */
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2; /* 2 line tak limit */
+          -webkit-box-orient: vertical;
         }
 
         @media (min-width: 640px) {
