@@ -11,27 +11,32 @@
   
   <style>
     :root {
-      --primary: #6366f1;
-      --primary-light: #818cf8;
+      /* --- NEW THEME MAPPED FROM LANDING PAGE (index (53)) --- */
+      --primary: #6366f1; /* from --primary-glow-1 */
+      --primary-light: #818cf8; /* (matches --primary) */
+      
+      --bg-primary: #0a0a0b;
+      --glass: rgba(30, 30, 35, 0.6); /* from --card-glass */
+      --glass-border: rgba(255, 255, 255, 0.1); /* from --card-border */
+      --glass-hover: rgba(35, 35, 40, 0.75); /* from --card-glass-hover */
+      
+      --text-primary: #f0f6fc;
+      --text-secondary: #c9d1d9;
+      --text-muted: #9ca3af; /* (kept for compatibility) */
+      
+      --border-radius: 16px; /* from --radius-card */
+      --border-radius-sm: 10px; /* (proportional) */
+      /* --- END OF THEME MAP --- */
+
+      /* --- KEPT FROM ORIGINAL CALCULATOR (Functional States) --- */
       --success: #10b981;
       --warning: #f59e0b;
       --error: #ef4444;
       
-      --bg-primary: #0a0a0b;
-      --bg-secondary: #1a1a1e;
-      --glass: rgba(255, 255, 255, 0.06);
-      --glass-border: rgba(255, 255, 255, 0.1);
-      --glass-hover: rgba(255, 255, 255, 0.08);
-      
-      --text-primary: #ffffff;
-      --text-secondary: #d1d5db;
-      --text-muted: #9ca3af;
-      
+      --bg-secondary: #1a1a1e; /* (kept for compatibility) */
+
       --shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.2);
-      
-      --border-radius: 12px;
-      --border-radius-sm: 8px;
       
       /* Safe area variables */
       --safe-area-top: env(safe-area-inset-top);
@@ -40,7 +45,7 @@
       --safe-area-right: env(safe-area-inset-right);
     }
 
-    /* Advanced mode colors - optimized */
+    /* Advanced mode colors - UNTOUCHED, as it's a functional state */
     .container.advanced-mode {
       --primary: #10b981;
       --primary-light: #34d399;
@@ -64,6 +69,7 @@
     body {
       font-family: 'Inter', system-ui, sans-serif;
       background: var(--bg-primary);
+      /* This background is identical to the landing page, so no change needed */
       background-image: radial-gradient(at 50% 0%, hsla(228,100%,74%,0.1) 0, transparent 50%);
       color: var(--text-primary);
       min-height: 100vh;
@@ -76,7 +82,7 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* Advanced mode background - simplified */
+    /* Advanced mode background - UNTOUCHED */
     body.advanced-bg {
       background-image: radial-gradient(at 50% 0%, hsla(158,100%,74%,0.12) 0, transparent 50%);
     }
@@ -728,15 +734,12 @@
 </head>
 <body>
   <div class="container">
-    <!-- Mode Switch -->
     <div class="mode-switch" id="modeSwitch">
       <button class="mode-switch-option active" data-mode="basic">Basic</button>
       <button class="mode-switch-option" data-mode="advanced">Advanced</button>
     </div>
 
-    <!-- Calculator Cards Container -->
     <div class="calculator-cards" id="calculatorCards">
-      <!-- First calculator card -->
       <div class="calculator-card" data-card-id="0">
         <button class="delete-card-btn" onclick="deleteCard(0)">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -745,7 +748,6 @@
         </button>
 
         <div class="form-section">
-          <!-- Tile Size with thickness combined -->
           <div class="form-row">
             <div class="form-group full-width">
               <label class="form-label">Tile Size & Thickness</label>
@@ -753,7 +755,6 @@
             </div>
           </div>
 
-          <!-- Mode Toggle -->
           <div class="form-row">
             <div class="form-group full-width">
               <label class="form-label">Calculation Mode</label>
@@ -764,7 +765,6 @@
             </div>
           </div>
 
-          <!-- Quantity Input -->
           <div class="form-row">
             <div class="form-group full-width">
               <label class="form-label input-label">Area (ft²)</label>
@@ -773,7 +773,6 @@
           </div>
         </div>
 
-        <!-- Price Section -->
         <div class="price-section">
           <div class="form-row">
             <div class="form-group">
@@ -794,7 +793,6 @@
           </div>
         </div>
 
-        <!-- Results Grid -->
         <div class="results-grid">
           <div class="result-item">
             <div class="result-label">Pieces</div>
@@ -814,10 +812,8 @@
           </div>
         </div>
 
-        <!-- Meta Information -->
         <div class="results-meta">Select tile specifications to see calculations</div>
 
-        <!-- Basic Mode Share Section -->
         <div class="basic-share-section">
           <button class="share-btn share-whatsapp" onclick="shareWhatsApp()">
             <svg class="share-icon" viewBox="0 0 24 24">
@@ -848,7 +844,6 @@
       </div>
     </div>
 
-    <!-- Add More Button (Advanced Mode Only) -->
     <button class="add-more-btn" id="addMoreBtn">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;">
         <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
@@ -856,7 +851,6 @@
       Add More Item
     </button>
 
-    <!-- Grand Total (Advanced Mode Only) -->
     <div class="grand-total">
       <div class="grand-total-header">Grand Total</div>
       <div class="grand-total-grid">
@@ -879,7 +873,6 @@
       </div>
     </div>
 
-    <!-- Advanced Mode Share Section -->
     <div class="share-section">
       <button class="share-btn share-whatsapp" id="shareWhatsapp">
         <svg class="share-icon" viewBox="0 0 24 24">
@@ -912,6 +905,8 @@
   <div class="copy-message" id="copyMessage">✓ Details copied to clipboard!</div>
 
   <script>
+    // --- ALL JAVASCRIPT IS 100% UNCHANGED ---
+    
     // SKU Master Data
     const SKU_MASTER = [
       {size:"1200x1200",thk:"9MM",pcs:2,kg:"61",ft2:31.0,m2:2.88},
