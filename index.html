@@ -50,13 +50,23 @@
         }
 
         .app-header {
-          position: relative; 
-          overflow: hidden; 
+          /* --- NAYA CHANGE: Dynamic Header ke liye Sticky --- */
+          position: sticky; 
           top: 0;
           width: 100%;
           padding: 15px 20px;
           border-bottom: 1px solid var(--card-border);
           z-index: 100;
+          overflow: hidden; /* Pehle se tha, accha hai */
+
+          /* --- NAYA CHANGE: Smooth transition aur performance hint --- */
+          transition: transform 0.3s ease-out;
+          will-change: transform;
+        }
+        
+        /* --- NAYA CHANGE: Header hide karne ke liye class --- */
+        .app-header.header-hidden {
+            transform: translateY(-100%);
         }
 
         .app-header::before {
@@ -74,8 +84,6 @@
                 var(--primary-glow-3) 66%, 
                 var(--primary-glow-1) 100%
             );
-            /* NAYA CHANGE: Rotation animation hata di */
-            /* animation: rotate 10s linear infinite; */
             opacity: 0.3;
         }
 
@@ -113,14 +121,16 @@
 
         .hero-section {
           text-align: center;
-          padding: 10px 20px 10px 20px; /* Padding kam ki */
+          padding: 10px 20px 10px 20px;
+          opacity: 0;
+          animation: fade-in-up 0.6s ease-out 0.1s forwards;
         }
 
         .hero-section h1 {
-          font-size: 1.5rem; /* Chhota kiya */
-          font-weight: 600; /* Thoda patla */
-          color: var(--text-secondary); /* Kam prominent */
-          letter-spacing: 0.1em; /* Thodi spacing */
+          font-size: 1.5rem; 
+          font-weight: 600; 
+          color: var(--text-secondary); 
+          letter-spacing: 0.1em; 
           text-transform: uppercase;
           margin: 0;
         }
@@ -164,8 +174,13 @@
           justify-content: center;
           min-height: 220px; 
           
-          transition: all 0.3s ease;
+          /* --- NAYA CHANGE: Snappy transition aur performance hint --- */
+          transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, opacity 0.5s ease-out;
+          will-change: transform, opacity;
           z-index: 1;
+
+          opacity: 0; 
+          animation-fill-mode: forwards; 
         }
 
         .project-card::before {
@@ -185,8 +200,6 @@
                 var(--primary-glow-1) 100%
             );
             
-            /* NAYA CHANGE: Rotation animation hata di */
-            /* animation: rotate 10s linear infinite; */
             opacity: 0.3; 
             transition: opacity 0.4s ease, transform 0.4s ease;
         }
@@ -214,21 +227,14 @@
         }
         
         .project-card:hover::before {
-            opacity: 0.6; /* Glow ab bhi tez hoga */
-            /* NAYA CHANGE: Rotation animation hata di */
-            /* animation-duration: 4s; */
+            opacity: 0.6; 
         }
         
+        /* --- NAYA CHANGE: Click/Tap Feedback --- */
         .project-card:active {
-            transform: scale(0.98); 
+            transform: scale(0.98); /* Halka sa shrink hoga */
+            transition-duration: 0.1s; /* Feedback turant milna chahiye */
         }
-
-        /* NAYA CHANGE: Rotation animation hata di */
-        /* @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        } */
-
 
         .card-icon {
           width: 112px; 
@@ -263,6 +269,31 @@
           color: var(--text-secondary);
           font-size: 0.9rem;
         }
+
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .project-grid .project-card:nth-child(1) {
+            animation: fade-in-up 0.5s ease-out 0.3s forwards;
+        }
+        .project-grid .project-card:nth-child(2) {
+            animation: fade-in-up 0.5s ease-out 0.5s forwards;
+        }
+        .project-grid .project-card:nth-child(3) {
+            animation: fade-in-up 0.5s ease-out 0.7s forwards;
+        }
+        .project-grid .project-card:nth-child(4) {
+            animation: fade-in-up 0.5s ease-out 0.9s forwards;
+        }
+
     </style>
 </head>
 <body>
@@ -304,7 +335,6 @@
             {
                 "title": "Price List",
                 "liveUrl": "./project-price/index.html",
-                /* NAYA ICON: Holographic Document */
                 "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <defs>
                                 <linearGradient id="g1" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
@@ -322,7 +352,6 @@
             {
                 "title": "Calculator",
                 "liveUrl": "./project-calculator/index.html",
-                /* NAYA ICON: Modern Calculator */
                 "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <defs>
                                 <linearGradient id="g2" x1="40" y1="0" x2="40" y2="80" gradientUnits="userSpaceOnUse">
@@ -330,11 +359,8 @@
                                 <stop offset="1" stop-color="var(--primary-glow-2)" stop-opacity="0.8"/>
                                 </linearGradient>
                             </defs>
-                            <!-- Calculator Body -->
                             <rect x="20" y="10" width="40" height="60" rx="8" stroke="url(#g2)" stroke-width="3"/>
-                            <!-- Display Screen -->
                             <rect x="28" y="18" width="24" height="12" rx="3" stroke="white" stroke-width="2" stroke-opacity="0.7"/>
-                            <!-- Buttons -->
                             <circle cx="30" cy="40" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
                             <circle cx="40" cy="40" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
                             <circle cx="50" cy="40" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
@@ -349,7 +375,6 @@
             {
                 "title": "Tiles JPG",
                 "liveUrl": "./project-tilesearch/index.html",
-                /* NAYA ICON: Digital Image Search */
                 "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <defs>
                                 <linearGradient id="g3" x1="0" y1="80" x2="80" y2="0" gradientUnits="userSpaceOnUse">
@@ -384,6 +409,27 @@
             document.getElementById('refresh-btn').addEventListener('click', () => {
                 location.reload();
             });
+
+            // --- NAYA CHANGE: Dynamic Header Logic ---
+            const header = document.querySelector('.app-header');
+            if (header) {
+                let lastScrollY = window.scrollY;
+
+                window.addEventListener('scroll', () => {
+                    const currentScrollY = window.scrollY;
+                    
+                    // Thoda threshold (50px) rakha hai taaki chote scroll par hide/show na ho
+                    if (currentScrollY > lastScrollY && currentScrollY > 50) {
+                        // Scroll Down
+                        header.classList.add('header-hidden');
+                    } else {
+                        // Scroll Up
+                        header.classList.remove('header-hidden');
+                    }
+                    
+                    lastScrollY = currentScrollY;
+                }, { passive: true }); // Performance ke liye passive listener
+            }
         
         }); 
 
