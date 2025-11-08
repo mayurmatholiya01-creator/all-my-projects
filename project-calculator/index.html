@@ -13,7 +13,7 @@
     :root {
       /* --- NEW THEME MAPPED FROM LANDING PAGE (index (53)) --- */
       --primary: #6366f1; /* from --primary-glow-1 */
-      --primary-light: #818cf8; /* (matches --primary) */
+      --primary-light: #a855f7; /* from --primary-glow-2 */
       
       --bg-primary: #0a0a0b;
       --glass: rgba(30, 30, 35, 0.6); /* from --card-glass */
@@ -45,14 +45,9 @@
       --safe-area-right: env(safe-area-inset-right);
     }
 
-    /* Advanced mode colors - UNTOUCHED, as it's a functional state */
-    .container.advanced-mode {
-      --primary: #10b981;
-      --primary-light: #34d399;
-      --glass: rgba(16, 185, 129, 0.08);
-      --glass-border: rgba(16, 185, 129, 0.15);
-      --glass-hover: rgba(16, 185, 129, 0.12);
-    }
+    /* DELETED: .container.advanced-mode CSS block
+      REASON: User wants one consistent theme.
+    */
 
     * {
       box-sizing: border-box;
@@ -69,7 +64,7 @@
     body {
       font-family: 'Inter', system-ui, sans-serif;
       background: var(--bg-primary);
-      /* This background is identical to the landing page, so no change needed */
+      /* This background is identical to the landing page */
       background-image: radial-gradient(at 50% 0%, hsla(228,100%,74%,0.1) 0, transparent 50%);
       color: var(--text-primary);
       min-height: 100vh;
@@ -82,10 +77,9 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* Advanced mode background - UNTOUCHED */
-    body.advanced-bg {
-      background-image: radial-gradient(at 50% 0%, hsla(158,100%,74%,0.12) 0, transparent 50%);
-    }
+    /* DELETED: body.advanced-bg CSS block
+      REASON: User wants one consistent theme.
+    */
 
     .container {
       width: 100%;
@@ -94,7 +88,7 @@
       transition: all 0.3s ease;
     }
 
-    /* Mode Switch - optimized */
+    /* Mode Switch */
     .mode-switch {
       display: flex;
       background: var(--glass);
@@ -134,18 +128,19 @@
       left: 4px;
       bottom: 4px;
       width: calc(50% - 4px);
+      /* NEW: Uses the new theme gradient */
       background: linear-gradient(135deg, var(--primary), var(--primary-light));
       border-radius: calc(var(--border-radius-sm) - 4px);
       transition: transform 0.3s ease;
       z-index: 1;
     }
 
+    /* This rule is now redundant, but harmless. Kept for function. */
     .mode-switch.advanced-mode::after {
       transform: translateX(100%);
-      background: linear-gradient(135deg, var(--success), #34d399);
     }
 
-    /* Calculator cards - performance optimized */
+    /* Calculator cards */
     .calculator-cards {
       display: flex;
       flex-direction: column;
@@ -180,7 +175,7 @@
       box-shadow: var(--shadow-lg);
     }
 
-    /* Delete button - simplified and performance optimized */
+    /* Delete button - UNCHANGED (uses --error) */
     .delete-card-btn {
       position: absolute;
       top: -10px;
@@ -282,7 +277,7 @@
     }
 
     .form-select option {
-      background: var(--bg-secondary);
+      background: var(--bg-primary); /* Darker than bg-secondary */
       color: var(--text-primary);
       padding: 0.5rem;
     }
@@ -309,7 +304,7 @@
       padding-left: 2.25rem;
     }
 
-    /* Focus states - simplified */
+    /* Focus states - NEW theme */
     .form-input:focus, .form-select:focus {
       border-color: var(--primary);
       background: var(--glass-hover);
@@ -357,6 +352,7 @@
       left: 4px;
       bottom: 4px;
       width: calc(50% - 4px);
+      /* NEW: Uses the new theme gradient */
       background: linear-gradient(135deg, var(--primary), var(--primary-light));
       border-radius: calc(var(--border-radius-sm) - 4px);
       transition: transform 0.2s ease;
@@ -411,7 +407,8 @@
       left: 0;
       right: 0;
       height: 2px;
-      background: var(--primary);
+      /* NEW: Uses primary gradient */
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
       transform: translateX(-100%);
       transition: transform 0.2s ease;
     }
@@ -479,10 +476,11 @@
     .add-more-btn {
       width: 100%;
       padding: 0.875rem;
-      background: rgba(16, 185, 129, 0.1);
-      border: 2px dashed var(--success);
+      /* NEW: Re-themed from green to primary */
+      background: rgba(99, 102, 241, 0.1);
+      border: 2px dashed var(--primary);
       border-radius: var(--border-radius-sm);
-      color: var(--success);
+      color: var(--primary-light);
       font-size: 0.875rem;
       font-weight: 600;
       cursor: pointer;
@@ -496,7 +494,7 @@
     }
 
     .add-more-btn:hover {
-      background: rgba(16, 185, 129, 0.15);
+      background: rgba(99, 102, 241, 0.15);
       transform: translateY(-2px);
     }
 
@@ -510,8 +508,9 @@
 
     /* Grand Total - optimized */
     .grand-total {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
-      border: 1px solid rgba(16, 185, 129, 0.25);
+      /* NEW: Re-themed from green to primary gradient */
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+      border: 1px solid var(--glass-border);
       border-radius: var(--border-radius);
       padding: 1.5rem;
       margin-bottom: 1.5rem;
@@ -542,9 +541,9 @@
     .grand-total-item {
       text-align: center;
       padding: 0.875rem;
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--glass);
       border-radius: var(--border-radius-sm);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid var(--glass-border);
       transition: transform 0.2s ease;
     }
 
@@ -580,7 +579,7 @@
       display: flex;
     }
 
-    /* Share buttons - performance optimized */
+    /* Share buttons - UNCHANGED */
     .share-btn {
       width: 44px;
       height: 44px;
@@ -636,7 +635,7 @@
       top: calc(20px + var(--safe-area-top));
       left: 50%;
       transform: translateX(-50%) translateY(-60px);
-      padding: 0.75rem 1.25rem;
+      /* NEW: Re-themed to green (success) */
       background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(6, 182, 212, 0.95));
       border-radius: var(--border-radius-sm);
       color: white;
@@ -654,7 +653,7 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    /* Mobile optimizations */
+    /* Mobile optimizations - UNCHANGED */
     @media (max-width: 480px) {
       .container {
         padding: 0.5rem;
@@ -690,7 +689,7 @@
       }
     }
 
-    /* Desktop optimizations */
+    /* Desktop optimizations - UNCHANGED */
     @media (min-width: 769px) {
       .form-input, .form-select {
         font-size: 1rem;
@@ -709,7 +708,7 @@
       }
     }
 
-    /* Remove expensive animations on low-end devices */
+    /* Remove expensive animations on low-end devices - UNCHANGED */
     @media (prefers-reduced-motion: reduce) {
       * {
         animation-duration: 0.01ms !important;
@@ -718,7 +717,7 @@
       }
     }
 
-    /* Faster loading animation */
+    /* Faster loading animation - UNCHANGED */
     .loading .result-value {
       animation: pulse 1s infinite;
     }
@@ -728,7 +727,7 @@
       50% { opacity: 0.5; }
     }
 
-    /* Remove orbs and heavy effects for performance */
+    /* Remove orbs and heavy effects for performance - UNCHANGED */
     .orb { display: none; }
   </style>
 </head>
@@ -822,7 +821,7 @@
           </button>
           <button class="share-btn share-sms" onclick="shareSMS()">
             <svg class="share-icon" viewBox="0 0 24 24">
-              <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z"/>
+              <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0 -1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z"/>
             </svg>
           </button>
           <button class="share-btn share-email" onclick="shareEmail()">
@@ -1223,12 +1222,12 @@
       if (mode === 'advanced') {
         container.classList.add('advanced-mode');
         modeSwitch.classList.add('advanced-mode');
-        body.classList.add('advanced-bg');
+        // body.classList.add('advanced-bg'); // <- This line is now removed
         setTimeout(() => updateGrandTotal(), 100);
       } else {
         container.classList.remove('advanced-mode');
         modeSwitch.classList.remove('advanced-mode');
-        body.classList.remove('advanced-bg');
+        // body.classList.remove('advanced-bg'); // <- This line is now removed
       }
       
       const options = modeSwitch.querySelectorAll('.mode-switch-option');
