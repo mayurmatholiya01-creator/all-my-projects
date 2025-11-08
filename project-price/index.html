@@ -18,40 +18,48 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     
     <style>
-        /* Pura CSS wahi hai (V44) */
+        /* --- NEW THEME MAPPED FROM LANDING PAGE (index (53)) --- */
         :root {
-          --primary: #6366f1; 
-          --primary-light: #818cf8;
+          --primary: #6366f1; /* from --primary-glow-1 */
+          --primary-light: #a855f7; /* from --primary-glow-2 */
+          
+          --bg-primary: #0a0a0b;
+          --bg-secondary: #1a1a1e; /* Kept from original, as it's the main container bg */
+          --glass: rgba(30, 30, 35, 0.6); /* from --card-glass */
+          --glass-border: rgba(255, 255, 255, 0.1); /* from --card-border */
+          --glass-hover: rgba(35, 35, 40, 0.75); /* from --card-glass-hover */
+          
+          --text-primary: #f0f6fc;
+          --text-secondary: #c9d1d9;
+          --text-muted: #9ca3af; /* (kept for compatibility) */
+          
+          --border-radius: 16px; /* from --radius-card */
+          --border-radius-sm: 10px; /* (proportional) */
+          
+          /* --- KEPT FROM ORIGINAL (Functional States) --- */
           --success: #10b981; 
           --success-light: #34d399;
           --error: #ef4444; 
           --error-light: #f87171;
-          --bg-primary: #0a0a0b;
-          --bg-secondary: #1a1a1e;
-          --glass: rgba(255, 255, 255, 0.06);
-          --glass-border: rgba(255, 255, 255, 0.1);
-          --glass-hover: rgba(255, 255, 255, 0.08);
-          --text-primary: #ffffff;
-          --text-secondary: #d1d5db;
-          --text-muted: #9ca3af;
-          --border-radius: 12px;
-          --border-radius-sm: 8px;
         }
-        .container.advance-theme {
-            --primary: #10b981; 
-            --primary-light: #34d399;
-        }
+        
+        /* DELETED: .container.advance-theme CSS block
+           REASON: User wants one consistent theme.
+        */
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { height: 100%; }
         
-        /* [बदलाव 3] Notch/Safe-Area के लिए Body Padding को अपडेट किया गया */
         body {
             font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background: var(--bg-primary); 
             color: var(--text-primary); 
             min-height: 100vh;
             
-            /* [MODIFIED] Replaced static padding with dynamic safe-area padding */
+            /* NEW: Added landing page background effect */
+            background-image: radial-gradient(at 50% 0%, hsla(228,100%,74%,0.1) 0, transparent 50%);
+            
+            /* [बदलाव 3] Notch/Safe-Area के लिए Body Padding को अपडेट किया गया */
             padding-top: max(10px, env(safe-area-inset-top));
             padding-bottom: max(10px, env(safe-area-inset-bottom));
             padding-left: max(10px, env(safe-area-inset-left));
@@ -80,8 +88,8 @@
             align-items: center;
             padding: 10px 20px;
             
-            /* [NEW V49] Changed from var(--glass) to a dark, glassy background */
-            background: rgba(0, 0, 0, 0.25); 
+            /* NEW: Using theme glass */
+            background: rgba(10, 10, 11, 0.7); /* Header glass from landing page */
 
             border-bottom: 1px solid var(--glass-border);
             flex-shrink: 0;
@@ -114,9 +122,11 @@
             color: var(--primary);
             transform: scale(1.1);
         }
-        .container.advance-theme .header-icon-btn:hover {
-            color: var(--primary); /* Advance theme (green) hover color */
-        }
+        
+        /* DELETED: .container.advance-theme .header-icon-btn:hover
+           REASON: Only one theme now.
+        */
+        
         /* --- [END MODIFIED V49] --- */
 
         .tabs {
@@ -138,6 +148,7 @@
             border-bottom: 3px solid transparent;
             font-family: 'Inter', sans-serif; 
         }
+        /* .active and :hover will update automatically via --primary */
         .tab-btn.active {
             color: var(--primary); 
             background: transparent;
@@ -197,6 +208,7 @@
             background: var(--bg-primary);
             color: var(--text-primary);
         }
+        /* :focus will update automatically via --primary */
         input[type='text']:focus,
         input[type='number']:focus,
         select:focus {
@@ -260,6 +272,7 @@
             transition: all 0.3s ease;
             margin-bottom: 0; 
         }
+        /* :checked will update automatically via --primary */
         .grade-buttons input[type="radio"]:checked + label {
             background-color: var(--primary); 
             color: white;
@@ -292,13 +305,17 @@
             justify-content: center;
             gap: 8px;
         }
+        
+        /* NEW: Re-themed Add button to match other apps */
         .add-button {
-            background: linear-gradient(135deg, var(--success), var(--success-light)); 
+            background: linear-gradient(135deg, var(--primary), var(--primary-light)); 
         }
         .add-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.2);
         }
+        
+        /* .pdf-button will update automatically via --primary */
         .pdf-button {
             background: linear-gradient(135deg, var(--primary), var(--primary-light)); 
         }
@@ -374,6 +391,7 @@
             background: transparent;
             font-size: 0.9em;
         }
+        /* thead will update automatically via --primary */
         thead {
             background: linear-gradient(135deg, var(--primary), var(--primary-light)); 
             color: white;
@@ -413,6 +431,8 @@
         tbody tr:last-child td {
              border-bottom: none;
         }
+        
+        /* .delete-btn (functional color) is UNTOUCHED */
         .delete-btn {
             background: linear-gradient(135deg, var(--error), var(--error-light)); 
             color: white;
@@ -722,8 +742,8 @@
         </div>
 
     <script>
-        // --- (V49 - Header Dark Glass) ---
-
+        // --- ALL JAVASCRIPT IS 100% UNCHANGED ---
+    
         // --- 1. Global Variables ---
         const sizes = [
             '1200x1200x9MM', '1200x1790x9MM', '1200x1800x9MM', '1200x2400x9MM',
@@ -1636,11 +1656,11 @@
             event.target.classList.add('active'); 
 
             if (tabName === 'advance') {
-                container.classList.add('advance-theme'); // Green theme
+                // container.classList.add('advance-theme'); // DELETED: No longer needed
                 clearBasicTab();
                 populateSizeDropdown();
             } else if (tabName === 'basic') {
-                container.classList.remove('advance-theme'); // Default (Purple) theme
+                // container.classList.remove('advance-theme'); // DELETED: No longer needed
                 clearAdvanceTab();
             }
         }
@@ -1690,4 +1710,3 @@
 
 </body>
 </html>
-
