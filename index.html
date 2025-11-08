@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mayur's Projects</title>
     
     <link rel="manifest" href="manifest.json">
@@ -10,33 +10,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome (Calculator ke icons ke liye) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <style>
-        /* ================================== */
-        /* === GLOBAL / HUB PAGE CSS === */
-        /* ================================== */
         :root {
-          /* --- DESIGN TOKENS --- */
+          /* --- DESIGN TOKENS (Figma/Apple Approach) --- */
           --bg-primary: #0a0a0b;
           --text-primary: #f0f6fc;
           --text-secondary: #c9d1d9;
-          --text-muted: #9ca3af;
           
           /* Primary Colors */
           --primary-glow-1: #6366f1;
           --primary-glow-2: #a855f7;
           --primary-glow-3: #ec4899;
-          
-          /* Tool Colors (Calculator se) */
-          --primary: #6366f1;
-          --primary-light: #818cf8;
-          --success: #10b981;
-          --success-light: #34d399;
-          --warning: #f59e0b;
-          --error: #ef4444;
 
           /* Card/Header Glass */
           --header-glass: rgba(10, 10, 11, 0.7);
@@ -48,14 +33,6 @@
           --spacing-medium: 16px;
           --spacing-large: 24px;
           --radius-card: 16px;
-          --border-radius: 12px;
-          --border-radius-sm: 8px;
-          
-          /* Safe area variables */
-          --safe-area-top: env(safe-area-inset-top);
-          --safe-area-bottom: env(safe-area-inset-bottom);
-          --safe-area-left: env(safe-area-inset-left);
-          --safe-area-right: env(safe-area-inset-right);
         }
 
         * {
@@ -64,42 +41,15 @@
           padding: 0;
         }
 
-        html {
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-        }
-
         body {
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           background-color: var(--bg-primary);
           background-image: radial-gradient(at 50% 0%, hsla(228,100%,74%,0.1) 0, transparent 50%);
           color: var(--text-primary);
           min-height: 100vh;
-          padding: 0; /* Safe area ko page content handle karega */
         }
 
-        /* Page Navigation */
-        .page {
-            display: none; /* Sabhi pages by default hidden */
-            min-height: 100vh;
-            /* Safe area padding ab page par apply hogi */
-            padding-top: max(1rem, var(--safe-area-top));
-            padding-bottom: max(1rem, var(--safe-area-bottom));
-            padding-left: max(1rem, var(--safe-area-left));
-            padding-right: max(1rem, var(--safe-area-right));
-            animation: pageFadeIn 0.4s ease-out;
-        }
-        .page.active {
-            display: block; /* Sirf active page dikhega */
-        }
-
-        @keyframes pageFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Global Header (Sirf Hub page par) */
-        #page-hub .app-header {
+        .app-header {
           position: sticky; 
           top: 0;
           width: 100%;
@@ -107,15 +57,16 @@
           border-bottom: 1px solid var(--card-border);
           z-index: 100;
           overflow: hidden; 
+
           transition: transform 0.3s ease-out;
           will-change: transform;
         }
         
-        #page-hub .app-header.header-hidden {
+        .app-header.header-hidden {
             transform: translateY(-100%);
         }
 
-        #page-hub .app-header::before {
+        .app-header::before {
             content: '';
             position: absolute;
             z-index: -2;
@@ -133,7 +84,7 @@
             opacity: 0.3;
         }
 
-        #page-hub .app-header::after {
+        .app-header::after {
             content: '';
             position: absolute;
             z-index: -1;
@@ -143,7 +94,7 @@
             -webkit-backdrop-filter: blur(10px);
         }
 
-        #page-hub .header-content {
+        .header-content {
           max-width: 1200px;
           margin: 0 auto;
           display: flex;
@@ -152,27 +103,27 @@
           font-weight: 600;
         }
         
-        #page-hub .logo-container { display: flex; align-items: center; gap: 10px; }
-        #page-hub .logo-container img { height: 35px; width: auto; object-fit: contain; }
+        .logo-container { display: flex; align-items: center; gap: 10px; }
+        .logo-container img { height: 35px; width: auto; object-fit: contain; }
         
-        #page-hub .header-icon-btn { background: transparent; border: none; cursor: pointer; padding: 5px; line-height: 0; }
-        #page-hub .header-icon-btn svg { width: 20px; height: 20px; stroke: var(--text-secondary); transition: all 0.3s ease; }
-        #page-hub .header-icon-btn:hover svg { stroke: var(--text-primary); transform: rotate(90deg); }
+        .header-icon-btn { background: transparent; border: none; cursor: pointer; padding: 5px; line-height: 0; }
+        .header-icon-btn svg { width: 20px; height: 20px; stroke: var(--text-secondary); transition: all 0.3s ease; }
+        .header-icon-btn:hover svg { stroke: var(--text-primary); transform: rotate(90deg); }
 
-        #page-hub .main-content {
+        .main-content {
           max-width: 1200px;
           margin: 0 auto;
           padding: 20px;
         }
 
-        #page-hub .hero-section {
+        .hero-section {
           text-align: center;
           padding: 10px 20px 10px 20px;
           opacity: 0;
           animation: fade-in-up 0.6s ease-out 0.1s forwards;
         }
 
-        #page-hub .hero-section h1 {
+        .hero-section h1 {
           font-size: 1.5rem; 
           font-weight: 600; 
           color: var(--text-secondary); 
@@ -181,7 +132,7 @@
           margin: 0;
         }
 
-        #page-hub .project-grid {
+        .project-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr); 
           gap: var(--spacing-medium); 
@@ -189,45 +140,54 @@
         }
 
         @media (min-width: 640px) {
-          #page-hub .project-grid {
+          .project-grid {
             gap: var(--spacing-large);
           }
         }
         
         @media (min-width: 768px) {
-            #page-hub .project-grid {
+            .project-grid {
                 max-width: 800px; 
                 margin-left: auto;
                 margin-right: auto;
             }
         }
 
-        #page-hub .project-card {
+        .project-card {
           position: relative; 
           overflow: hidden; 
-          cursor: pointer;
+          
           border-radius: var(--radius-card);
           padding: var(--spacing-large);
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+          
+          display: block;
+          text-decoration: none;
+          color: var(--text-primary);
+          
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
           min-height: 220px; 
+          
           transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, opacity 0.5s ease-out;
           will-change: transform, opacity;
           z-index: 1;
+
           opacity: 0; 
           animation-fill-mode: forwards; 
-          text-decoration: none;
-          color: var(--text-primary);
         }
 
-        #page-hub .project-card::before {
+        .project-card::before {
             content: '';
             position: absolute;
             z-index: -2;
-            top: -50%; left: -50%; width: 200%; height: 200%;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            
             background: conic-gradient(
                 from 180deg at 50% 50%,
                 var(--primary-glow-1) 0%, 
@@ -235,11 +195,12 @@
                 var(--primary-glow-3) 66%, 
                 var(--primary-glow-1) 100%
             );
+            
             opacity: 0.3; 
             transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
-        #page-hub .project-card::after {
+        .project-card::after {
             content: '';
             position: absolute;
             z-index: -1;
@@ -252,30 +213,38 @@
             transition: background 0.3s ease;
         }
 
-        #page-hub .project-card:hover {
+        .project-card:hover {
           transform: scale(1.03); 
           box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
         }
         
-        #page-hub .project-card:hover::after { background: var(--card-glass-hover); }
-        #page-hub .project-card:hover::before {
+        .project-card:hover::after {
+            background: var(--card-glass-hover); 
+        }
+        
+        .project-card:hover::before {
             opacity: 0.6; 
             animation: rotate 4s linear infinite;
         }
         
-        #page-hub .project-card:active {
+        .project-card:active {
             transform: scale(0.98);
             transition-duration: 0.1s; 
         }
 
-        #page-hub .card-icon {
-          width: 112px; height: 112px; 
+        .card-icon {
+          width: 112px; 
+          height: 112px; 
           margin-bottom: var(--spacing-medium);
           transform: translateZ(10px);
         }
-        #page-hub .card-icon svg { width: 100%; height: 100%; }
 
-        #page-hub .project-card h3 {
+        .card-icon svg {
+          width: 100%;
+          height: 100%;
+        }
+
+        .project-card h3 {
           margin: 0;
           color: var(--text-primary);
           font-size: 1.1rem; 
@@ -284,31 +253,33 @@
           transform: translateZ(10px); 
         }
         
-        #page-hub .project-card p {
+        .project-card p {
           margin-top: 8px;
-          font-size: 0.85rem;
+          font-size: 0.85rem; /* Font chhota kiya */
           color: var(--text-secondary);
           text-align: center;
           font-weight: 400;
           transform: translateZ(10px);
-          line-height: 1.3;
+          line-height: 1.3; /* Line height kam ki */
           padding: 0 10px; 
-          max-height: 2.3em;
-          min-height: 2.3em;
+          
+          /* NAYA CHANGE: Text ko 2 line mein limit karega */
+          max-height: 2.3em; /* 0.85rem * 1.3 * 2 lines (approx) */
+          min-height: 2.3em; /* Consistent height ke liye */
           overflow: hidden;
           text-overflow: ellipsis;
           display: -webkit-box;
-          -webkit-line-clamp: 2;
+          -webkit-line-clamp: 2; /* 2 line tak limit */
           -webkit-box-orient: vertical;
         }
 
         @media (min-width: 640px) {
-            #page-hub .project-card h3 {
+            .project-card h3 {
                 font-size: 1.25rem; 
             }
         }
         
-        #page-hub .app-footer {
+        .app-footer {
           text-align: center;
           padding: 40px 20px;
           color: var(--text-secondary);
@@ -316,916 +287,137 @@
         }
 
         @keyframes fade-in-up {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
-        #page-hub .project-grid .project-card:nth-child(1) { animation: fade-in-up 0.5s ease-out 0.3s forwards; }
-        #page-hub .project-grid .project-card:nth-child(2) { animation: fade-in-up 0.5s ease-out 0.5s forwards; }
-        #page-hub .project-grid .project-card:nth-child(3) { animation: fade-in-up 0.5s ease-out 0.7s forwards; }
-        #page-hub .project-grid .project-card:nth-child(4) { animation: fade-in-up 0.5s ease-out 0.9s forwards; }
-
-
-        /* ================================== */
-        /* === TOOL PAGE - SHARED CSS === */
-        /* (Yeh style sabhi tools par apply hoga) */
-        /* ================================== */
-
-        .tool-header {
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            background: var(--header-glass);
-            border-bottom: 1px solid var(--card-border);
-            border-radius: var(--border-radius);
-            margin: 0 auto 20px auto;
-            max-width: 720px; /* Calculator ke container jitna */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+        .project-grid .project-card:nth-child(1) {
+            animation: fade-in-up 0.5s ease-out 0.3s forwards;
+        }
+        .project-grid .project-card:nth-child(2) {
+            animation: fade-in-up 0.5s ease-out 0.5s forwards;
+        }
+        .project-grid .project-card:nth-child(3) {
+            animation: fade-in-up 0.5s ease-out 0.7s forwards;
+        }
+        .project-grid .project-card:nth-child(4) {
+            animation: fade-in-up 0.5s ease-out 0.9s forwards;
         }
 
-        .back-button {
-            background: var(--card-glass-hover);
-            border: 1px solid var(--card-border);
-            color: var(--text-primary);
-            font-size: 1.1rem;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-        .back-button:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-        }
-        .back-button:active {
-            transform: scale(0.9);
-        }
-
-        .tool-title {
-            flex: 1;
-            text-align: center;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-left: -40px; /* Back button ki width ko offset karne ke liye */
-        }
-        
-        /* Tool page specific body styling */
-        body.tool-bg-basic {
-             background-image: radial-gradient(at 50% 0%, hsla(228,100%,74%,0.1) 0, transparent 50%);
-        }
-        body.tool-bg-advanced {
-            background-image: radial-gradient(at 50% 0%, hsla(158,100%,74%,0.12) 0, transparent 50%);
-        }
-
-
-        /* ================================== */
-        /* === CALCULATOR TOOL CSS === */
-        /* (index (46).html se copy kiya gaya aur #page-calculator se scope kiya gaya) */
-        /* ================================== */
-        
-        #page-calculator {
-             padding-top: 1rem;
-             padding-bottom: 1rem;
-        }
-        
-        #page-calculator .container {
-          width: 100%;
-          max-width: 720px;
-          margin: 0 auto;
-          transition: all 0.3s ease;
-        }
-
-        #page-calculator .mode-switch {
-          display: flex;
-          background: var(--card-glass); 
-          border: 1px solid var(--card-border);
-          border-radius: var(--border-radius-sm);
-          padding: 4px;
-          margin-bottom: 1.5rem;
-          position: relative;
-          transition: all 0.3s ease;
-        }
-
-        #page-calculator .mode-switch-option {
-          flex: 1;
-          padding: 0.75rem 1.25rem;
-          background: none;
-          border: none;
-          color: var(--text-secondary);
-          font-size: 0.875rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: color 0.2s ease;
-          position: relative;
-          z-index: 2;
-          text-align: center;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-
-        #page-calculator .mode-switch-option.active {
-          color: var(--text-primary);
-        }
-
-        #page-calculator .mode-switch::after {
-          content: '';
-          position: absolute;
-          top: 4px;
-          left: 4px;
-          bottom: 4px;
-          width: calc(50% - 4px);
-          background: linear-gradient(135deg, var(--primary), var(--primary-light));
-          border-radius: calc(var(--border-radius-sm) - 4px);
-          transition: transform 0.3s ease;
-          z-index: 1;
-        }
-
-        #page-calculator .mode-switch.advanced-mode::after {
-          transform: translateX(100%);
-          background: linear-gradient(135deg, var(--success), #34d399);
-        }
-        
-        /* Advanced mode colors */
-        #page-calculator .container.advanced-mode {
-          --primary: #10b981;
-          --primary-light: #34d399;
-        }
-        /* NAYA: Advanced mode ke elements ko green glass dena */
-        #page-calculator .container.advanced-mode .calculator-card,
-        #page-calculator .container.advanced-mode .form-input,
-        #page-calculator .container.advanced-mode .form-select,
-        #page-calculator .container.advanced-mode .mode-toggle,
-        #page-calculator .container.advanced-mode .price-section,
-        #page-calculator .container.advanced-mode .result-item,
-        #page-calculator .container.advanced-mode .results-meta,
-        #page-calculator .container.advanced-mode .basic-share-section {
-           background: rgba(16, 185, 129, 0.08);
-           border-color: rgba(16, 185, 129, 0.15);
-        }
-        #page-calculator .container.advanced-mode .calculator-card:hover,
-        #page-calculator .container.advanced-mode .form-input:hover,
-        #page-calculator .container.advanced-mode .form-select:hover,
-        #page-calculator .container.advanced-mode .price-section:hover,
-        #page-calculator .container.advanced-mode .result-item:hover,
-        #page-calculator .container.advanced-mode .results-meta:hover {
-            background: rgba(16, 185, 129, 0.12);
-        }
-        #page-calculator .container.advanced-mode .form-input:focus, 
-        #page-calculator .container.advanced-mode .form-select:focus {
-           border-color: var(--primary);
-           box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.1);
-        }
-        #page-calculator .container.advanced-mode .result-item::before {
-            background: var(--primary);
-        }
-
-
-        #page-calculator .calculator-cards {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-          margin-bottom: 1.5rem;
-        }
-
-        #page-calculator .calculator-card {
-          background: var(--card-glass);
-          border: 1px solid var(--card-border);
-          border-radius: var(--border-radius);
-          padding: 1.5rem;
-          position: relative;
-          transition: all 0.2s ease;
-          animation: cardSlideIn 0.4s ease-out;
-        }
-
-        @keyframes cardSlideIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-
-        #page-calculator .calculator-card:hover {
-          background: var(--card-glass-hover);
-          transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        }
-        
-        #page-calculator .delete-card-btn {
-          position: absolute;
-          top: -10px;
-          right: -10px;
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          border: none;
-          background: linear-gradient(135deg, #ef4444, #dc2626);
-          color: white;
-          cursor: pointer;
-          display: none;
-          align-items: center;
-          justify-content: center;
-          transition: transform 0.2s ease;
-          z-index: 10;
-          border: 2px solid var(--bg-primary);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        #page-calculator .delete-card-btn:hover { transform: scale(1.1); }
-        #page-calculator .delete-card-btn:active { transform: scale(0.95); }
-
-        #page-calculator .container.advanced-mode .delete-card-btn {
-          display: flex;
-        }
-
-        #page-calculator .form-section { margin-bottom: 1.5rem; }
-        #page-calculator .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-        #page-calculator .form-group { position: relative; }
-        #page-calculator .form-group.full-width { grid-column: span 2; }
-
-        #page-calculator .gst-label-centered {
-          text-align: center;
-          font-size: 0.75rem;
-          font-weight: 600;
-          color: var(--text-secondary);
-          margin-bottom: 0.5rem;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-
-        #page-calculator .form-label {
-          display: block;
-          margin-bottom: 0.5rem;
-          font-size: 0.75rem;
-          font-weight: 600;
-          color: var(--text-secondary);
-          text-transform: uppercase;
-          letter-spacing: 0.3px;
-        }
-
-        #page-calculator .form-input, #page-calculator .form-select {
-          width: 100%;
-          padding: 0.875rem 1rem;
-          background: var(--card-glass); 
-          border: 1px solid var(--card-border); 
-          border-radius: var(--border-radius-sm);
-          color: var(--text-primary);
-          font-size: 16px; 
-          font-weight: 500;
-          transition: all 0.2s ease;
-          outline: none;
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          appearance: none;
-        }
-
-        #page-calculator .form-select {
-          background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23d1d5db' stroke-width='2' fill='none'/></svg>");
-          background-repeat: no-repeat;
-          background-position: right 1rem center;
-          background-size: 12px 8px;
-          cursor: pointer;
-          padding-right: 2.5rem;
-        }
-
-        #page-calculator .form-select option {
-          background: var(--bg-secondary);
-          color: var(--text-primary);
-          padding: 0.5rem;
-        }
-
-        #page-calculator .price-input-container { position: relative; }
-        #page-calculator .price-input-container::before {
-          content: '₹';
-          position: absolute;
-          left: 1rem;
-          top: 50%;
-          transform: translateY(-50%);
-          color: var(--text-secondary);
-          font-size: 1rem;
-          font-weight: 600;
-          z-index: 2;
-          pointer-events: none;
-        }
-        #page-calculator .form-input.price-input { padding-left: 2.25rem; }
-
-        #page-calculator .form-input:focus, #page-calculator .form-select:focus {
-          border-color: var(--primary);
-          background: var(--card-glass-hover); 
-          box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
-        }
-
-        #page-calculator .form-input:hover, #page-calculator .form-select:hover {
-          background: var(--card-glass-hover);
-        }
-
-        #page-calculator .mode-toggle {
-          display: flex;
-          background: var(--card-glass);
-          border-radius: var(--border-radius-sm);
-          padding: 4px;
-          position: relative;
-          border: 1px solid var(--card-border);
-        }
-
-        #page-calculator .mode-option {
-          flex: 1;
-          padding: 0.625rem 0.875rem;
-          background: none;
-          border: none;
-          color: var(--text-secondary);
-          font-size: 0.75rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: color 0.2s ease;
-          position: relative;
-          z-index: 2;
-          text-transform: uppercase;
-          letter-spacing: 0.3px;
-        }
-
-        #page-calculator .mode-option.active { color: var(--text-primary); }
-        #page-calculator .mode-toggle::after {
-          content: '';
-          position: absolute;
-          top: 4px;
-          left: 4px;
-          bottom: 4px;
-          width: calc(50% - 4px);
-          background: linear-gradient(135deg, var(--primary), var(--primary-light));
-          border-radius: calc(var(--border-radius-sm) - 4px);
-          transition: transform 0.2s ease;
-          z-index: 1;
-        }
-        #page-calculator .mode-toggle.pieces-mode::after { transform: translateX(100%); }
-
-        #page-calculator .price-section {
-          background: var(--card-glass);
-          border: 1px solid var(--card-border);
-          border-radius: var(--border-radius-sm);
-          padding: 1rem;
-          margin-bottom: 1.5rem;
-          transition: background 0.2s ease;
-        }
-        #page-calculator .price-section:hover { background: var(--card-glass-hover); }
-
-        #page-calculator .results-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 0.875rem;
-          margin-bottom: 1rem;
-        }
-
-        #page-calculator .result-item {
-          background: var(--card-glass);
-          border: 1px solid var(--card-border);
-          border-radius: var(--border-radius-sm);
-          padding: 1rem;
-          text-align: center;
-          transition: all 0.2s ease;
-          position: relative;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          min-height: 70px;
-        }
-
-        #page-calculator .result-item::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 2px;
-          background: var(--primary);
-          transform: translateX(-100%);
-          transition: transform 0.2s ease;
-        }
-        #page-calculator .result-item:hover::before { transform: translateX(0); }
-        #page-calculator .result-item:hover {
-          background: var(--card-glass-hover);
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        #page-calculator .result-label {
-          color: var(--text-secondary);
-          font-size: 0.625rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          margin-bottom: 0.5rem;
-        }
-
-        #page-calculator .result-value {
-          color: var(--text-primary);
-          font-size: 1.25rem;
-          font-weight: 700;
-          line-height: 1;
-        }
-
-        #page-calculator .results-meta {
-          color: var(--text-muted);
-          font-size: 0.75rem;
-          text-align: center;
-          padding: 0.75rem;
-          background: var(--card-glass);
-          border-radius: var(--border-radius-sm);
-          border: 1px solid var(--card-border);
-          margin-bottom: 1rem;
-          transition: background 0.2s ease;
-        }
-        #page-calculator .results-meta:hover { background: var(--card-glass-hover); }
-
-        #page-calculator .basic-share-section {
-          display: flex;
-          justify-content: center;
-          gap: 0.875rem;
-          margin-top: 1rem;
-          padding: 1rem;
-          background: var(--card-glass);
-          border-radius: var(--border-radius-sm);
-          border: 1px solid var(--card-border);
-        }
-
-        #page-calculator .container.advanced-mode .basic-share-section {
-          display: none;
-        }
-
-        #page-calculator .add-more-btn {
-          width: 100%;
-          padding: 0.875rem;
-          background: rgba(16, 185, 129, 0.1);
-          border: 2px dashed var(--success);
-          border-radius: var(--border-radius-sm);
-          color: var(--success);
-          font-size: 0.875rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          margin-bottom: 1.5rem;
-          display: none;
-          align-items: center;
-          justify-content: center;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-        #page-calculator .add-more-btn:hover {
-          background: rgba(16, 185, 129, 0.15);
-          transform: translateY(-2px);
-        }
-        #page-calculator .add-more-btn:active { transform: translateY(0); }
-        #page-calculator .container.advanced-mode .add-more-btn { display: flex; }
-
-        #page-calculator .grand-total {
-          background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
-          border: 1px solid rgba(16, 185, 129, 0.25);
-          border-radius: var(--border-radius);
-          padding: 1.5rem;
-          margin-bottom: 1.5rem;
-          display: none;
-          transition: all 0.3s ease;
-        }
-        #page-calculator .container.advanced-mode .grand-total { display: block; }
-        #page-calculator .grand-total-header {
-          text-align: center;
-          font-size: 1rem;
-          font-weight: 700;
-          color: var(--text-primary);
-          margin-bottom: 1rem;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-        }
-        #page-calculator .grand-total-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 0.875rem;
-        }
-        #page-calculator .grand-total-item {
-          text-align: center;
-          padding: 0.875rem;
-          background: rgba(255, 255, 255, 0.08);
-          border-radius: var(--border-radius-sm);
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          transition: transform 0.2s ease;
-        }
-        #page-calculator .grand-total-item:hover { transform: translateY(-2px); }
-        #page-calculator .grand-total-label {
-          color: var(--text-secondary);
-          font-size: 0.625rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          margin-bottom: 0.5rem;
-        }
-        #page-calculator .grand-total-value {
-          color: var(--text-primary);
-          font-size: 1.125rem;
-          font-weight: 700;
-        }
-
-        #page-calculator .share-section {
-          display: none;
-          justify-content: center;
-          gap: 0.875rem;
-          margin-top: 1rem;
-          transition: all 0.3s ease;
-        }
-        #page-calculator .container.advanced-mode .share-section { display: flex; }
-
-        #page-calculator .share-btn {
-          width: 44px;
-          height: 44px;
-          border-radius: 50%;
-          border: none;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: transform 0.2s ease;
-          position: relative;
-          overflow: hidden;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-        #page-calculator .share-btn:hover { transform: translateY(-2px) scale(1.05); }
-        #page-calculator .share-btn:active { transform: translateY(0) scale(1); }
-
-        #page-calculator .share-whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); }
-        #page-calculator .share-sms { background: linear-gradient(135deg, #06b6d4, #0891b2); }
-        #page-calculator .share-email { background: linear-gradient(135deg, #ec4899, #db2777); }
-        #page-calculator .share-copy { background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
-        #page-calculator .share-clear { background: linear-gradient(135deg, var(--warning), #f97316); }
-        #page-calculator .share-icon { width: 18px; height: 18px; fill: white; }
-
-        #page-calculator .copy-message {
-          position: fixed;
-          top: calc(20px + var(--safe-area-top));
-          left: 50%;
-          transform: translateX(-50%) translateY(-60px);
-          padding: 0.75rem 1.25rem;
-          background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(6, 182, 212, 0.95));
-          border-radius: var(--border-radius-sm);
-          color: white;
-          font-size: 0.875rem;
-          font-weight: 600;
-          opacity: 0;
-          transition: all 0.3s ease;
-          z-index: 1000;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-        #page-calculator .copy-message.show {
-          opacity: 1;
-          transform: translateX(-50%) translateY(0);
-        }
-
-        /* Mobile optimizations */
-        @media (max-width: 480px) {
-          #page-calculator .container { padding: 0.5rem; }
-          #page-calculator .calculator-card { padding: 1rem; }
-          #page-calculator .form-input, #page-calculator .form-select { padding: 0.75rem 0.875rem; }
-          #page-calculator .form-select { padding-right: 2.25rem; }
-          #page-calculator .delete-card-btn { top: -8px; right: -8px; width: 28px; height: 28px; }
-          #page-calculator .share-btn { width: 40px; height: 40px; }
-          #page-calculator .share-icon { width: 16px; height: 16px; }
-        }
-
-        /* Desktop optimizations */
-        @media (min-width: 769px) {
-          #page-calculator .form-input, #page-calculator .form-select { font-size: 1rem; padding: 1rem 1.25rem; }
-          #page-calculator .form-select { padding-right: 3rem; }
-          #page-calculator .delete-card-btn { width: 36px; height: 36px; top: -12px; right: -12px; }
-        }
-
-        /* Reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-          #page-calculator * {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-          }
-        }
-
-        /* Faster loading animation */
-        #page-calculator .loading .result-value { animation: pulse 1s infinite; }
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
     </style>
-    
-    <!-- ================================== */
-    /* === (Future Price List CSS yahaan aayega) === */
-    /* ================================== */
-
-    <!-- ================================== */
-    /* === (Future Tiles JPG CSS yahaan aayega) === */
-    /* ================================== */
-
 </head>
 <body>
 
-    <!-- ================================== */
-    /* === PAGE 1: HUB (HOMEPAGE) HTML === */
-    /* ================================== */
-    <div id="page-hub" class="page active">
-        <header class="app-header">
-            <div class="header-content">
-                <div class="logo-container">
-                    <img id="logoA" alt="Logo A">
-                    <img id="logoGranicer2" alt="Granicer Logo 2"> </div>
-                
-                <button id="refresh-btn" class="header-icon-btn" title="Refresh Page">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M23 4v6h-6M1 20v-6h6"/>
-                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-                    </svg>
-                </button>
-            </div>
-        </header>
-
-        <main class="main-content">
-            <section class="hero-section">
-                <h1>TOOLS</h1>
-            </section>
-
-            <div id="project-list" class="project-grid">
-                <!-- Project cards yahan JS se load honge -->
-            </div>
-        </main>
-
-        <footer class="app-footer">
-            <p>© 2025 Mayur Matholiya</p>
-        </footer>
-    </div>
-
-    <!-- ================================== */
-    /* === PAGE 2: CALCULATOR TOOL HTML === */
-    /* ================================== */
-    <div id="page-calculator" class="page">
-        
-        <!-- NAYA Tool Header -->
-        <div class="tool-header">
-            <button class="back-button" onclick="navigateTo('page-hub')">
-                <i class="fas fa-arrow-left"></i>
+    <header class="app-header">
+        <div class="header-content">
+            <div class="logo-container">
+                <img id="logoA" alt="Logo A">
+                <img id="logoGranicer2" alt="Granicer Logo 2"> </div>
+            
+            <button id="refresh-btn" class="header-icon-btn" title="Refresh Page">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 4v6h-6M1 20v-6h6"/>
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                </svg>
             </button>
-            <h2 class="tool-title">TilesPro Calculator</h2>
         </div>
+    </header>
 
-        <!-- Calculator ka original HTML (index (46).html se) -->
-        <div class="container">
-            <!-- Mode Switch -->
-            <div class="mode-switch" id="modeSwitch">
-              <button class="mode-switch-option active" data-mode="basic">Basic</button>
-              <button class="mode-switch-option" data-mode="advanced">Advanced</button>
-            </div>
+    <main class="main-content">
+        <section class="hero-section">
+            <h1>TOOLS</h1>
+        </section>
 
-            <!-- Calculator Cards Container -->
-            <div class="calculator-cards" id="calculatorCards">
-              <!-- First calculator card -->
-              <div class="calculator-card" data-card-id="0">
-                <button class="delete-card-btn" onclick="deleteCard(0)">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                  </svg>
-                </button>
-
-                <div class="form-section">
-                  <!-- Tile Size with thickness combined -->
-                  <div class="form-row">
-                    <div class="form-group full-width">
-                      <label class="form-label">Tile Size & Thickness</label>
-                      <select class="form-select size-thickness" data-card="0"></select>
-                    </div>
-                  </div>
-
-                  <!-- Mode Toggle -->
-                  <div class="form-row">
-                    <div class="form-group full-width">
-                      <label class="form-label">Calculation Mode</label>
-                      <div class="mode-toggle" data-card="0">
-                        <button class="mode-option active" data-mode="area">Area (ft²)</button>
-                        <button class="mode-option" data-mode="pieces">Pieces</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Quantity Input -->
-                  <div class="form-row">
-                    <div class="form-group full-width">
-                      <label class="form-label input-label">Area (ft²)</label>
-                      <input type="number" class="form-input quantity" data-card="0" placeholder="Enter value..." min="0" step="0.01" inputmode="decimal">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Price Section -->
-                <div class="price-section">
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label class="form-label">Price/sq feet</label>
-                      <div class="price-input-container">
-                        <input type="number" class="form-input price-input price" data-card="0" placeholder="Enter price..." min="0" step="0.01" inputmode="decimal">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="gst-label-centered">GST</div>
-                      <select class="form-select gst" data-card="0">
-                        <option value="0">Without GST</option>
-                        <option value="18">18%</option>
-                        <option value="12">12%</option>
-                        <option value="5">5%</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Results Grid -->
-                <div class="results-grid">
-                  <div class="result-item">
-                    <div class="result-label">Pieces</div>
-                    <div class="result-value pieces-result">-</div>
-                  </div>
-                  <div class="result-item">
-                    <div class="result-label">Area (ft²)</div>
-                    <div class="result-value area-ft2-result">-</div>
-                  </div>
-                  <div class="result-item">
-                    <div class="result-label">Weight (tons)</div>
-                    <div class="result-value weight-result">-</div>
-                  </div>
-                  <div class="result-item">
-                    <div class="result-label">Total Amount</div>
-                    <div class="result-value total-price-result">-</div>
-                  </div>
-                </div>
-
-                <!-- Meta Information -->
-                <div class="results-meta">Select tile specifications to see calculations</div>
-
-                <!-- Basic Mode Share Section -->
-                <div class="basic-share-section">
-                  <button class="share-btn share-whatsapp" onclick="shareWhatsApp(0)">
-                    <svg class="share-icon" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.891 3.486"/></svg>
-                  </button>
-                  <button class="share-btn share-sms" onclick="shareSMS(0)">
-                    <svg class="share-icon" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z"/></svg>
-                  </button>
-                  <button class="share-btn share-email" onclick="shareEmail(0)">
-                    <svg class="share-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-                  </button>
-                  <button class="share-btn share-copy" onclick="copyToClipboard(0)">
-                    <svg class="share-icon" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-
-                  </button>
-                  <button class="share-btn share-clear" onclick="clearAll(0)">
-                    <svg class="share-icon" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Add More Button (Advanced Mode Only) -->
-            <button class="add-more-btn" id="addMoreBtn">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;">
-                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-              </svg>
-              Add More Item
-            </button>
-
-            <!-- Grand Total (Advanced Mode Only) -->
-            <div class="grand-total">
-              <div class="grand-total-header">Grand Total</div>
-              <div class="grand-total-grid">
-                <div class="grand-total-item">
-                  <div class="grand-total-label">Total Pieces</div>
-                  <div class="grand-total-value" id="grandTotalPieces">-</div>
-                </div>
-                <div class="grand-total-item">
-                  <div class="grand-total-label">Total Area</div>
-                  <div class="grand-total-value" id="grandTotalArea">-</div>
-                </div>
-                <div class="grand-total-item">
-                  <div class="grand-total-label">Total Weight</div>
-                  <div class="grand-total-value" id="grandTotalWeight">-</div>
-                </div>
-                <div class="grand-total-item">
-                  <div class="grand-total-label">Final Amount</div>
-                  <div class="grand-total-value" id="grandFinalAmount">-</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Advanced Mode Share Section -->
-            <div class="share-section">
-              <button class="share-btn share-whatsapp" id="shareWhatsappAdv">
-                <svg class="share-icon" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.891 3.486"/></svg>
-              </button>
-              <button class="share-btn share-sms" id="shareSMSAdv">
-                <svg class="share-icon" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z"/></svg>
-              </button>
-              <button class="share-btn share-email" id="shareEmailAdv">
-                <svg class="share-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-              </button>
-              <button class="share-btn share-copy" id="copyBtnAdv">
-                <svg class="share-icon" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-              </button>
-              <button class="share-btn share-clear" id="clearBtnAdv">
-                <svg class="share-icon" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-              </button>
-            </div>
+        <div id="project-list" class="project-grid">
+            <!-- Project cards yahan JS se load honge -->
         </div>
+    </main>
 
-        <div class="copy-message" id="copyMessage">✓ Details copied to clipboard!</div>
-    </div>
+    <footer class="app-footer">
+        <p>© 2025 Mayur Matholiya</p>
+    </footer>
     
-    <!-- ================================== */
-    /* === PAGE 3: PRICE LIST TOOL HTML === */
-    /* (Yeh abhi add nahi kiya hai) */
-    /* ================================== */
-    <div id="page-price-list" class="page">
-        <!-- Future content -->
-    </div>
-
-
-    <!-- ================================== */
-    /* === PAGE 4: TILES JPG TOOL HTML === */
-    /* (Yeh abhi add nahi kiya hai) */
-    /* ================================== */
-    <div id="page-tiles-jpg" class="page">
-        <!-- Future content -->
-    </div>
-    
-
     <script src="imagedata.js"></script>
 
-    <!-- ================================== */
-    /* === GLOBAL / NAVIGATION JAVASCRIPT === */
-    /* ================================== */
     <script>
-        // --- Page Navigation ---
-        function navigateTo(pageId) {
-            document.body.classList.remove('tool-bg-basic', 'tool-bg-advanced');
-            
-            // Sabhi pages ko hide karo
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            // Target page ko show karo
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-            }
-            
-            // Calculator ke liye special background logic
-            if (pageId === 'page-calculator') {
-                 // Calculator ke current mode ke hisab se body background set karo
-                const calcContainer = document.querySelector('#page-calculator .container');
-                if (calcContainer && calcContainer.classList.contains('advanced-mode')) {
-                    document.body.classList.add('tool-bg-advanced');
-                } else {
-                    document.body.classList.add('tool-bg-basic');
-                }
-            } else {
-                // Hub ya dusre tools ke liye default background
-                document.body.style.backgroundImage = 'radial-gradient(at 50% 0%, hsla(228,100%,74%,0.1) 0, transparent 50%)';
-            }
-            
-            window.scrollTo(0, 0); // Page ke top par scroll karo
-        }
-        
-        // --- Hub Page Logic ---
+        // --- NAYA CHANGE: Descriptions angreji mein aur concise ---
         const projects = [
             {
                 "title": "Price List",
-                "id": "page-price-list", 
+                "liveUrl": "./project-price/index.html",
                 "description": "Generate & share PDF price quotations.",
-                "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g1" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="var(--primary-glow-1)" stop-opacity="0.8"/><stop offset="1" stop-color="var(--primary-glow-3)" stop-opacity="1"/></linearGradient></defs><path d="M56.6667 8H23.3333C20.3878 8 18 10.3878 18 13.3333V66.6667C18 69.6122 20.3878 72 23.3333 72H56.6667C59.6122 72 62 69.6122 62 66.6667V24L56.6667 8Z" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M56 8V24H62" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M48.6667 44H31.3333" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/><path d="M48.6667 56H31.3333" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/><path d="M38 32H31.3333" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/></svg>`
+                "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="g1" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="var(--primary-glow-1)" stop-opacity="0.8"/>
+                                <stop offset="1" stop-color="var(--primary-glow-3)" stop-opacity="1"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M56.6667 8H23.3333C20.3878 8 18 10.3878 18 13.3333V66.6667C18 69.6122 20.3878 72 23.3333 72H56.6667C59.6122 72 62 69.6122 62 66.6667V24L56.6667 8Z" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M56 8V24H62" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M48.6667 44H31.3333" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
+                            <path d="M48.6667 56H31.3333" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
+                            <path d="M38 32H31.3333" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
+                        </svg>`
             },
             {
                 "title": "Calculator",
-                "id": "page-calculator", 
+                "liveUrl": "./project-calculator/index.html",
                 "description": "Calculate tile area, weight, and cost.",
-                "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g2" x1="40" y1="0" x2="40" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="var(--primary-glow-1)" stop-opacity="1"/><stop offset="1" stop-color="var(--primary-glow-2)" stop-opacity="0.8"/></linearGradient></defs><rect x="20" y="10" width="40" height="60" rx="8" stroke="url(#g2)" stroke-width="3"/><rect x="28" y="18" width="24" height="12" rx="3" stroke="white" stroke-width="2" stroke-opacity="0.7"/><circle cx="30" cy="40" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/><circle cx="40" cy="40" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/><circle cx="50" cy="40" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/><circle cx="30" cy="50" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/><circle cx="40" cy="50" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/><circle cx="50" cy="50" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/><circle cx="30" cy="60" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/><circle cx="40" cy="60" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/><circle cx="50" cy="60" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/></svg>`
+                "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="g2" x1="40" y1="0" x2="40" y2="80" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="var(--primary-glow-1)" stop-opacity="1"/>
+                                <stop offset="1" stop-color="var(--primary-glow-2)" stop-opacity="0.8"/>
+                                </linearGradient>
+                            </defs>
+                            <rect x="20" y="10" width="40" height="60" rx="8" stroke="url(#g2)" stroke-width="3"/>
+                            <rect x="28" y="18" width="24" height="12" rx="3" stroke="white" stroke-width="2" stroke-opacity="0.7"/>
+                            <circle cx="30" cy="40" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                            <circle cx="40" cy="40" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                            <circle cx="50" cy="40" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                            <circle cx="30" cy="50" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                            <circle cx="40" cy="50" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                            <circle cx="50" cy="50" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                            <circle cx="30" cy="60" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                            <circle cx="40" cy="60" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                            <circle cx="50" cy="60" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                        </svg>`
             },
             {
                 "title": "Tiles JPG",
-                "id": "page-tiles-jpg", 
+                "liveUrl": "./project-tilesearch/index.html",
                 "description": "Search tile designs by name and filter by size.",
-                "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g3" x1="0" y1="80" x2="80" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="var(--primary-glow-2)" stop-opacity="0.8"/><stop offset="1" stop-color="var(--primary-glow-3)" stop-opacity="1"/></linearGradient></defs><path d="M20 12H60C62.2091 12 64 13.7909 64 16V64C64 66.2091 62.2091 68 60 68H20C17.7909 68 16 66.2091 16 64V16C16 13.7909 17.7909 12 20 12Z" stroke="url(#g3)" stroke-width="3" stroke-opacity="0.4"/><path d="M52 36C52 42.6274 46.6274 48 40 48C33.3726 48 28 42.6274 28 36C28 29.3726 33.3726 24 40 24C46.6274 24 52 29.3726 52 36Z" stroke="url(#g3)" stroke-width="3"/><path d="M46.6667 46.6667L57.3333 57.3333" stroke="url(#g3)" stroke-width="3" stroke-linecap="round"/></svg>`
+                "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="g3" x1="0" y1="80" x2="80" y2="0" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="var(--primary-glow-2)" stop-opacity="0.8"/>
+                                <stop offset="1" stop-color="var(--primary-glow-3)" stop-opacity="1"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M20 12H60C62.2091 12 64 13.7909 64 16V64C64 66.2091 62.2091 68 60 68H20C17.7909 68 16 66.2091 16 64V16C16 13.7909 17.7909 12 20 12Z" stroke="url(#g3)" stroke-width="3" stroke-opacity="0.4"/>
+                            <path d="M52 36C52 42.6274 46.6274 48 40 48C33.3726 48 28 42.6274 28 36C28 29.3726 33.3726 24 40 24C46.6274 24 52 29.3726 52 36Z" stroke="url(#g3)" stroke-width="3"/>
+                            <path d="M46.6667 46.6667L57.3333 57.3333" stroke="url(#g3)" stroke-width="3" stroke-linecap="round"/>
+                        </svg>`
             }
         ];
 
+        // --- app.js ka code ---
         window.addEventListener('DOMContentLoaded', () => {
             
             try {
@@ -1246,19 +438,19 @@
                 location.reload();
             });
 
-            // Hub Page Header Scroll Logic
-            const header = document.querySelector('#page-hub .app-header');
+            const header = document.querySelector('.app-header');
             if (header) {
                 let lastScrollY = window.scrollY;
+
                 window.addEventListener('scroll', () => {
                     const currentScrollY = window.scrollY;
-                    if (document.getElementById('page-hub').classList.contains('active')) {
-                        if (currentScrollY > lastScrollY && currentScrollY > 50) {
-                            header.classList.add('header-hidden');
-                        } else {
-                            header.classList.remove('header-hidden');
-                        }
+                    
+                    if (currentScrollY > lastScrollY && currentScrollY > 50) {
+                        header.classList.add('header-hidden');
+                    } else {
+                        header.classList.remove('header-hidden');
                     }
+                    
                     lastScrollY = currentScrollY;
                 }, { passive: true });
             }
@@ -1273,7 +465,8 @@
                 projects.forEach(project => {
                     const projectCard = document.createElement('a');
                     projectCard.className = 'project-card';
-                    projectCard.onclick = () => navigateTo(project.id);
+                    projectCard.href = project.liveUrl;
+                    projectCard.setAttribute('target', '_self'); 
                     
                     projectCard.innerHTML = `
                         <div class="card-icon">${project.icon}</div>
@@ -1298,529 +491,5 @@
             }
         }
     </script>
-    
-    <!-- ================================== */
-    /* === CALCULATOR TOOL JAVASCRIPT === */
-    /* ================================== */
-    <script>
-        (function() { // NAYA: Logic ko IIFE mein wrap kiya
-        
-            // SKU Master Data
-            const SKU_MASTER = [
-              {size:"1200x1200",thk:"9MM",pcs:2,kg:"61",ft2:31.0,m2:2.88},
-              {size:"1200x1790",thk:"9MM",pcs:2,kg:"91",ft2:46.242,m2:4.296},
-              {size:"1200x1800",thk:"9MM",pcs:2,kg:"91 TO 96.5",ft2:46.5,m2:4.32},
-              {size:"1200x2400",thk:"9MM",pcs:1,kg:"62",ft2:31.0,m2:2.88},
-              {size:"1200x2800",thk:"6MM",pcs:1,kg:"50.5",ft2:36.167,m2:3.36},
-              {size:"1200x3180",thk:"15MM",pcs:1,kg:"136",ft2:41.075,m2:3.816},
-              {size:"1200x3200",thk:"15MM",pcs:1,kg:"136",ft2:41.337,m2:3.84},
-              {size:"1600x1600",thk:"9MM",pcs:1,kg:"55",ft2:27.556,m2:2.56},
-              {size:"1600x3200",thk:"6MM",pcs:1,kg:"74",ft2:55.116,m2:5.12},
-              {size:"1600x3200",thk:"12MM",pcs:1,kg:"148",ft2:55.116,m2:5.12},
-              {size:"1620x3240",thk:"12MM",pcs:1,kg:"150",ft2:56.5,m2:5.249},
-              {size:"790x2980",thk:"15MM",pcs:1,kg:"87",ft2:25.338,m2:2.354},
-              {size:"800x3000",thk:"15MM",pcs:1,kg:"84.5",ft2:25.834,m2:2.4},
-              {size:"800x2400",thk:"15MM",pcs:1,kg:"67.5",ft2:20.67,m2:1.9},
-              {size:"1000x3000",thk:"5MM",pcs:1,kg:"35.5",ft2:32.29,m2:3.0},
-              {size:"1200x2600",thk:"6MM",pcs:1,kg:"42.5",ft2:33.58,m2:3.1},
-              {size:"1200x3000",thk:"9MM",pcs:1,kg:"77.5",ft2:38.75,m2:3.6},
-              {size:"1200x3200",thk:"15MM",pcs:1,kg:"136",ft2:41.33,m2:3.8},
-              {size:"800x3200",thk:"15MM",pcs:1,kg:"74",ft2:27.56,m2:2.6},
-            ];
-
-            SKU_MASTER.sort((a, b) => a.ft2 - b.ft2);
-
-            const fmt = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 });
-            const fmt3 = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 3 });
-
-            let currentAppMode = 'basic';
-            let cardCounter = 1;
-            let cardModes = { 0: 'area' };
-
-            function parseKgMin(value) {
-              const nums = String(value).match(/[\d.]+/g);
-              return nums && nums.length ? parseFloat(nums[0]) : NaN;
-            }
-
-            function initializeSelect(cardId) {
-              const select = document.querySelector(`#page-calculator [data-card="${cardId}"].size-thickness`);
-              if (select) {
-                select.innerHTML = SKU_MASTER.map((sku, index) => 
-                  `<option value="${index}">${sku.size} (${sku.thk})</option>`
-                ).join('');
-                
-                const defaultIndex = SKU_MASTER.findIndex(s => s.size === "800x3000" && s.thk === "15MM");
-                if (defaultIndex >= 0) select.selectedIndex = defaultIndex;
-              }
-            }
-
-            function getSelectedSKU(cardId) {
-              const select = document.querySelector(`#page-calculator [data-card="${cardId}"].size-thickness`);
-              if (!select) return null;
-              const index = parseInt(select.value);
-              return SKU_MASTER[index];
-            }
-
-            // NAYA: Functions ko global banana hoga taaki HTML unhe call kar sake
-            window.calculateCard = function(cardId) {
-              const card = document.querySelector(`#page-calculator [data-card-id="${cardId}"]`);
-              if (!card) return;
-
-              const sku = getSelectedSKU(cardId);
-              const quantity = parseFloat(card.querySelector('.quantity').value || 0);
-              const pricePerFt2 = parseFloat(card.querySelector('.price').value || 0);
-              const gstRate = parseFloat(card.querySelector('.gst').value || 0);
-              
-              if (!sku) {
-                resetCardResults(card);
-                return;
-              }
-
-              const pcsPerBox = sku.pcs;
-              const ft2PerPc = sku.ft2 / pcsPerBox;
-              const kgPerPc = parseKgMin(sku.kg) / pcsPerBox;
-
-              let pieces = 0, areaFt2 = 0, weight = 0, totalPrice = 0;
-              const mode = cardModes[cardId] || 'area';
-
-              if (quantity > 0) {
-                if (mode === 'area') {
-                  areaFt2 = quantity;
-                  pieces = Math.ceil(areaFt2 / ft2PerPc);
-                } else {
-                  pieces = Math.ceil(quantity);
-                  areaFt2 = pieces * ft2PerPc;
-                }
-                weight = (pieces * kgPerPc) / 1000;
-                
-                if (pricePerFt2 > 0) {
-                  const basePrice = areaFt2 * pricePerFt2;
-                  const gstAmount = basePrice * (gstRate / 100);
-                  totalPrice = basePrice + gstAmount;
-                }
-              }
-
-              card.querySelector('.pieces-result').textContent = pieces ? fmt.format(pieces) : '-';
-              card.querySelector('.area-ft2-result').textContent = areaFt2 ? fmt.format(areaFt2) : '-';
-              card.querySelector('.weight-result').textContent = weight ? fmt3.format(weight) : '-';
-              card.querySelector('.total-price-result').textContent = totalPrice > 0 ? '₹' + new Intl.NumberFormat('en-IN').format(Math.round(totalPrice)) : '-';
-              
-              card.querySelector('.results-meta').textContent = `${pcsPerBox} pcs/box • ${sku.ft2} ft²/box • ${sku.m2} m²/box • ~${parseKgMin(sku.kg)} kg/box`;
-              
-              if (currentAppMode === 'advanced') {
-                updateGrandTotal();
-              }
-            }
-
-            function resetCardResults(card) {
-              card.querySelector('.pieces-result').textContent = '-';
-              card.querySelector('.area-ft2-result').textContent = '-';
-              card.querySelector('.weight-result').textContent = '-';
-              card.querySelector('.total-price-result').textContent = '-';
-              card.querySelector('.results-meta').textContent = 'Select tile specifications to see calculations';
-            }
-
-            function updateGrandTotal() {
-              const cards = document.querySelectorAll('#page-calculator .calculator-card');
-              let totalPieces = 0, totalArea = 0, totalWeight = 0, totalFinalAmount = 0;
-
-              cards.forEach(card => {
-                const pieces = parseFloat(card.querySelector('.pieces-result').textContent.replace(/[^0-9.-]+/g,"") || 0);
-                const area = parseFloat(card.querySelector('.area-ft2-result').textContent.replace(/[^0-9.-]+/g,"") || 0);
-                const weight = parseFloat(card.querySelector('.weight-result').textContent.replace(/[^0-9.-]+/g,"") || 0);
-                const finalAmount = parseFloat(card.querySelector('.total-price-result').textContent.replace(/[^0-9.-]+/g,"") || 0);
-                
-                totalPieces += pieces;
-                totalArea += area;
-                totalWeight += weight;
-                totalFinalAmount += finalAmount;
-              });
-
-              document.getElementById('grandTotalPieces').textContent = totalPieces > 0 ? fmt.format(totalPieces) : '-';
-              document.getElementById('grandTotalArea').textContent = totalArea > 0 ? fmt.format(totalArea) + ' ft²' : '-';
-              document.getElementById('grandTotalWeight').textContent = totalWeight > 0 ? fmt3.format(totalWeight) + ' tons' : '-';
-              document.getElementById('grandFinalAmount').textContent = totalFinalAmount > 0 ? '₹' + new Intl.NumberFormat('en-IN').format(Math.round(totalFinalAmount)) : '-';
-            }
-
-            window.setCardMode = function(cardId, mode) {
-              cardModes[cardId] = mode;
-              const card = document.querySelector(`#page-calculator [data-card-id="${cardId}"]`);
-              const modeToggle = card.querySelector('.mode-toggle');
-              const inputLabel = card.querySelector('.input-label');
-              const quantityInput = card.querySelector('.quantity');
-              
-              modeToggle.classList.toggle('pieces-mode', mode === 'pieces');
-              
-              const options = modeToggle.querySelectorAll('.mode-option');
-              options.forEach(opt => {
-                opt.classList.toggle('active', opt.dataset.mode === mode);
-              });
-              
-              inputLabel.textContent = mode === 'area' ? 'Area (ft²)' : 'Pieces';
-              quantityInput.placeholder = mode === 'area' ? 'e.g. 2000' : 'e.g. 25';
-              
-              calculateCard(cardId);
-            }
-
-            window.addMoreCard = function() {
-              if (currentAppMode !== 'advanced') return;
-              
-              const cardId = cardCounter++;
-              const cardsContainer = document.getElementById('calculatorCards');
-              
-              const newCard = document.createElement('div');
-              newCard.className = 'calculator-card';
-              newCard.dataset.cardId = cardId;
-              
-              newCard.innerHTML = `
-                <button class="delete-card-btn" onclick="deleteCard(${cardId})">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                  </svg>
-                </button>
-                <div class="form-section">
-                  <div class="form-row">
-                    <div class="form-group full-width">
-                      <label class="form-label">Tile Size & Thickness</label>
-                      <select class="form-select size-thickness" data-card="${cardId}"></select>
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group full-width">
-                      <label class="form-label">Calculation Mode</label>
-                      <div class="mode-toggle" data-card="${cardId}">
-                        <button class="mode-option active" data-mode="area" onclick="setCardMode(${cardId}, 'area')">Area (ft²)</button>
-                        <button class="mode-option" data-mode="pieces" onclick="setCardMode(${cardId}, 'pieces')">Pieces</button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group full-width">
-                      <label class="form-label input-label">Area (ft²)</label>
-                      <input type="number" class="form-input quantity" data-card="${cardId}" placeholder="Enter value..." min="0" step="0.01" inputmode="decimal">
-                    </div>
-                  </div>
-                </div>
-                <div class="price-section">
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label class="form-label">Price/sq feet</label>
-                      <div class="price-input-container">
-                        <input type="number" class="form-input price-input price" data-card="${cardId}" placeholder="Enter price..." min="0" step="0.01" inputmode="decimal">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="gst-label-centered">GST</div>
-                      <select class="form-select gst" data-card="${cardId}">
-                        <option value="0">Without GST</option>
-                        <option value="18">18%</option>
-                        <option value="12">12%</option>
-                        <option value="5">5%</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="results-grid">
-                  <div class="result-item"><div class="result-label">Pieces</div><div class="result-value pieces-result">-</div></div>
-                  <div class="result-item"><div class="result-label">Area (ft²)</div><div class="result-value area-ft2-result">-</div></div>
-                  <div class="result-item"><div class="result-label">Weight (tons)</div><div class="result-value weight-result">-</div></div>
-                  <div class="result-item"><div class="result-label">Total Amount</div><div class="result-value total-price-result">-</div></div>
-                </div>
-                <div class="results-meta">Select tile specifications to see calculations</div>
-              `;
-              
-              cardsContainer.appendChild(newCard);
-              
-              cardModes[cardId] = 'area';
-              initializeSelect(cardId);
-              setupCardEventListeners(cardId);
-              calculateCard(cardId);
-            }
-
-            window.deleteCard = function(cardId) {
-              if (document.querySelectorAll('#page-calculator .calculator-card').length <= 1) return;
-              
-              const card = document.querySelector(`#page-calculator [data-card-id="${cardId}"]`);
-              if (card) {
-                card.style.animation = 'fadeOut 0.2s ease-out';
-                setTimeout(() => {
-                  card.remove();
-                  delete cardModes[cardId];
-                  updateGrandTotal();
-                }, 200);
-              }
-            }
-
-            function setupCardEventListeners(cardId) {
-              const card = document.querySelector(`#page-calculator [data-card-id="${cardId}"]`);
-              if (!card) return;
-
-              card.querySelector('.size-thickness').addEventListener('change', () => calculateCard(cardId));
-              card.querySelector('.quantity').addEventListener('input', () => calculateCard(cardId));
-              card.querySelector('.price').addEventListener('input', () => calculateCard(cardId));
-              card.querySelector('.gst').addEventListener('change', () => calculateCard(cardId));
-              
-              // NAYA: onclick ab HTML mein hai, isliye yahan se hata diya
-            }
-
-            function resetAllCards() {
-              const cards = document.querySelectorAll('#page-calculator .calculator-card');
-              cards.forEach((card, index) => {
-                if (index > 0) {
-                  card.remove();
-                }
-              });
-              
-              const firstCard = document.querySelector('#page-calculator [data-card-id="0"]');
-              if (firstCard) {
-                firstCard.querySelector('.quantity').value = '';
-                firstCard.querySelector('.price').value = '';
-                firstCard.querySelector('.gst').selectedIndex = 0;
-                cardModes[0] = 'area';
-                setCardMode(0, 'area'); // Yeh calculateCard ko call kar dega
-              } else {
-                 calculateCard(0); // Agar first card nahi mila to bhi recalculate
-              }
-              
-              cardCounter = 1;
-              cardModes = { 0: 'area' };
-              updateGrandTotal(); // NAYA: Reset ke baad Grand Total update
-            }
-
-            window.switchMode = function(mode) {
-              const prevMode = currentAppMode;
-              currentAppMode = mode;
-              const container = document.querySelector('#page-calculator .container');
-              const modeSwitch = document.getElementById('modeSwitch');
-              const body = document.body;
-              
-              if (prevMode !== mode) {
-                resetAllCards();
-              }
-              
-              if (mode === 'advanced') {
-                container.classList.add('advanced-mode');
-                modeSwitch.classList.add('advanced-mode');
-                body.classList.add('tool-bg-advanced'); // NAYA: Body background change
-                body.classList.remove('tool-bg-basic');
-                setTimeout(() => updateGrandTotal(), 100);
-              } else {
-                container.classList.remove('advanced-mode');
-                modeSwitch.classList.remove('advanced-mode');
-                body.classList.add('tool-bg-basic'); // NAYA: Body background change
-                body.classList.remove('tool-bg-advanced');
-              }
-              
-              const options = modeSwitch.querySelectorAll('.mode-switch-option');
-              options.forEach(opt => {
-                opt.classList.toggle('active', opt.dataset.mode === mode);
-              });
-            }
-            
-            // NAYA: getShareText ab cardId (basic mode) ya 'all' (advanced mode) lega
-            function getShareText(cardId = 'all') {
-              let text = '';
-              
-              if (currentAppMode === 'basic') {
-                const card = document.querySelector(`#page-calculator [data-card-id="${cardId}"]`);
-                if (!card) return '';
-                const sku = getSelectedSKU(cardId);
-                const pricePerFt2 = parseFloat(card.querySelector('.price').value || 0);
-                const gstRate = parseFloat(card.querySelector('.gst').value || 0);
-                const quantity = card.querySelector('.quantity').value;
-                
-                if (!sku || !quantity) return '';
-
-                text = `Size: ${sku.size} (${sku.thk})
-Pieces: ${card.querySelector('.pieces-result').textContent}
-Area: ${card.querySelector('.area-ft2-result').textContent} (sq feet)
-Weight: ${card.querySelector('.weight-result').textContent} tons`;
-
-                if (pricePerFt2 > 0 && card.querySelector('.total-price-result').textContent !== '-') {
-                  const areaValue = parseFloat(card.querySelector('.area-ft2-result').textContent.replace(/,/g, ''));
-                  const basePrice = areaValue * pricePerFt2;
-                  text += `\nAmount: ₹${new Intl.NumberFormat('en-IN').format(Math.round(basePrice))}`;
-                  
-                  if (gstRate > 0) {
-                    const gstAmount = basePrice * (gstRate / 100);
-                    text += `\nGST (${gstRate}%): ₹${new Intl.NumberFormat('en-IN').format(Math.round(gstAmount))}`;
-                    text += `\nAmount (incl. ${gstRate}% GST): ${card.querySelector('.total-price-result').textContent}`;
-                  }
-                }
-              } else {
-                // Advanced mode - Hamesha sabhi cards ka share karega
-                const cards = document.querySelectorAll('#page-calculator .calculator-card');
-                text = 'TILE CALCULATION DETAILS\n\n';
-                
-                let hasAnyGst = false;
-                let totalBaseAmount = 0;
-                let totalGstAmount = 0;
-                
-                cards.forEach((card, index) => {
-                  const currentCardId = parseInt(card.dataset.cardId);
-                  const sku = getSelectedSKU(currentCardId);
-                  const pricePerFt2 = parseFloat(card.querySelector('.price').value || 0);
-                  const gstRate = parseFloat(card.querySelector('.gst').value || 0);
-                  const quantity = card.querySelector('.quantity').value;
-                  
-                  if (sku && quantity) {
-                    text += `ITEM ${index + 1}:\n`;
-                    text += `Size: ${sku.size} (${sku.thk})\n`;
-                    text += `Pieces: ${card.querySelector('.pieces-result').textContent}\n`;
-                    text += `Area: ${card.querySelector('.area-ft2-result').textContent} (sq feet)\n`;
-                    text += `Weight: ${card.querySelector('.weight-result').textContent} tons\n`;
-                    
-                    if (pricePerFt2 > 0 && card.querySelector('.total-price-result').textContent !== '-') {
-                      const areaValue = parseFloat(card.querySelector('.area-ft2-result').textContent.replace(/,/g, ''));
-                      const basePrice = areaValue * pricePerFt2;
-                      const gstAmount = basePrice * (gstRate / 100);
-                      const finalAmount = basePrice + gstAmount;
-                      
-                      totalBaseAmount += basePrice;
-                      totalGstAmount += gstAmount;
-                      
-                      text += `Amount: ₹${new Intl.NumberFormat('en-IN').format(Math.round(basePrice))}\n`;
-                      
-                      if (gstRate > 0) {
-                        text += `GST (${gstRate}%): ₹${new Intl.NumberFormat('en-IN').format(Math.round(gstAmount))}\n`;
-                        text += `Amount (incl. ${gstRate}% GST): ₹${new Intl.NumberFormat('en-IN').format(Math.round(finalAmount))}\n`;
-                        hasAnyGst = true;
-                      }
-                    }
-                    text += '\n';
-                  }
-                });
-                
-                text += 'GRAND TOTAL:\n';
-                text += `Total Pieces: ${document.getElementById('grandTotalPieces').textContent}\n`;
-                text += `Total Area: ${document.getElementById('grandTotalArea').textContent}\n`;
-                text += `Total Weight: ${document.getElementById('grandTotalWeight').textContent}\n`;
-                
-                if (totalBaseAmount > 0) {
-                  text += `Base Amount: ₹${new Intl.NumberFormat('en-IN').format(Math.round(totalBaseAmount))}\n`;
-                  
-                  if (hasAnyGst) {
-                    text += `Total GST: ₹${new Intl.NumberFormat('en-IN').format(Math.round(totalGstAmount))}\n`;
-                    text += `Final Amount (incl. GST): ₹${new Intl.NumberFormat('en-IN').format(Math.round(totalBaseAmount + totalGstAmount))}`;
-                  } else {
-                    text += `Final Amount: ₹${new Intl.NumberFormat('en-IN').format(Math.round(totalBaseAmount))}`;
-                  }
-                }
-              }
-              
-              return text;
-            }
-
-
-            window.copyToClipboard = function(cardId = 'all') {
-              const text = getShareText(currentAppMode === 'basic' ? cardId : 'all');
-              if (!text) return;
-
-              navigator.clipboard.writeText(text).then(() => {
-                const copyMessage = document.getElementById('copyMessage');
-                copyMessage.classList.add('show');
-                setTimeout(() => {
-                  copyMessage.classList.remove('show');
-                }, 1500);
-              }).catch(err => console.error('Copy failed:', err));
-            }
-
-            window.clearAll = function(cardId = 'all') {
-                if(currentAppMode === 'basic') {
-                    // Basic mode mein sirf pehla card clear karo
-                    const card = document.querySelector(`#page-calculator [data-card-id="${cardId}"]`);
-                    if(card) {
-                        card.querySelector('.quantity').value = '';
-                        card.querySelector('.price').value = '';
-                        card.querySelector('.gst').selectedIndex = 0;
-                        calculateCard(cardId);
-                    }
-                } else {
-                    // Advanced mode mein sabhi cards clear karo
-                    const cards = document.querySelectorAll('#page-calculator .calculator-card');
-                    cards.forEach(card => {
-                        card.querySelector('.quantity').value = '';
-                        card.querySelector('.price').value = '';
-                        card.querySelector('.gst').selectedIndex = 0;
-                        calculateCard(parseInt(card.dataset.cardId));
-                    });
-                }
-            }
-
-            window.shareWhatsApp = function(cardId = 'all') {
-              const text = getShareText(currentAppMode === 'basic' ? cardId : 'all');
-              if (!text) return;
-              window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-            }
-
-            window.shareSMS = function(cardId = 'all') {
-              const text = getShareText(currentAppMode === 'basic' ? cardId : 'all');
-              if (!text) return;
-              const url = navigator.userAgent.match(/iPhone|iPad/) 
-                ? `sms:&body=${encodeURIComponent(text)}` 
-                : `sms:?body=${encodeURIComponent(text)}`;
-              window.location.href = url;
-            }
-
-            window.shareEmail = function(cardId = 'all') {
-              const text = getShareText(currentAppMode === 'basic' ? cardId : 'all');
-              if (!text) return;
-              const subject = encodeURIComponent('TilesPro Calculation Results');
-              const body = encodeURIComponent(text);
-              window.location.href = `mailto:?subject=${subject}&body=${body}`;
-            }
-
-            // Fade out animation
-            const style = document.createElement('style');
-            style.textContent = `
-              @keyframes fadeOut {
-                from { opacity: 1; transform: translateY(0); }
-                to { opacity: 0; transform: translateY(-10px); }
-              }
-            `;
-            document.head.appendChild(style);
-
-            // Event Listeners
-            document.addEventListener('DOMContentLoaded', () => {
-                const pageCalc = document.getElementById('page-calculator');
-                if (!pageCalc) return; // Agar calculator page nahi hai toh kuch na kare
-
-                pageCalc.querySelector('#modeSwitch').addEventListener('click', (e) => {
-                  const option = e.target.closest('.mode-switch-option');
-                  if (option) switchMode(option.dataset.mode);
-                });
-
-                pageCalc.querySelector('#addMoreBtn').addEventListener('click', addMoreCard);
-                
-                // Basic aur Advanced dono share sections ke liye listeners
-                addShareListeners('#page-calculator .basic-share-section');
-                addShareListeners('#page-calculator .share-section');
-
-                // NAYA: onclick ab HTML mein hai, isliye yahan se alag se attach
-                pageCalc.querySelector('#shareWhatsappAdv').addEventListener('click', () => shareWhatsApp('all'));
-                pageCalc.querySelector('#shareSMSAdv').addEventListener('click', () => shareSMS('all'));
-                pageCalc.querySelector('#shareEmailAdv').addEventListener('click', () => shareEmail('all'));
-                pageCalc.querySelector('#copyBtnAdv').addEventListener('click', () => copyToClipboard('all'));
-                pageCalc.querySelector('#clearBtnAdv').addEventListener('click', () => clearAll('all'));
-
-                // Initialize
-                initializeSelect(0);
-                setupCardEventListeners(0);
-                calculateCard(0);
-            
-                console.log('TilesPro Calculator - High Performance Version Ready! ⚡🚀');
-            });
-        
-        })(); // NAYA: IIFE ko yahan band kiya
-    </script>
-
-    <!-- ================================== */
-    /* === (Future Price List JS yahaan aayega) === */
-    /* ================================== */
-
-    <!-- ================================== */
-    /* === (Future Tiles JPG JS yahaan aayega) === */
-    /* ================================== */
-
 </body>
 </html>
