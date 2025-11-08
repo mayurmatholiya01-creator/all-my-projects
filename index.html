@@ -36,9 +36,13 @@
           --spacing-large: 24px;
           --radius-card: 16px;
           
-          /* [नया] Safe area padding */
+          /* [नया] Safe area padding (JODA GAYA) */
           --safe-area-top: env(safe-area-inset-top);
           --safe-area-bottom: env(safe-area-inset-bottom);
+          
+          /* NAV BAR KE LIYE VARIABLES JODE GAYE */
+          --primary: var(--primary-glow-1);
+          --primary-light: var(--primary-glow-2);
         }
 
         * {
@@ -327,7 +331,7 @@
             animation: fade-in-up 0.5s ease-out 0.9s forwards;
         }
 
-        /* --- [नया] Bottom Navigation Bar Styles --- */
+        /* --- [नया] Bottom Navigation Bar Styles (JODA GAYA) --- */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -383,7 +387,7 @@
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             border-radius: 0 0 3px 3px;
         }
-
+        /* --- END OF NAV BAR STYLES --- */
     </style>
 </head>
 <body>
@@ -419,6 +423,68 @@
     <script src="imagedata.js"></script>
 
     <script>
+        // --- NAYA CHANGE: Descriptions angreji mein aur concise ---
+        const projects = [
+            {
+                "title": "Price List",
+                "liveUrl": "./project-price/index.html",
+                "description": "Generate & share PDF price quotations.",
+                "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="g1" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="var(--primary-glow-1)" stop-opacity="0.8"/>
+                                <stop offset="1" stop-color="var(--primary-glow-3)" stop-opacity="1"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M56.6667 8H23.3333C20.3878 8 18 10.3878 18 13.3333V66.6667C18 69.6122 20.3878 72 23.3333 72H56.6667C59.6122 72 62 69.6122 62 66.6667V24L56.6667 8Z" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M56 8V24H62" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M48.6667 44H31.3333" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
+                            <path d="M48.6667 56H31.3333" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
+                            <path d="M38 32H31.3333" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
+                        </svg>`
+            },
+            {
+                "title": "Calculator",
+                "liveUrl": "./project-calculator/index.html",
+                "description": "Calculate tile area, weight, and cost.",
+                "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="g2" x1="40" y1="0" x2="40" y2="80" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="var(--primary-glow-1)" stop-opacity="1"/>
+                                <stop offset="1" stop-color="var(--primary-glow-2)" stop-opacity="0.8"/>
+                                </linearGradient>
+                            </defs>
+                            <rect x="20" y="10" width="40" height="60" rx="8" stroke="url(#g2)" stroke-width="3"/>
+                            <rect x="28" y="18" width="24" height="12" rx="3" stroke="white" stroke-width="2" stroke-opacity="0.7"/>
+                            <circle cx="30" cy="40" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                            <circle cx="40" cy="40" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                            <circle cx="50" cy="40" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                            <circle cx="30" cy="50" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                            <circle cx="40" cy="50" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                            <circle cx="50" cy="50" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                            <circle cx="30" cy="60" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                            <circle cx="40" cy="60" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                            <circle cx="50" cy="60" r="3" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+                        </svg>`
+            },
+            {
+                "title": "Tiles JPG",
+                "liveUrl": "./project-tilesearch/index.html",
+                "description": "Search tile designs by name and filter by size.",
+                "icon": `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="g3" x1="0" y1="80" x2="80" y2="0" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="var(--primary-glow-2)" stop-opacity="0.8"/>
+                                <stop offset="1" stop-color="var(--primary-glow-3)" stop-opacity="1"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M20 12H60C62.2091 12 64 13.7909 64 16V64C64 66.2091 62.2091 68 60 68H20C17.7909 68 16 66.2091 16 64V16C16 13.7909 17.7909 12 20 12Z" stroke="url(#g3)" stroke-width="3" stroke-opacity="0.4"/>
+                            <path d="M52 36C52 42.6274 46.6274 48 40 48C33.3726 48 28 42.6274 28 36C28 29.3726 33.3726 24 40 24C46.6274 24 52 29.3726 52 36Z" stroke="url(#g3)" stroke-width="3"/>
+                            <path d="M46.6667 46.6667L57.3333 57.3333" stroke="url(#g3)" stroke-width="3" stroke-linecap="round"/>
+                        </svg>`
+            }
+        ];
+
         // --- app.js ka code ---
         window.addEventListener('DOMContentLoaded', () => {
             
@@ -494,27 +560,26 @@
         }
     </script>
     
-<nav class="bottom-nav">
-    <a href="./index.html" class="nav-link active">
-        <i class="nav-icon fas fa-home"></i>
-        <span>Home</span>
-    </a>
+    <nav class="bottom-nav">
+        <a href="./index.html" class="nav-link active">
+            <i class="nav-icon fas fa-home"></i>
+            <span>Home</span>
+        </a>
 
-    <a href="./project-price/index.html" class="nav-link">
-        <i class="nav-icon fas fa-list-alt"></i>
-        <span>Price List</span>
-    </a>
+        <a href="./project-price/index.html" class="nav-link">
+            <i class="nav-icon fas fa-list-alt"></i>
+            <span>Price List</span>
+        </a>
 
-    <a href="./project-calculator/index.html" class="nav-link">
-        <i class="nav-icon fas fa-calculator"></i>
-        <span>Calculator</span>
-    </a>
+        <a href="./project-calculator/index.html" class="nav-link">
+            <i class="nav-icon fas fa-calculator"></i>
+            <span>Calculator</span>
+        </a>
 
-    <a href="./project-tilesearch/index.html" class="nav-link">
-        <i class="nav-icon fas fa-search"></i>
-        <span>Tiles</span>
-    </a>
-</nav>
-
-</body>
+        <a href="./project-tilesearch/index.html" class="nav-link">
+            <i class="nav-icon fas fa-search"></i>
+            <span>Tiles</span>
+        </a>
+    </nav>
+    </body>
 </html>
