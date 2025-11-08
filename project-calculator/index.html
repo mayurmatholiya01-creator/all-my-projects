@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
   <title>TilesPro Calculator</title>
   
-  
-  
-  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   
   <style>
     :root {
@@ -45,10 +43,6 @@
       --safe-area-right: env(safe-area-inset-right);
     }
 
-    /* DELETED: .container.advanced-mode CSS block
-      REASON: User wants one consistent theme.
-    */
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -64,7 +58,6 @@
     body {
       font-family: 'Inter', system-ui, sans-serif;
       background: var(--bg-primary);
-      /* This background is identical to the landing page */
       background-image: radial-gradient(at 50% 0%, hsla(228,100%,74%,0.1) 0, transparent 50%);
       color: var(--text-primary);
       min-height: 100vh;
@@ -72,14 +65,11 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: max(1rem, var(--safe-area-top)) max(1rem, var(--safe-area-right)) max(1rem, var(--safe-area-bottom)) max(1rem, var(--safe-area-left));
+      /* [नया] नेविगेशन बार के लिए नीचे जगह छोड़ी गई है */
+      padding: max(1rem, var(--safe-area-top)) max(1rem, var(--safe-area-right)) calc(65px + max(1rem, var(--safe-area-bottom))) max(1rem, var(--safe-area-left));
       transition: background-image 0.3s ease;
       -webkit-tap-highlight-color: transparent;
     }
-
-    /* DELETED: body.advanced-bg CSS block
-      REASON: User wants one consistent theme.
-    */
 
     .container {
       width: 100%;
@@ -128,14 +118,12 @@
       left: 4px;
       bottom: 4px;
       width: calc(50% - 4px);
-      /* NEW: Uses the new theme gradient */
       background: linear-gradient(135deg, var(--primary), var(--primary-light));
       border-radius: calc(var(--border-radius-sm) - 4px);
       transition: transform 0.3s ease;
       z-index: 1;
     }
 
-    /* This rule is now redundant, but harmless. Kept for function. */
     .mode-switch.advanced-mode::after {
       transform: translateX(100%);
     }
@@ -175,7 +163,6 @@
       box-shadow: var(--shadow-lg);
     }
 
-    /* Delete button - UNCHANGED (uses --error) */
     .delete-card-btn {
       position: absolute;
       top: -10px;
@@ -352,7 +339,6 @@
       left: 4px;
       bottom: 4px;
       width: calc(50% - 4px);
-      /* NEW: Uses the new theme gradient */
       background: linear-gradient(135deg, var(--primary), var(--primary-light));
       border-radius: calc(var(--border-radius-sm) - 4px);
       transition: transform 0.2s ease;
@@ -407,7 +393,6 @@
       left: 0;
       right: 0;
       height: 2px;
-      /* NEW: Uses primary gradient */
       background: linear-gradient(90deg, var(--primary), var(--primary-light));
       transform: translateX(-100%);
       transition: transform 0.2s ease;
@@ -476,7 +461,6 @@
     .add-more-btn {
       width: 100%;
       padding: 0.875rem;
-      /* NEW: Re-themed from green to primary */
       background: rgba(99, 102, 241, 0.1);
       border: 2px dashed var(--primary);
       border-radius: var(--border-radius-sm);
@@ -508,7 +492,6 @@
 
     /* Grand Total - optimized */
     .grand-total {
-      /* NEW: Re-themed from green to primary gradient */
       background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
       border: 1px solid var(--glass-border);
       border-radius: var(--border-radius);
@@ -635,7 +618,6 @@
       top: calc(20px + var(--safe-area-top));
       left: 50%;
       transform: translateX(-50%) translateY(-60px);
-      /* NEW: Re-themed to green (success) */
       background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(6, 182, 212, 0.95));
       border-radius: var(--border-radius-sm);
       color: white;
@@ -729,6 +711,63 @@
 
     /* Remove orbs and heavy effects for performance - UNCHANGED */
     .orb { display: none; }
+    
+    /* --- [नया] Bottom Navigation Bar Styles --- */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: calc(65px + var(--safe-area-bottom)); /* iOS safe area के लिए */
+        background: var(--header-glass); /* Aapke header se matching glass */
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-top: 1px solid var(--card-border);
+        display: flex;
+        z-index: 1000;
+        padding-bottom: var(--safe-area-bottom); /* iOS safe area padding */
+    }
+
+    .nav-link {
+        flex: 1; /* Sabko barabar space dega */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: var(--text-secondary); /* Inactive color */
+        font-size: 10px;
+        font-weight: 500;
+        position: relative;
+        transition: color 0.2s ease, transform 0.1s ease;
+        -webkit-tap-highlight-color: transparent; /* Tap par flash hatayega */
+    }
+
+    .nav-link:active {
+        transform: scale(0.96); /* Tap karne par chhota effect */
+    }
+
+    .nav-icon {
+        font-size: 22px;
+        margin-bottom: 4px;
+    }
+
+    .nav-link.active {
+        color: var(--primary); /* Active color */
+    }
+
+    /* Active page ke liye chhota indicator */
+    .nav-link.active::before {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 30px;
+        height: 3px;
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        border-radius: 0 0 3px 3px;
+    }
   </style>
 </head>
 <body>
@@ -1408,5 +1447,28 @@ Weight: ${card.querySelector('.weight-result').textContent} tons`;
     console.log('TilesPro Calculator - High Performance Version Ready! ⚡🚀');
 
   </script>
+
+<nav class="bottom-nav">
+    <a href="../index.html" class="nav-link">
+        <i class="nav-icon fas fa-home"></i>
+        <span>Home</span>
+    </a>
+
+    <a href="../project-price/index.html" class="nav-link">
+        <i class="nav-icon fas fa-list-alt"></i>
+        <span>Price List</span>
+    </a>
+
+    <a href="../project-calculator/index.html" class="nav-link active">
+        <i class="nav-icon fas fa-calculator"></i>
+        <span>Calculator</span>
+    </a>
+
+    <a href="../project-tilesearch/index.html" class="nav-link">
+        <i class="nav-icon fas fa-search"></i>
+        <span>Tiles</span>
+    </a>
+</nav>
+
 </body>
 </html>
