@@ -691,6 +691,7 @@
     }
     
     // [बदलाव 5] macOS जैसा Fly-to-Cart एनीमेशन
+    // [बदलाव] macOS जैसा Fly-to-Cart एनीमेशन
     function flyToCart(event) {
         try {
             const card = event.target.closest('.tile-card');
@@ -698,15 +699,16 @@
             if (!img) return;
 
             const fab = document.getElementById('cart-fab');
+            if (!fab) return; // कार्ट बटन नहीं मिला
+            
             const fabRect = fab.getBoundingClientRect();
             const imgRect = img.getBoundingClientRect();
             
             // 1. क्लोन बनाएं
             const clone = img.cloneNode(true);
-            clone.classList.add('fly-to-cart-clone');
+            clone.classList.add('fly-to-cart-clone'); // CSS transition इसी क्लास में है
             
             // 2. क्लोन को स्टाइल करें (शुरुआती पोजीशन)
-            clone.style.position = 'fixed';
             clone.style.top = `${imgRect.top}px`;
             clone.style.left = `${imgRect.left}px`;
             clone.style.width = `${imgRect.width}px`;
@@ -715,26 +717,28 @@
             
             document.body.appendChild(clone);
 
-            // 3. एनीमेशन शुरू करें (टारगेट पोजीशन)
-            requestAnimationFrame(() => {
-                clone.style.top = `${fabRect.top + fabRect.height / 4}px`;
-                clone.style.left = `${fabRect.left + fabRect.width / 4}px`;
-                clone.style.width = '20px';
-                clone.style.height = 'auto';
+            // 3. [नया] एनीमेशन को विश्वसनीय रूप से शुरू करें
+            // ब्राउज़र को क्लोन को "पेंट" करने के लिए एक पल दें
+            setTimeout(() => {
+                clone.style.top = `${fabRect.top + fabRect.height / 2 - 10}px`; // बटन के केंद्र में
+                clone.style.left = `${fabRect.left + fabRect.width / 2 - 10}px`; // बटन के केंद्र में
+                clone.style.width = '20px'; // छोटा करें
+                clone.style.height = '20px'; // छोटा करें
                 clone.style.opacity = '0';
                 clone.style.transform = 'scale(0.1)';
-            });
+            }, 10); // 10ms का छोटा सा डिले
 
             // 4. क्लोन को हटा दें
             setTimeout(() => {
-                clone.remove();
-            }, 600); // 600ms (एनीमेशन टाइम)
+                if (clone.parentNode) {
+                    clone.parentNode.removeChild(clone);
+                }
+            }, 610); // 600ms (एनीमेशन) + 10ms (डिले)
 
         } catch (err) {
             console.warn('Fly-to-cart animation failed:', err);
         }
     }
-
 
     function toggleSelection(event, designName) {
       event.stopPropagation();
