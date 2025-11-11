@@ -406,11 +406,11 @@
     
     /* कार्ड पर नया सलेक्ट बटन (हल्का) */
     .select-btn {
-      background: linear-gradient(135deg, var(--primary), var(--primary-light)); /* [बदलाव] */
+      background: var(--glass-hover); /* हल्का बैकग्राउंड */
     }
-.select-btn .fas {
-      color: white; /* [बदलाव] सफेद किया */
-      font-size: 15px; /* [बदलाव] थोड़ा छोटा किया */
+    .select-btn .fas {
+      color: var(--text-primary); /* सिर्फ आइकन को प्राइमरी कलर दिया */
+      font-size: 16px;
       transition: transform 0.2s ease;
     }
     
