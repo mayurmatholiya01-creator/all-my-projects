@@ -1,4 +1,4 @@
-const CACHE_NAME = 'all-my-projects-v3'; // Version wahi rakha hai
+const CACHE_NAME = 'all-my-projects-v3.01'; // Version wahi rakha hai
 
 const ASSETS_TO_CACHE = [
     './', 
