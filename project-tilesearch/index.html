@@ -34,68 +34,74 @@
       --safe-area-bottom: env(safe-area-inset-bottom);
       --header-glass: rgba(10, 10, 11, 0.7);
       --card-border: rgba(255, 255, 255, 0.1);
+      
+      /* [नया] कार्ट के लिए कलर्स */
+      --success: #10b981;
+      --success-light: #34d399;
+      --error: #ef4444;
+      --warning: #f59e0b;
     }
 
     .app-header {
-  position: sticky; 
-  top: 0;
-  width: 100%;
-  padding: 15px 20px;
-  border-bottom: 1px solid var(--card-border);
-  z-index: 100;
-  overflow: hidden; 
+      position: sticky; 
+      top: 0;
+      width: 100%;
+      padding: 15px 20px;
+      border-bottom: 1px solid var(--card-border);
+      z-index: 100;
+      overflow: hidden; 
 
-  transition: transform 0.3s ease-out;
-  will-change: transform;
-}
+      transition: transform 0.3s ease-out;
+      will-change: transform;
+    }
 
-.app-header.header-hidden {
-    transform: translateY(-100%);
-}
+    .app-header.header-hidden {
+        transform: translateY(-100%);
+    }
 
-.app-header::before {
-    content: '';
-    position: absolute;
-    z-index: -2;
-    top: -100%; 
-    left: -100%;
-    width: 300%;
-    height: 300%;
-    background: conic-gradient(
-        from 180deg at 50% 50%,
-        var(--primary-glow-1) 0%, 
-        var(--primary-glow-2) 33%, 
-        var(--primary-glow-3) 66%, 
-        var(--primary-glow-1) 100%
-    );
-    opacity: 0.3;
-}
+    .app-header::before {
+        content: '';
+        position: absolute;
+        z-index: -2;
+        top: -100%; 
+        left: -100%;
+        width: 300%;
+        height: 300%;
+        background: conic-gradient(
+            from 180deg at 50% 50%,
+            var(--primary-glow-1) 0%, 
+            var(--primary-glow-2) 33%, 
+            var(--primary-glow-3) 66%, 
+            var(--primary-glow-1) 100%
+        );
+        opacity: 0.3;
+    }
 
-.app-header::after {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    inset: 0; 
-    background: var(--header-glass); 
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-}
+    .app-header::after {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        inset: 0; 
+        background: var(--header-glass); 
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
 
-.header-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 600;
-}
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+    }
 
-.logo-container { display: flex; align-items: center; gap: 10px; }
-.logo-container img { height: 35px; width: auto; object-fit: contain; }
+    .logo-container { display: flex; align-items: center; gap: 10px; }
+    .logo-container img { height: 35px; width: auto; object-fit: contain; }
 
-.header-icon-btn { background: transparent; border: none; cursor: pointer; padding: 5px; line-height: 0; }
-.header-icon-btn svg { width: 20px; height: 20px; stroke: var(--text-secondary); transition: all 0.3s ease; }
-.header-icon-btn:hover svg { stroke: var(--text-primary); transform: rotate(90deg); }
+    .header-icon-btn { background: transparent; border: none; cursor: pointer; padding: 5px; line-height: 0; }
+    .header-icon-btn svg { width: 20px; height: 20px; stroke: var(--text-secondary); transition: all 0.3s ease; }
+    .header-icon-btn:hover svg { stroke: var(--text-primary); transform: rotate(90deg); }
   
     * { margin:0; padding:0; box-sizing:border-box }
     body {
@@ -232,7 +238,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.2s ease;
+      transition: all 0.2s ease; /* बदला गया */
       position: relative;
       overflow: hidden;
       box-shadow: var(--shadow);
@@ -476,6 +482,149 @@
         border-radius: 0 0 3px 3px;
     }
     /* --- END OF NAV BAR STYLES --- */
+    
+    /* === [नया] CART STYLES === */
+    
+    /* कार्ड पर नया सलेक्ट बटन */
+    .select-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    }
+    
+    .select-btn.selected {
+      background: linear-gradient(135deg, var(--success), var(--success-light)); /* Green */
+    }
+    
+    .select-btn .fas {
+      color: white;
+      font-size: 16px;
+    }
+    
+    /* कार्ड की सलेक्टेड स्टेट */
+    .tile-card.selected {
+      border-color: var(--primary);
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+    }
+    
+    /* फ्लोटिंग कार्ट बटन (FAB) */
+    .cart-fab {
+      position: fixed;
+      bottom: calc(85px + var(--safe-area-bottom)); /* Nav bar से 20px ऊपर */
+      right: max(20px, env(safe-area-inset-right));
+      z-index: 1001;
+      
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: none; /* शुरुआत में छिपा हुआ */
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-lg);
+      transform: scale(0);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .cart-fab.show {
+      display: flex;
+      transform: scale(1);
+    }
+    .cart-fab:hover {
+      transform: scale(1.1);
+    }
+    .cart-fab .fas {
+      font-size: 20px;
+    }
+    #cart-count {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--error);
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--bg-primary);
+    }
+
+    /* कार्ट Modal के अंदर का कंटेंट */
+    #cart-modal-content {
+      padding: 20px;
+      padding-top: 80px; /* हेडर की जगह */
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .cart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .cart-item {
+      position: relative;
+    }
+    .cart-item img {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: var(--border-radius-sm);
+    }
+    .cart-item-remove {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--error);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 20px;
+      text-align: center;
+    }
+    
+    .cart-modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .cart-action-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: var(--border-radius-sm);
+      color: white;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .cart-action-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .cart-action-download {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    }
+    .cart-action-share {
+      background: linear-gradient(135deg, var(--success), var(--success-light));
+    }
+    .cart-action-clear {
+      background: linear-gradient(135deg, var(--warning), #f97316);
+    }
+    /* === [नया] END CART STYLES === */
   </style>
 </head>
 <body>
@@ -544,9 +693,56 @@
     </div>
   </div>
 
+  <div id="cart-fab" class="cart-fab" onclick="openCartModal()">
+    <i class="fas fa-shopping-cart"></i>
+    <span id="cart-count">0</span>
+  </div>
+
+  <div id="cartModalOverlay" class="modal-overlay">
+    <div class="modal-content" id="cart-modal-content">
+      </div>
+  </div>
   <script>
-    // --- ALL JAVASCRIPT IS 100% UNCHANGED ---
-    
+    // --- Naya Header JS ---
+    window.addEventListener('DOMContentLoaded', () => {
+        try {
+            if (typeof logoA_base64 !== 'undefined') {
+                document.getElementById('logoA').src = logoA_base64;
+            }
+            if (typeof logoGranicer2_base64 !== 'undefined') {
+                document.getElementById('logoGranicer2').src = logoGranicer2_base64;
+            }
+        } catch (e) {
+            console.error("Logo base64 data nahi mila. imagedata.js loaded hai?", e);
+        }
+
+        document.getElementById('refresh-btn').addEventListener('click', () => {
+            location.reload();
+        });
+
+        const header = document.querySelector('.app-header');
+        if (header) {
+            let lastScrollY = window.scrollY;
+
+            window.addEventListener('scroll', () => {
+                const currentScrollY = window.scrollY;
+
+                if (currentScrollY > lastScrollY && currentScrollY > 50) {
+                    header.classList.add('header-hidden');
+                } else {
+                    header.classList.remove('header-hidden');
+                }
+
+                lastScrollY = currentScrollY;
+            }, { passive: true });
+        }
+
+        // --- बाकी का जावास्क्रिप्ट लोड करें ---
+        loadApp();
+    }); 
+    // --- End Naya Header JS ---
+
+    // --- मूल app ऑब्जेक्ट ---
     const app = {
       data: [],
       filteredData: [],
@@ -567,43 +763,232 @@
         modalWhatsapp: document.getElementById('modalWhatsapp')
       }
     };
+    
+    // --- [नया] CART LOGIC ---
+    let cart = []; // यह हमारा नया कार्ट/सिलेक्शन ऐरे है
+    
+    // कार्ट बटन को अपडेट करने का फंक्शन
+    function updateCartButton() {
+      const fab = document.getElementById('cart-fab');
+      const count = document.getElementById('cart-count');
+      
+      if (cart.length > 0) {
+        fab.classList.add('show');
+        count.textContent = cart.length;
+      } else {
+        fab.classList.remove('show');
+      }
+    }
+
+    // आइटम को कार्ट में जोड़ने या हटाने का फंक्शन
+    function toggleSelection(event, designName) {
+      event.stopPropagation(); // कार्ड के क्लिक को रोकता है
+      
+      const tile = app.data.find(t => t.design_name === designName);
+      if (!tile) return;
+
+      const card = event.target.closest('.tile-card');
+      const button = event.target.closest('.select-btn');
+
+      const indexInCart = cart.findIndex(item => item.design_name === designName);
+
+      if (indexInCart > -1) {
+        // --- कार्ट से हटाएं ---
+        cart.splice(indexInCart, 1);
+        button.innerHTML = '<i class="fas fa-plus"></i>';
+        button.classList.remove('selected');
+        card.classList.remove('selected');
+      } else {
+        // --- कार्ट में जोड़ें ---
+        cart.push(tile);
+        button.innerHTML = '<i class="fas fa-check"></i>';
+        button.classList.add('selected');
+        card.classList.add('selected');
+      }
+      
+      updateCartButton();
+    }
+
+    // कार्ट Modal खोलने का फंक्शन
+    function openCartModal() {
+      const modal = document.getElementById('cartModalOverlay');
+      const content = document.getElementById('cart-modal-content');
+      
+      let gridHTML = '';
+      cart.forEach(tile => {
+        gridHTML += `
+          <div class="cart-item">
+            <img src="${getImageUrl(tile.url)}" alt="${tile.design_name}" />
+            <button class="cart-item-remove" onclick="removeCartItem('${tile.design_name}')">✕</button>
+          </div>
+        `;
+      });
+
+      content.innerHTML = `
+        <div class="modal-header">
+          <div class="modal-caption">Selected Items (${cart.length})</div>
+          <button class="close-btn" onclick="closeCartModal()">✕</button>
+        </div>
+        <div class="cart-grid">
+          ${gridHTML}
+        </div>
+        <div class="cart-modal-actions">
+          <button class="cart-action-btn cart-action-download" onclick="downloadAllSelected()">
+            <i class="fas fa-download"></i> Download All
+          </button>
+          <button class="cart-action-btn cart-action-share" onclick="shareAllSelected()">
+            <i class="fab fa-whatsapp"></i> Share All
+          </button>
+          <button class="cart-action-btn cart-action-clear" onclick="clearCart()">
+            <i class="fas fa-trash"></i> Clear All
+          </button>
+        </div>
+      `;
+      
+      modal.style.display = 'flex';
+      document.body.classList.add('modal-open');
+    }
+
+    function closeCartModal() {
+      document.getElementById('cartModalOverlay').style.display = 'none';
+      document.body.classList.remove('modal-open');
+    }
+
+    // कार्ट से एक आइटम हटाना (जब कार्ट पॉप-अप में हो)
+    function removeCartItem(designName) {
+      // 1. कार्ट ऐरे से हटाएं
+      const indexInCart = cart.findIndex(item => item.design_name === designName);
+      if (indexInCart > -1) {
+        cart.splice(indexInCart, 1);
+      }
+      
+      // 2. मुख्य ग्रिड में UI अपडेट करें (अगर कार्ड अभी दिख रहा है)
+      const card = Array.from(document.querySelectorAll('.tile-card')).find(c => c.innerHTML.includes(`'${designName}'`));
+      if (card) {
+        const button = card.querySelector('.select-btn');
+        button.innerHTML = '<i class="fas fa-plus"></i>';
+        button.classList.remove('selected');
+        card.classList.remove('selected');
+      }
+      
+      // 3. कार्ट बटन और Modal को री-रेंडर करें
+      updateCartButton();
+      if (cart.length > 0) {
+        openCartModal(); // Modal को नए कार्ट के साथ रीफ्रेश करें
+      } else {
+        closeCartModal(); // अगर कार्ट खाली है तो बंद करें
+      }
+    }
+
+    // पूरा कार्ट खाली करें
+    function clearCart() {
+      cart = []; // ऐरे खाली करें
+      
+      // सभी कार्ड्स से .selected क्लास हटाएं
+      document.querySelectorAll('.tile-card.selected').forEach(card => {
+        card.classList.remove('selected');
+        const button = card.querySelector('.select-btn');
+        if (button) {
+          button.innerHTML = '<i class="fas fa-plus"></i>';
+          button.classList.remove('selected');
+        }
+      });
+      
+      updateCartButton();
+      closeCartModal();
+    }
+
+    // --- [नया] बैच एक्शन लॉजिक ---
+
+    // 1. सब डाउनलोड करें
+    function downloadAllSelected() {
+      if (cart.length === 0) return;
+      
+      alert(`Preparing to download ${cart.length} images.\n\nNOTE: Your browser might ask for permission to open multiple pop-ups. Please "Allow" it.`);
+      
+      cart.forEach((tile, index) => {
+        const downloadUrl = getDownloadUrl(tile.url);
+        // हर यूआरएल को थोड़ी देर से खोलें ताकि ब्राउज़र को समय मिले
+        setTimeout(() => {
+          window.open(downloadUrl, '_blank');
+        }, index * 300); // 300ms का गेप
+      });
+    }
+
+    // 2. सब शेयर करें (एडवांस तरीका)
+    async function shareAllSelected() {
+      if (cart.length === 0) return;
+
+      // 1. पहले टेक्स्ट फॉलबैक तैयार करें
+      let textFallback = 'Check out these tile designs:\n\n';
+      cart.forEach((tile, index) => {
+        textFallback += `${index + 1}. ${tile.design_name} (${tile.dimensions})\n${getDownloadUrl(tile.url)}\n\n`;
+      });
+
+      // 2. असली फ़ाइलें शेयर करने की कोशिश करें
+      try {
+        // --- लोडिंग इंडिकेटर दिखाएं ---
+        const shareBtn = document.querySelector('.cart-action-share');
+        shareBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sharing...';
+        shareBtn.disabled = true;
+
+        const files = await Promise.all(cart.map(async (tile) => {
+          const response = await fetch(getFullImageUrl(tile.url)); // पूरी इमेज यूआरएल
+          const blob = await response.blob();
+          return new File([blob], `${tile.design_name}.jpg`, { type: 'image/jpeg' });
+        }));
+
+        // 3. चेक करें कि क्या ब्राउज़र फ़ाइलें शेयर कर सकता है
+        if (navigator.share && navigator.canShare({ files: files })) {
+          await navigator.share({
+            title: 'Tile Designs',
+            text: `Sharing ${files.length} tile designs.`,
+            files: files
+          });
+          // --- सफलता पर बटन रीसेट करें ---
+          shareBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Share All';
+          shareBtn.disabled = false;
+        } else {
+          // 4. अगर फ़ाइलें शेयर नहीं हो सकतीं (जैसे डेस्कटॉप पर)
+          throw new Error('File sharing not supported.');
+        }
+      } catch (error) {
+        // --- एरर पर बटन रीसेट करें ---
+        const shareBtn = document.querySelector('.cart-action-share');
+        if(shareBtn) { // चेक करें कि modal अभी भी खुला है या नहीं
+            shareBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Share All';
+            shareBtn.disabled = false;
+        }
+        
+        console.error('File share failed, falling back to text:', error);
+        
+        // 5. टेक्स्ट फॉलबैक का उपयोग करें
+        if (navigator.share) { // टेक्स्ट शेयर करने का प्रयास करें
+          navigator.share({ title: 'Tile Designs', text: textFallback });
+        } else { // अंतिम फॉलबैक: WhatsApp लिंक
+          window.open(`https://wa.me/?text=${encodeURIComponent(textFallback)}`, '_blank');
+        }
+      }
+    }
+    // --- [नया] END CART LOGIC ---
+    
 
     // PWA Install Logic
     let deferredPrompt;
-    const installPrompt = document.getElementById('installPrompt');
-    const installBtn = document.getElementById('installBtn');
-    const installDismiss = document.getElementById('installDismiss');
-
+    
+    // (PWA के बाकी फंक्शन अपरिवर्तित)
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      
+      const installPrompt = document.getElementById('installPrompt');
       if (!localStorage.getItem('install-dismissed')) {
         setTimeout(() => {
           installPrompt.classList.add('show');
         }, 3000);
       }
     });
-
-    installBtn.addEventListener('click', async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        deferredPrompt = null;
-        installPrompt.classList.remove('show');
-      }
-    });
-
-    installDismiss.addEventListener('click', () => {
-      installPrompt.classList.remove('show');
-      localStorage.setItem('install-dismissed', 'true');
-    });
-
-    window.addEventListener('appinstalled', () => {
-      installPrompt.classList.remove('show');
-      console.log('PWA installed successfully');
-    });
-
+    
+    // (बाकी मूल जावास्क्रिप्ट फंक्शन अपरिवर्तित)
     function getImageUrl(driveUrl) {
       const id = driveUrl?.match(/[-\w]{25,}/)?.[0];
       return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w400` : '';
@@ -683,6 +1068,7 @@
       applyFilters();
     }
 
+    // --- [संशोधित] renderTiles फंक्शन ---
     function renderTiles() {
       const tilesToShow = app.filteredData.slice(0, app.displayedCount);
       
@@ -694,13 +1080,20 @@
       }
 
       app.elements.emptyState.style.display = 'none';
+      
       app.elements.tilesGrid.innerHTML = tilesToShow.map(tile => {
         const imageUrl = getImageUrl(tile.url);
         const downloadUrl = getDownloadUrl(tile.url);
         const fullUrl = getFullImageUrl(tile.url);
         
+        // चेक करें कि क्या यह आइटम पहले से कार्ट में है
+        const isInCart = cart.some(item => item.design_name === tile.design_name);
+        const btnIcon = isInCart ? '<i class="fas fa-check"></i>' : '<i class="fas fa-plus"></i>';
+        const btnClass = isInCart ? 'action-btn select-btn selected' : 'action-btn select-btn';
+        const cardClass = isInCart ? 'tile-card selected' : 'tile-card';
+
         return `
-          <div class="tile-card" onclick="openModal('${tile.design_name}', '${tile.dimensions}', '${fullUrl}', '${downloadUrl}')">
+          <div class="${cardClass}" onclick="openModal('${tile.design_name}', '${tile.dimensions}', '${fullUrl}', '${downloadUrl}')">
             <div class="tile-image">
               ${imageUrl ? `<img src="${imageUrl}" alt="${tile.design_name}" loading="lazy" />` : 
                 '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#8b949e">No Image</div>'}
@@ -711,6 +1104,10 @@
                 <p>${tile.dimensions}</p>
               </div>
               <div class="tile-actions">
+                <button class="${btnClass}" onclick="toggleSelection(event, '${tile.design_name}')" 
+                        title="Select">
+                  ${btnIcon}
+                </button>
                 <button class="action-btn download-btn" onclick="event.stopPropagation();window.open('${downloadUrl}','_blank')" 
                         title="Download"></button>
                 <button class="action-btn whatsapp-btn" onclick="event.stopPropagation();shareToWhatsApp('${tile.design_name}','${fullUrl}')" 
@@ -723,6 +1120,7 @@
       app.elements.loadMoreBtn.style.display = 
         app.displayedCount < app.filteredData.length ? 'block' : 'none';
     }
+    // --- [संशोधित] END ---
 
     function applyFilters() {
       const searchTerm = app.elements.searchInput.value.toLowerCase().trim();
@@ -759,6 +1157,7 @@
       document.body.classList.remove('modal-open');
     }
 
+    // --- (यह आपका मूल एडवांस शेयर फंक्शन है) ---
     async function shareToWhatsApp(name, url) {
       try {
         const response = await fetch(url);
@@ -775,43 +1174,7 @@
         window.open(url, '_blank');
       }
     }
-
-    app.elements.searchInput.addEventListener('input', (e) => {
-      const query = e.target.value;
-      if (query.length > 1) {
-        const suggestions = getSuggestions(query);
-        showSuggestions(suggestions);
-      } else {
-        app.elements.suggestions.style.display = 'none';
-      }
-      applyFilters();
-    });
-
-    app.elements.sizeFilter.addEventListener('change', () => {
-      app.elements.searchInput.value = '';
-      app.elements.suggestions.style.display = 'none';
-      applyFilters();
-    });
-
-    app.elements.loadMoreBtn.addEventListener('click', loadMore);
-
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.control-group')) {
-        app.elements.suggestions.style.display = 'none';
-      }
-    });
-
-    app.elements.modal.addEventListener('click', (e) => {
-      if (e.target === app.elements.modal) closeModal();
-    });
-
-    // *** YAHAN SE 'E' HATA DIYA GAYA HAI ***
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
-    });
-
-
-
+    
     async function loadData() {
       try {
         const csvUrl = 'https://docs.google.com/spreadsheets/d/1oHpJw-_zLdf_jt2SL5l7Hpiu8nSK9gvXfLEVvLlz5cM/export?format=csv&gid=622851011&_=' + Date.now();
@@ -840,44 +1203,71 @@
         app.elements.emptyState.innerHTML = '<h3>Failed to load tiles</h3><p>Please check your connection and try again</p>';
       }
     }
-// --- Naya Header JS ---
-window.addEventListener('DOMContentLoaded', () => {
+    
+    // --- [नया] ऐप को शुरू करने वाला फंक्शन ---
+    function loadApp() {
+        const installPromptEl = document.getElementById('installPrompt');
+        const installBtn = document.getElementById('installBtn');
+        const installDismiss = document.getElementById('installDismiss');
 
-    try {
-        if (typeof logoA_base64 !== 'undefined') {
-            document.getElementById('logoA').src = logoA_base64;
+        if(installBtn) {
+            installBtn.addEventListener('click', async () => {
+              if (deferredPrompt) {
+                deferredPrompt.prompt();
+                await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                installPromptEl.classList.remove('show');
+              }
+            });
         }
-        if (typeof logoGranicer2_base64 !== 'undefined') {
-            document.getElementById('logoGranicer2').src = logoGranicer2_base64;
+        
+        if(installDismiss) {
+            installDismiss.addEventListener('click', () => {
+              installPromptEl.classList.remove('show');
+              localStorage.setItem('install-dismissed', 'true');
+            });
         }
-    } catch (e) {
-        console.error("Logo base64 data nahi mila. imagedata.js loaded hai?", e);
+        
+        window.addEventListener('appinstalled', () => {
+          if(installPromptEl) installPromptEl.classList.remove('show');
+          console.log('PWA installed successfully');
+        });
+
+        app.elements.searchInput.addEventListener('input', (e) => {
+          const query = e.target.value;
+          if (query.length > 1) {
+            const suggestions = getSuggestions(query);
+            showSuggestions(suggestions);
+          } else {
+            app.elements.suggestions.style.display = 'none';
+          }
+          applyFilters();
+        });
+
+        app.elements.sizeFilter.addEventListener('change', () => {
+          app.elements.searchInput.value = '';
+          app.elements.suggestions.style.display = 'none';
+          applyFilters();
+        });
+
+        app.elements.loadMoreBtn.addEventListener('click', loadMore);
+
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.control-group')) {
+            app.elements.suggestions.style.display = 'none';
+          }
+        });
+
+        app.elements.modal.addEventListener('click', (e) => {
+          if (e.target === app.elements.modal) closeModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeModal();
+        });
+
+        loadData();
     }
-
-    document.getElementById('refresh-btn').addEventListener('click', () => {
-        location.reload();
-    });
-
-    const header = document.querySelector('.app-header');
-    if (header) {
-        let lastScrollY = window.scrollY;
-
-        window.addEventListener('scroll', () => {
-            const currentScrollY = window.scrollY;
-
-            if (currentScrollY > lastScrollY && currentScrollY > 50) {
-                header.classList.add('header-hidden');
-            } else {
-                header.classList.remove('header-hidden');
-            }
-
-            lastScrollY = currentScrollY;
-        }, { passive: true });
-    }
-
-}); 
-// --- End Naya Header JS ---
-    loadData();
   </script>
   
   <nav class="bottom-nav">
