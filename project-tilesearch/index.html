@@ -50,55 +50,31 @@
       border-bottom: 1px solid var(--card-border);
       z-index: 100;
       overflow: hidden; 
-
       transition: transform 0.3s ease-out;
       will-change: transform;
     }
-
-    .app-header.header-hidden {
-        transform: translateY(-100%);
-    }
-
+    .app-header.header-hidden { transform: translateY(-100%); }
     .app-header::before {
-        content: '';
-        position: absolute;
-        z-index: -2;
-        top: -100%; 
-        left: -100%;
-        width: 300%;
-        height: 300%;
+        content: ''; position: absolute; z-index: -2; top: -100%; left: -100%;
+        width: 300%; height: 300%;
         background: conic-gradient(
             from 180deg at 50% 50%,
-            var(--primary-glow-1) 0%, 
-            var(--primary-glow-2) 33%, 
-            var(--primary-glow-3) 66%, 
-            var(--primary-glow-1) 100%
+            var(--primary-glow-1) 0%, var(--primary-glow-2) 33%, 
+            var(--primary-glow-3) 66%, var(--primary-glow-1) 100%
         );
         opacity: 0.3;
     }
-
     .app-header::after {
-        content: '';
-        position: absolute;
-        z-index: -1;
-        inset: 0; 
+        content: ''; position: absolute; z-index: -1; inset: 0; 
         background: var(--header-glass); 
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     }
-
     .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 600;
+      max-width: 1200px; margin: 0 auto; display: flex;
+      justify-content: space-between; align-items: center; font-weight: 600;
     }
-
     .logo-container { display: flex; align-items: center; gap: 10px; }
     .logo-container img { height: 35px; width: auto; object-fit: contain; }
-
     .header-icon-btn { background: transparent; border: none; cursor: pointer; padding: 5px; line-height: 0; }
     .header-icon-btn svg { width: 20px; height: 20px; stroke: var(--text-secondary); transition: all 0.3s ease; }
     .header-icon-btn:hover svg { stroke: var(--text-primary); transform: rotate(90deg); }
@@ -110,19 +86,18 @@
       color: var(--text-primary); 
       padding:20px; min-height:100vh;
       line-height:1.6; 
-      
-      /* Landing page background effect */
       background-image: radial-gradient(at 50% 0%, hsla(228,100%,74%,0.1) 0, transparent 50%);
-      
-      /* PWA Safe Area Support */
       padding-top: max(20px, env(safe-area-inset-top));
-      /* NAV BAR KE LIYE PADDING-BOTTOM BADLA GAYA */
       padding-bottom: calc(65px + max(20px, env(safe-area-inset-bottom)));
       padding-left: max(20px, env(safe-area-inset-left));
       padding-right: max(20px, env(safe-area-inset-right));
     }
     
     body.modal-open .app-container { 
+      filter:blur(4px) brightness(0.7); 
+      transition:filter 0.3s ease;
+    }
+    body.modal-open .app-header {
       filter:blur(4px) brightness(0.7); 
       transition:filter 0.3s ease;
     }
@@ -228,7 +203,6 @@
       display:flex; gap:8px; flex-shrink:0; margin-left:12px;
     }
     
-    /* NEW: Button style from index(50) for consistency */
     .action-btn {
       width: 40px;
       height: 40px;
@@ -238,7 +212,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease; /* बदला गया */
+      transition: all 0.2s ease;
       position: relative;
       overflow: hidden;
       box-shadow: var(--shadow);
@@ -250,48 +224,31 @@
       transform: translateY(0) scale(1);
     }
     
-    /* Download Icon (using new button style) */
     .download-btn {
       background: linear-gradient(135deg, var(--primary), var(--primary-light));
       background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3e%3cpath d='M12 16l-5-5h3V4h4v7h3l-5 5z'/%3e%3cpath d='M5 20h14v2H5v-2z'/%3e%3c/svg%3e");
       background-size:18px; background-repeat:no-repeat; background-position:center;
     }
-
-    /* WhatsApp Icon (using new button style) */
     .whatsapp-btn {
       background: linear-gradient(135deg, #25D366, #128C7E);
       background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3e%3cpath d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488'/%3e%3c/svg%3e");
       background-size:18px; background-repeat:no-repeat; background-position:center;
     }
 
-    /* Modal buttons with same style */
+    /* Modal buttons */
     .modal-action-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.2s ease;
-      position: relative;
-      overflow: hidden;
+      width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s ease; position: relative; overflow: hidden;
       box-shadow: var(--shadow);
     }
-    .modal-action-btn:hover {
-      transform: translateY(-2px) scale(1.05);
-    }
-    .modal-action-btn:active {
-      transform: translateY(0) scale(1);
-    }
-    
+    .modal-action-btn:hover { transform: translateY(-2px) scale(1.05); }
+    .modal-action-btn:active { transform: translateY(0) scale(1); }
     .modal-download-btn {
       background: linear-gradient(135deg, var(--primary), var(--primary-light));
       background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3e%3cpath d='M12 16l-5-5h3V4h4v7h3l-5 5z'/%3e%3cpath d='M5 20h14v2H5v-2z'/%3e%3c/svg%3e");
       background-size:18px; background-repeat:no-repeat; background-position:center;
     }
-    
     .modal-whatsapp-btn {
       background: linear-gradient(135deg, #25D366, #128C7E);
       background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3e%3cpath d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488'/%3e%3c/svg%3e");
@@ -300,7 +257,6 @@
 
     .load-more {
       display:block; margin:0 auto; padding:16px 32px;
-      /* NEW: Re-themed */
       background:linear-gradient(135deg, var(--primary), var(--primary-light));
       border:none; border-radius: var(--border-radius-sm); color:#fff; font-size:16px; font-weight:600;
       cursor:pointer; transition:all 0.3s; text-transform:uppercase; letter-spacing:0.5px;
@@ -332,7 +288,7 @@
     
     .modal-header {
       position:absolute; top:0; left:0; right:0; z-index:10;
-      background: rgba(30, 30, 35, 0.75); /* var(--glass-hover) with more opacity */
+      background: rgba(30, 30, 35, 0.75);
       backdrop-filter:blur(12px);
       padding:12px 20px; 
       border-bottom: 1px solid var(--glass-border);
@@ -383,17 +339,10 @@
       backdrop-filter: blur(5px);
     }
     .install-prompt.show { display:flex; }
-    .install-prompt-content {
-      flex:1; margin-right:16px;
-    }
-    .install-prompt h3 {
-      font-size:0.9rem; color: var(--text-primary); margin-bottom:4px;
-    }
-    .install-prompt p {
-      font-size:0.8rem; color: var(--text-secondary);
-    }
+    .install-prompt-content { flex:1; margin-right:16px; }
+    .install-prompt h3 { font-size:0.9rem; color: var(--text-primary); margin-bottom:4px; }
+    .install-prompt p { font-size:0.8rem; color: var(--text-secondary); }
     .install-btn {
-      /* NEW: Re-themed */
       background: linear-gradient(135deg, var(--primary), var(--primary-light)); 
       color: var(--text-primary); 
       border:none; border-radius: var(--border-radius-sm);
@@ -419,84 +368,59 @@
       body { 
         padding:16px; 
         padding-top: max(16px, env(safe-area-inset-top)); 
-        /* NAV BAR KE LIYE PADDING-BOTTOM BADLA GAYA */
         padding-bottom: calc(65px + max(16px, env(safe-area-inset-bottom)));
       }
       .install-prompt { left:16px; right:16px; bottom:16px; }
     }
     
-    /* --- [नया] Bottom Navigation Bar Styles (JODA GAYA) --- */
+    /* --- Bottom Navigation Bar Styles --- */
     .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: calc(65px + var(--safe-area-bottom)); /* iOS safe area के लिए */
-        background: var(--header-glass); /* Aapke header se matching glass */
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        position: fixed; bottom: 0; left: 0; right: 0;
+        height: calc(65px + var(--safe-area-bottom)); 
+        background: var(--header-glass); 
+        backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
         border-top: 1px solid var(--card-border);
-        display: flex;
-        z-index: 1000;
-        padding-bottom: var(--safe-area-bottom); /* iOS safe area padding */
+        display: flex; z-index: 1000;
+        padding-bottom: var(--safe-area-bottom);
     }
-
     .nav-link {
-        flex: 1; /* Sabko barabar space dega */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-        color: var(--text-secondary); /* Inactive color */
-        font-size: 10px;
-        font-weight: 500;
-        position: relative;
-        transition: color 0.2s ease, transform 0.1s ease;
-        -webkit-tap-highlight-color: transparent; /* Tap par flash hatayega */
+        flex: 1; display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        text-decoration: none; color: var(--text-secondary); 
+        font-size: 10px; font-weight: 500;
+        position: relative; transition: color 0.2s ease, transform 0.1s ease;
+        -webkit-tap-highlight-color: transparent;
     }
-
-    .nav-link:active {
-        transform: scale(0.96); /* Tap karne par chhota effect */
-    }
-
-    .nav-icon {
-        font-size: 22px;
-        margin-bottom: 4px;
-    }
-
-    .nav-link.active {
-        color: var(--primary); /* Active color */
-    }
-
-    /* Active page ke liye chhota indicator */
+    .nav-link:active { transform: scale(0.96); }
+    .nav-icon { font-size: 22px; margin-bottom: 4px; }
+    .nav-link.active { color: var(--primary); }
     .nav-link.active::before {
-        content: '';
-        position: absolute;
-        top: 2px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 30px;
-        height: 3px;
+        content: ''; position: absolute; top: 2px; left: 50%;
+        transform: translateX(-50%); width: 30px; height: 3px;
         background: linear-gradient(135deg, var(--primary), var(--primary-light));
         border-radius: 0 0 3px 3px;
     }
     /* --- END OF NAV BAR STYLES --- */
     
-    /* === [नया] CART STYLES === */
+    /* === [बदलाव 1] CART STYLES === */
     
-    /* कार्ड पर नया सलेक्ट बटन */
+    /* कार्ड पर नया सलेक्ट बटन (हल्का) */
     .select-btn {
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      background: var(--glass-hover); /* हल्का बैकग्राउंड */
+    }
+    .select-btn .fas {
+      color: var(--primary); /* सिर्फ आइकन को प्राइमरी कलर दिया */
+      font-size: 16px;
+      transition: transform 0.2s ease;
     }
     
+    /* सलेक्टेड स्टेट (हरा) */
     .select-btn.selected {
       background: linear-gradient(135deg, var(--success), var(--success-light)); /* Green */
     }
-    
-    .select-btn .fas {
-      color: white;
-      font-size: 16px;
+    .select-btn.selected .fas {
+      color: white; /* आइकन को सफेद करें */
+      transform: scale(1.1);
     }
     
     /* कार्ड की सलेक्टेड स्टेट */
@@ -508,21 +432,14 @@
     /* फ्लोटिंग कार्ट बटन (FAB) */
     .cart-fab {
       position: fixed;
-      bottom: calc(85px + var(--safe-area-bottom)); /* Nav bar से 20px ऊपर */
+      bottom: calc(85px + var(--safe-area-bottom)); 
       right: max(20px, env(safe-area-inset-right));
       z-index: 1001;
-      
       background: linear-gradient(135deg, var(--primary), var(--primary-light));
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      display: none; /* शुरुआत में छिपा हुआ */
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: var(--shadow-lg);
+      color: white; border: none; border-radius: 50%;
+      width: 60px; height: 60px;
+      display: none; align-items: center; justify-content: center;
+      cursor: pointer; box-shadow: var(--shadow-lg);
       transform: scale(0);
       transition: transform 0.3s ease, opacity 0.3s ease;
     }
@@ -530,34 +447,56 @@
       display: flex;
       transform: scale(1);
     }
-    .cart-fab:hover {
-      transform: scale(1.1);
-    }
-    .cart-fab .fas {
-      font-size: 20px;
-    }
+    .cart-fab:hover { transform: scale(1.1); }
+    .cart-fab .fas { font-size: 20px; }
     #cart-count {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: var(--error);
-      color: white;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      font-size: 12px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: absolute; top: -5px; right: -5px;
+      background: var(--error); color: white;
+      border-radius: 50%; width: 24px; height: 24px;
+      font-size: 12px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
       border: 2px solid var(--bg-primary);
     }
 
-    /* कार्ट Modal के अंदर का कंटेंट */
+    /* [बदलाव 2] कार्ट Modal के अंदर का कंटेंट (बटन से जुड़ा हुआ) */
+    #cartModalOverlay {
+      /* केंद्र के बजाय अब कोने में अलाइन होगा */
+      align-items: flex-end;
+      justify-content: flex-end;
+      padding: 20px;
+      /* FAB और Nav Bar के लिए जगह */
+      padding-bottom: calc(160px + var(--safe-area-bottom)); 
+      padding-right: max(20px, env(safe-area-inset-right));
+    }
+    
+    #cartModalOverlay .modal-content {
+      /* मूल Modal से एनीमेशन हटाया */
+      animation: none; 
+      /* नया एनीमेशन और पोजीशन */
+      max-width: 400px;
+      max-height: 70vh;
+      transform-origin: bottom right; /* यह जादू है! */
+      animation: cartModalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    /* छिपने का एनीमेशन */
+    #cartModalOverlay.closing .modal-content {
+      animation: cartModalOut 0.3s ease-out forwards;
+    }
+    
+    @keyframes cartModalIn { 
+      from{opacity:0;transform:scale(0.1)} 
+      to{opacity:1;transform:scale(1)} 
+    }
+    @keyframes cartModalOut {
+      from { opacity: 1; transform: scale(1); }
+      to { opacity: 0; transform: scale(0.1); }
+    }
+    
     #cart-modal-content {
       padding: 20px;
       padding-top: 80px; /* हेडर की जगह */
-      max-height: 80vh;
+      max-height: 70vh;
       overflow-y: auto;
     }
     .cart-grid {
@@ -566,63 +505,37 @@
       gap: 10px;
       margin-bottom: 20px;
     }
-    .cart-item {
-      position: relative;
-    }
+    .cart-item { position: relative; }
     .cart-item img {
-      width: 100%;
-      height: 100px;
-      object-fit: cover;
+      width: 100%; height: 100px; object-fit: cover;
       border-radius: var(--border-radius-sm);
     }
     .cart-item-remove {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: var(--error);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
-      font-size: 12px;
-      line-height: 20px;
-      text-align: center;
+      position: absolute; top: -5px; right: -5px;
+      background: var(--error); color: white; border: none;
+      border-radius: 50%; width: 20px; height: 20px;
+      cursor: pointer; font-size: 12px; line-height: 20px; text-align: center;
     }
-    
-    .cart-modal-actions {
-      display: flex;
-      gap: 10px;
-    }
-    
+    .cart-modal-actions { display: flex; gap: 10px; }
     .cart-action-btn {
-      flex: 1;
-      padding: 12px;
-      border: none;
+      flex: 1; padding: 12px; border: none;
       border-radius: var(--border-radius-sm);
-      color: white;
-      font-size: 1em;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      color: white; font-size: 1em; font-weight: 600;
+      cursor: pointer; transition: all 0.3s ease;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
     }
-    .cart-action-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    .cart-action-download {
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    }
-    .cart-action-share {
-      background: linear-gradient(135deg, var(--success), var(--success-light));
-    }
-    .cart-action-clear {
-      background: linear-gradient(135deg, var(--warning), #f97316);
+    .cart-action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .cart-action-download { background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
+    .cart-action-share { background: linear-gradient(135deg, var(--success), var(--success-light)); }
+    .cart-action-clear { background: linear-gradient(135deg, var(--warning), #f97316); }
+    
+    /* [बदलाव 3] Fly-to-Cart एनीमेशन के लिए CSS */
+    .fly-to-cart-clone {
+      position: fixed;
+      z-index: 3000; /* सबसे ऊपर */
+      border-radius: var(--border-radius-sm);
+      transition: all 0.6s cubic-bezier(0.5, -0.5, 0.8, 0.5); /* macOS जैसा ईज़िंग */
+      pointer-events: none;
     }
     /* === [नया] END CART STYLES === */
   </style>
@@ -736,8 +649,6 @@
                 lastScrollY = currentScrollY;
             }, { passive: true });
         }
-
-        // --- बाकी का जावास्क्रिप्ट लोड करें ---
         loadApp();
     }); 
     // --- End Naya Header JS ---
@@ -764,10 +675,9 @@
       }
     };
     
-    // --- [नया] CART LOGIC ---
-    let cart = []; // यह हमारा नया कार्ट/सिलेक्शन ऐरे है
+    // --- [बदलाव 4] CART LOGIC ---
+    let cart = []; 
     
-    // कार्ट बटन को अपडेट करने का फंक्शन
     function updateCartButton() {
       const fab = document.getElementById('cart-fab');
       const count = document.getElementById('cart-count');
@@ -779,10 +689,55 @@
         fab.classList.remove('show');
       }
     }
+    
+    // [बदलाव 5] macOS जैसा Fly-to-Cart एनीमेशन
+    function flyToCart(event) {
+        try {
+            const card = event.target.closest('.tile-card');
+            const img = card.querySelector('.tile-image img');
+            if (!img) return;
 
-    // आइटम को कार्ट में जोड़ने या हटाने का फंक्शन
+            const fab = document.getElementById('cart-fab');
+            const fabRect = fab.getBoundingClientRect();
+            const imgRect = img.getBoundingClientRect();
+            
+            // 1. क्लोन बनाएं
+            const clone = img.cloneNode(true);
+            clone.classList.add('fly-to-cart-clone');
+            
+            // 2. क्लोन को स्टाइल करें (शुरुआती पोजीशन)
+            clone.style.position = 'fixed';
+            clone.style.top = `${imgRect.top}px`;
+            clone.style.left = `${imgRect.left}px`;
+            clone.style.width = `${imgRect.width}px`;
+            clone.style.height = `${imgRect.height}px`;
+            clone.style.opacity = '0.8';
+            
+            document.body.appendChild(clone);
+
+            // 3. एनीमेशन शुरू करें (टारगेट पोजीशन)
+            requestAnimationFrame(() => {
+                clone.style.top = `${fabRect.top + fabRect.height / 4}px`;
+                clone.style.left = `${fabRect.left + fabRect.width / 4}px`;
+                clone.style.width = '20px';
+                clone.style.height = 'auto';
+                clone.style.opacity = '0';
+                clone.style.transform = 'scale(0.1)';
+            });
+
+            // 4. क्लोन को हटा दें
+            setTimeout(() => {
+                clone.remove();
+            }, 600); // 600ms (एनीमेशन टाइम)
+
+        } catch (err) {
+            console.warn('Fly-to-cart animation failed:', err);
+        }
+    }
+
+
     function toggleSelection(event, designName) {
-      event.stopPropagation(); // कार्ड के क्लिक को रोकता है
+      event.stopPropagation();
       
       const tile = app.data.find(t => t.design_name === designName);
       if (!tile) return;
@@ -793,23 +748,21 @@
       const indexInCart = cart.findIndex(item => item.design_name === designName);
 
       if (indexInCart > -1) {
-        // --- कार्ट से हटाएं ---
         cart.splice(indexInCart, 1);
         button.innerHTML = '<i class="fas fa-plus"></i>';
         button.classList.remove('selected');
         card.classList.remove('selected');
       } else {
-        // --- कार्ट में जोड़ें ---
         cart.push(tile);
         button.innerHTML = '<i class="fas fa-check"></i>';
         button.classList.add('selected');
         card.classList.add('selected');
+        flyToCart(event); // [बदलाव 6] एनीमेशन को कॉल करें
       }
       
       updateCartButton();
     }
 
-    // कार्ट Modal खोलने का फंक्शन
     function openCartModal() {
       const modal = document.getElementById('cartModalOverlay');
       const content = document.getElementById('cart-modal-content');
@@ -849,20 +802,24 @@
       document.body.classList.add('modal-open');
     }
 
+    // [बदलाव 7] क्लोज़ Modal एनीमेशन के साथ
     function closeCartModal() {
-      document.getElementById('cartModalOverlay').style.display = 'none';
+      const modal = document.getElementById('cartModalOverlay');
+      modal.classList.add('closing');
       document.body.classList.remove('modal-open');
+      
+      setTimeout(() => {
+        modal.style.display = 'none';
+        modal.classList.remove('closing');
+      }, 300); // 300ms (एनीमेशन टाइम)
     }
 
-    // कार्ट से एक आइटम हटाना (जब कार्ट पॉप-अप में हो)
     function removeCartItem(designName) {
-      // 1. कार्ट ऐरे से हटाएं
       const indexInCart = cart.findIndex(item => item.design_name === designName);
       if (indexInCart > -1) {
         cart.splice(indexInCart, 1);
       }
       
-      // 2. मुख्य ग्रिड में UI अपडेट करें (अगर कार्ड अभी दिख रहा है)
       const card = Array.from(document.querySelectorAll('.tile-card')).find(c => c.innerHTML.includes(`'${designName}'`));
       if (card) {
         const button = card.querySelector('.select-btn');
@@ -871,20 +828,17 @@
         card.classList.remove('selected');
       }
       
-      // 3. कार्ट बटन और Modal को री-रेंडर करें
       updateCartButton();
       if (cart.length > 0) {
-        openCartModal(); // Modal को नए कार्ट के साथ रीफ्रेश करें
+        openCartModal(); 
       } else {
-        closeCartModal(); // अगर कार्ट खाली है तो बंद करें
+        closeCartModal(); 
       }
     }
 
-    // पूरा कार्ट खाली करें
     function clearCart() {
-      cart = []; // ऐरे खाली करें
+      cart = []; 
       
-      // सभी कार्ड्स से .selected क्लास हटाएं
       document.querySelectorAll('.tile-card.selected').forEach(card => {
         card.classList.remove('selected');
         const button = card.querySelector('.select-btn');
@@ -898,9 +852,6 @@
       closeCartModal();
     }
 
-    // --- [नया] बैच एक्शन लॉजिक ---
-
-    // 1. सब डाउनलोड करें
     function downloadAllSelected() {
       if (cart.length === 0) return;
       
@@ -908,14 +859,13 @@
       
       cart.forEach((tile, index) => {
         const downloadUrl = getDownloadUrl(tile.url);
-        // हर यूआरएल को थोड़ी देर से खोलें ताकि ब्राउज़र को समय मिले
         setTimeout(() => {
           window.open(downloadUrl, '_blank');
-        }, index * 300); // 300ms का गेप
+        }, index * 300);
       });
     }
 
-    // 2. सब शेयर करें (एडवांस तरीका)
+    // [बदलाव 8] शेयर लॉजिक (बिना टेक्स्ट के)
     async function shareAllSelected() {
       if (cart.length === 0) return;
 
@@ -927,13 +877,12 @@
 
       // 2. असली फ़ाइलें शेयर करने की कोशिश करें
       try {
-        // --- लोडिंग इंडिकेटर दिखाएं ---
         const shareBtn = document.querySelector('.cart-action-share');
         shareBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sharing...';
         shareBtn.disabled = true;
 
         const files = await Promise.all(cart.map(async (tile) => {
-          const response = await fetch(getFullImageUrl(tile.url)); // पूरी इमेज यूआरएल
+          const response = await fetch(getFullImageUrl(tile.url)); 
           const blob = await response.blob();
           return new File([blob], `${tile.design_name}.jpg`, { type: 'image/jpeg' });
         }));
@@ -942,20 +891,17 @@
         if (navigator.share && navigator.canShare({ files: files })) {
           await navigator.share({
             title: 'Tile Designs',
-            text: `Sharing ${files.length} tile designs.`,
+            // text: '...'  <-- टेक्स्ट लाइन हटा दी गई
             files: files
           });
-          // --- सफलता पर बटन रीसेट करें ---
           shareBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Share All';
           shareBtn.disabled = false;
         } else {
-          // 4. अगर फ़ाइलें शेयर नहीं हो सकतीं (जैसे डेस्कटॉप पर)
           throw new Error('File sharing not supported.');
         }
       } catch (error) {
-        // --- एरर पर बटन रीसेट करें ---
         const shareBtn = document.querySelector('.cart-action-share');
-        if(shareBtn) { // चेक करें कि modal अभी भी खुला है या नहीं
+        if(shareBtn) { 
             shareBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Share All';
             shareBtn.disabled = false;
         }
@@ -963,9 +909,9 @@
         console.error('File share failed, falling back to text:', error);
         
         // 5. टेक्स्ट फॉलबैक का उपयोग करें
-        if (navigator.share) { // टेक्स्ट शेयर करने का प्रयास करें
+        if (navigator.share) { 
           navigator.share({ title: 'Tile Designs', text: textFallback });
-        } else { // अंतिम फॉलबैक: WhatsApp लिंक
+        } else { 
           window.open(`https://wa.me/?text=${encodeURIComponent(textFallback)}`, '_blank');
         }
       }
@@ -976,14 +922,13 @@
     // PWA Install Logic
     let deferredPrompt;
     
-    // (PWA के बाकी फंक्शन अपरिवर्तित)
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
       const installPrompt = document.getElementById('installPrompt');
       if (!localStorage.getItem('install-dismissed')) {
         setTimeout(() => {
-          installPrompt.classList.add('show');
+          if(installPrompt) installPrompt.classList.add('show');
         }, 3000);
       }
     });
@@ -993,17 +938,14 @@
       const id = driveUrl?.match(/[-\w]{25,}/)?.[0];
       return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w400` : '';
     }
-
     function getDownloadUrl(driveUrl) {
       const id = driveUrl?.match(/[-\w]{25,}/)?.[0];
       return id ? `https://drive.google.com/uc?export=download&id=${id}` : driveUrl;
     }
-
     function getFullImageUrl(driveUrl) {
       const id = driveUrl?.match(/[-\w]{25,}/)?.[0];
       return id ? `https://lh3.googleusercontent.com/d/${id}=w1200` : '';
     }
-
     function fuzzySearch(query, text) {
       query = query.toLowerCase();
       text = text.toLowerCase();
@@ -1013,24 +955,19 @@
       }
       return queryIndex === query.length;
     }
-
     function getSuggestions(query) {
       if (!query.trim()) return [];
-      
       const selectedSize = app.elements.sizeFilter.value;
       let filteredBySize = app.data;
-      
       if (selectedSize) {
         filteredBySize = app.data.filter(tile => tile.dimensions === selectedSize);
       }
-      
       return filteredBySize
         .filter(tile => fuzzySearch(query, tile.design_name))
         .map(tile => tile.design_name)
         .filter((name, index, arr) => arr.indexOf(name) === index)
         .slice(0, 8);
     }
-
     function populateSizeFilter() {
       const sizes = [...new Set(app.data.map(t => t.dimensions))]
         .filter(Boolean)
@@ -1039,7 +976,6 @@
           const bNum = parseInt(b.match(/\d+/)?.[0] || '0');
           return aNum - bNum;
         });
-      
       app.elements.sizeFilter.innerHTML = '<option value="">All Sizes</option>';
       sizes.forEach(size => {
         const opt = document.createElement('option');
@@ -1048,27 +984,24 @@
         app.elements.sizeFilter.appendChild(opt);
       });
     }
-
     function showSuggestions(suggestions) {
       const container = app.elements.suggestions;
       if (!suggestions.length) {
         container.style.display = 'none';
         return;
       }
-      
       container.innerHTML = suggestions
         .map(name => `<div class="suggestion-item" onclick="selectSuggestion('${name}')">${name}</div>`)
         .join('');
       container.style.display = 'block';
     }
-
     function selectSuggestion(name) {
       app.elements.searchInput.value = name;
       app.elements.suggestions.style.display = 'none';
       applyFilters();
     }
 
-    // --- [संशोधित] renderTiles फंक्शन ---
+    // --- [बदलाव 9] संशोधित renderTiles फंक्शन ---
     function renderTiles() {
       const tilesToShow = app.filteredData.slice(0, app.displayedCount);
       
@@ -1086,7 +1019,6 @@
         const downloadUrl = getDownloadUrl(tile.url);
         const fullUrl = getFullImageUrl(tile.url);
         
-        // चेक करें कि क्या यह आइटम पहले से कार्ट में है
         const isInCart = cart.some(item => item.design_name === tile.design_name);
         const btnIcon = isInCart ? '<i class="fas fa-check"></i>' : '<i class="fas fa-plus"></i>';
         const btnClass = isInCart ? 'action-btn select-btn selected' : 'action-btn select-btn';
@@ -1261,9 +1193,17 @@
         app.elements.modal.addEventListener('click', (e) => {
           if (e.target === app.elements.modal) closeModal();
         });
+        
+        // [बदलाव] कार्ट modal के लिए क्लिक हैंडलर
+        document.getElementById('cartModalOverlay').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('cartModalOverlay')) closeCartModal();
+        });
 
         document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape') closeModal();
+          if (e.key === 'Escape') {
+              closeModal();
+              closeCartModal();
+          }
         });
 
         loadData();
@@ -1275,17 +1215,14 @@
         <i class="nav-icon fas fa-home"></i>
         <span>Home</span>
     </a>
-
     <a href="../project-price/index.html" class="nav-link">
         <i class="nav-icon fas fa-list-alt"></i>
         <span>Price List</span>
     </a>
-
     <a href="../project-calculator/index.html" class="nav-link">
         <i class="nav-icon fas fa-calculator"></i>
         <span>Calculator</span>
     </a>
-
     <a href="../project-tilesearch/index.html" class="nav-link active">
         <i class="nav-icon fas fa-search"></i>
         <span>Tiles</span>
