@@ -460,19 +460,15 @@
 
     /* [बदलाव 2] कार्ट Modal के अंदर का कंटेंट (बटन से जुड़ा हुआ) */
     #cartModalOverlay {
-      /* केंद्र के बजाय अब कोने में अलाइन होगा */
       align-items: flex-end;
       justify-content: flex-end;
       padding: 20px;
-      /* FAB और Nav Bar के लिए जगह */
       padding-bottom: calc(160px + var(--safe-area-bottom)); 
       padding-right: max(20px, env(safe-area-inset-right));
     }
     
     #cartModalOverlay .modal-content {
-      /* मूल Modal से एनीमेशन हटाया */
       animation: none; 
-      /* नया एनीमेशन और पोजीशन */
       max-width: 400px;
       max-height: 70vh;
       transform-origin: bottom right; /* यह जादू है! */
@@ -529,14 +525,9 @@
     .cart-action-share { background: linear-gradient(135deg, var(--success), var(--success-light)); }
     .cart-action-clear { background: linear-gradient(135deg, var(--warning), #f97316); }
     
-    /* [बदलाव 3] Fly-to-Cart एनीमेशन के लिए CSS */
-    .fly-to-cart-clone {
-      position: fixed;
-      z-index: 3000; /* सबसे ऊपर */
-      border-radius: var(--border-radius-sm);
-      transition: all 0.6s cubic-bezier(0.5, -0.5, 0.8, 0.5); /* macOS जैसा ईज़िंग */
-      pointer-events: none;
-    }
+    /* [बदलाव 3] Fly-to-Cart एनीमेशन के लिए CSS (हटा दिया गया) */
+    /* .fly-to-cart-clone { ... } */
+    
     /* === [नया] END CART STYLES === */
   </style>
 </head>
@@ -690,55 +681,9 @@
       }
     }
     
-    // [बदलाव 5] macOS जैसा Fly-to-Cart एनीमेशन
-    // [बदलाव] macOS जैसा Fly-to-Cart एनीमेशन
-    function flyToCart(event) {
-        try {
-            const card = event.target.closest('.tile-card');
-            const img = card.querySelector('.tile-image img');
-            if (!img) return;
+    // [बदलाव 5] flyToCart एनीमेशन हटा दिया गया
+    /* function flyToCart(event) { ... } */
 
-            const fab = document.getElementById('cart-fab');
-            if (!fab) return; // कार्ट बटन नहीं मिला
-            
-            const fabRect = fab.getBoundingClientRect();
-            const imgRect = img.getBoundingClientRect();
-            
-            // 1. क्लोन बनाएं
-            const clone = img.cloneNode(true);
-            clone.classList.add('fly-to-cart-clone'); // CSS transition इसी क्लास में है
-            
-            // 2. क्लोन को स्टाइल करें (शुरुआती पोजीशन)
-            clone.style.top = `${imgRect.top}px`;
-            clone.style.left = `${imgRect.left}px`;
-            clone.style.width = `${imgRect.width}px`;
-            clone.style.height = `${imgRect.height}px`;
-            clone.style.opacity = '0.8';
-            
-            document.body.appendChild(clone);
-
-            // 3. [नया] एनीमेशन को विश्वसनीय रूप से शुरू करें
-            // ब्राउज़र को क्लोन को "पेंट" करने के लिए एक पल दें
-            setTimeout(() => {
-                clone.style.top = `${fabRect.top + fabRect.height / 2 - 10}px`; // बटन के केंद्र में
-                clone.style.left = `${fabRect.left + fabRect.width / 2 - 10}px`; // बटन के केंद्र में
-                clone.style.width = '20px'; // छोटा करें
-                clone.style.height = '20px'; // छोटा करें
-                clone.style.opacity = '0';
-                clone.style.transform = 'scale(0.1)';
-            }, 10); // 10ms का छोटा सा डिले
-
-            // 4. क्लोन को हटा दें
-            setTimeout(() => {
-                if (clone.parentNode) {
-                    clone.parentNode.removeChild(clone);
-                }
-            }, 610); // 600ms (एनीमेशन) + 10ms (डिले)
-
-        } catch (err) {
-            console.warn('Fly-to-cart animation failed:', err);
-        }
-    }
 
     function toggleSelection(event, designName) {
       event.stopPropagation();
@@ -761,7 +706,8 @@
         button.innerHTML = '<i class="fas fa-check"></i>';
         button.classList.add('selected');
         card.classList.add('selected');
-        flyToCart(event); // [बदलाव 6] एनीमेशन को कॉल करें
+        // [बदलाव 6] एनीमेशन कॉल हटा दिया गया
+        // flyToCart(event); 
       }
       
       updateCartButton();
@@ -873,7 +819,7 @@
     async function shareAllSelected() {
       if (cart.length === 0) return;
 
-      // 1. पहले टेक्स्ट फॉलबैक तैयार करें
+      // 1. टेक्स्ट फॉलबैक तैयार करें
       let textFallback = 'Check out these tile designs:\n\n';
       cart.forEach((tile, index) => {
         textFallback += `${index + 1}. ${tile.design_name} (${tile.dimensions})\n${getDownloadUrl(tile.url)}\n\n`;
@@ -1093,7 +1039,6 @@
       document.body.classList.remove('modal-open');
     }
 
-    // --- (यह आपका मूल एडवांस शेयर फंक्शन है) ---
     async function shareToWhatsApp(name, url) {
       try {
         const response = await fetch(url);
@@ -1163,7 +1108,7 @@
               localStorage.setItem('install-dismissed', 'true');
             });
         }
-        
+
         window.addEventListener('appinstalled', () => {
           if(installPromptEl) installPromptEl.classList.remove('show');
           console.log('PWA installed successfully');
@@ -1198,7 +1143,6 @@
           if (e.target === app.elements.modal) closeModal();
         });
         
-        // [बदलाव] कार्ट modal के लिए क्लिक हैंडलर
         document.getElementById('cartModalOverlay').addEventListener('click', (e) => {
             if (e.target === document.getElementById('cartModalOverlay')) closeCartModal();
         });
