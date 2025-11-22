@@ -12,33 +12,30 @@
   <style>
     :root {
       /* --- NEW THEME MAPPED FROM LANDING PAGE (index (53)) --- */
-      --primary: #6366f1; /* from --primary-glow-1 */
-      --primary-light: #a855f7; /* from --primary-glow-2 */
+      --primary: #6366f1; 
+      --primary-light: #a855f7;
       
       --bg-primary: #0a0a0b;
-      --glass: rgba(30, 30, 35, 0.6); /* from --card-glass */
-      --glass-border: rgba(255, 255, 255, 0.1); /* from --card-border */
-      --glass-hover: rgba(35, 35, 40, 0.75); /* from --card-glass-hover */
+      --glass: rgba(30, 30, 35, 0.6);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --glass-hover: rgba(35, 35, 40, 0.75);
       
       --text-primary: #f0f6fc;
       --text-secondary: #c9d1d9;
-      --text-muted: #9ca3af; /* (kept for compatibility) */
+      --text-muted: #9ca3af;
       
-      --border-radius: 16px; /* from --radius-card */
-      --border-radius-sm: 10px; /* (proportional) */
-      /* --- END OF THEME MAP --- */
+      --border-radius: 16px;
+      --border-radius-sm: 10px;
 
-      /* --- KEPT FROM ORIGINAL CALCULATOR (Functional States) --- */
       --success: #10b981;
       --warning: #f59e0b;
       --error: #ef4444;
       
-      --bg-secondary: #1a1a1e; /* (kept for compatibility) */
+      --bg-secondary: #1a1a1e;
 
       --shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.2);
       
-      /* Safe area variables */
       --safe-area-top: env(safe-area-inset-top);
       --safe-area-bottom: env(safe-area-inset-bottom);
       --safe-area-left: env(safe-area-inset-left);
@@ -299,7 +296,7 @@
       appearance: none;
     }
 
-    /* Custom Select (for GST) */
+    /* Custom Select */
     .form-select {
       background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23d1d5db' stroke-width='2' fill='none'/></svg>");
       background-repeat: no-repeat;
@@ -330,13 +327,40 @@
     }
     .form-input.price-input { padding-left: 2.25rem; }
 
+    /* Search Input Wrapper & Clear Button */
+    .input-wrapper {
+        position: relative;
+    }
+    .sku-search {
+        padding-right: 35px; /* Make space for clear button */
+    }
+    .clear-sku-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        display: none; /* Hidden by default */
+        padding: 5px;
+        z-index: 5;
+    }
+    .clear-sku-btn:hover {
+        color: var(--text-primary);
+    }
+    .clear-sku-btn.show {
+        display: block;
+    }
+
     /* Suggestions Dropdown Style */
     .suggestions-list {
         position: absolute;
         top: 100%;
         left: 0;
         right: 0;
-        background: #1a1a1e; /* Slightly lighter than main bg */
+        background: #1a1a1e;
         border: 1px solid var(--glass-border);
         border-radius: 0 0 var(--border-radius-sm) var(--border-radius-sm);
         max-height: 200px;
@@ -697,6 +721,13 @@
               <label class="form-label">Tile Size & Thickness</label>
               <div class="input-wrapper">
                   <input type="text" class="form-input sku-search" data-card="0" placeholder="Search size (e.g. 1200)" autocomplete="off">
+                  <button class="clear-sku-btn" data-card="0" onclick="clearSkuSearch(0)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="15" y1="9" x2="9" y2="15"></line>
+                          <line x1="9" y1="9" x2="15" y2="15"></line>
+                      </svg>
+                  </button>
                   <input type="hidden" class="sku-selected-index" data-card="0" value="">
                   <div class="suggestions-list" id="suggestions-0"></div>
               </div>
@@ -745,10 +776,6 @@
           <div class="result-item">
             <div class="result-label">Boxes</div>
             <div class="result-value boxes-result">-</div>
-          </div>
-          <div class="result-item">
-            <div class="result-label">Pieces</div>
-            <div class="result-value pieces-result">-</div>
           </div>
           <div class="result-item">
             <div class="result-label">Area (ft²)</div>
@@ -940,11 +967,23 @@ window.addEventListener('DOMContentLoaded', () => {
       if(input) input.value = '';
       const hiddenInput = document.querySelector(`[data-card="${cardId}"].sku-selected-index`);
       if(hiddenInput) hiddenInput.value = '';
+      
+      // Hide clear button
+      const clearBtn = document.querySelector(`[data-card="${cardId}"].clear-sku-btn`);
+      if(clearBtn) clearBtn.classList.remove('show');
     }
 
     function handleSkuSearch(event, cardId) {
         const query = event.target.value.toLowerCase();
         const suggestionsList = document.getElementById(`suggestions-${cardId}`);
+        const clearBtn = document.querySelector(`[data-card="${cardId}"].clear-sku-btn`);
+        
+        // Toggle clear button visibility
+        if (query.length > 0) {
+            clearBtn.classList.add('show');
+        } else {
+            clearBtn.classList.remove('show');
+        }
         
         if (!query) {
             suggestionsList.style.display = 'none';
@@ -955,6 +994,21 @@ window.addEventListener('DOMContentLoaded', () => {
             .filter(item => item.sku.size.toLowerCase().includes(query));
 
         renderSuggestions(cardId, matches);
+    }
+    
+    function clearSkuSearch(cardId) {
+        const input = document.querySelector(`[data-card="${cardId}"].sku-search`);
+        const hiddenInput = document.querySelector(`[data-card="${cardId}"].sku-selected-index`);
+        const suggestionsList = document.getElementById(`suggestions-${cardId}`);
+        const clearBtn = document.querySelector(`[data-card="${cardId}"].clear-sku-btn`);
+        
+        if(input) input.value = '';
+        if(hiddenInput) hiddenInput.value = '';
+        if(suggestionsList) suggestionsList.style.display = 'none';
+        if(clearBtn) clearBtn.classList.remove('show');
+        
+        calculateCard(cardId);
+        input.focus();
     }
 
     function renderSuggestions(cardId, matches) {
@@ -1047,7 +1101,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
 
       card.querySelector('.boxes-result').textContent = numBoxes ? fmt.format(numBoxes) : '-';
-      card.querySelector('.pieces-result').textContent = pieces ? fmt.format(pieces) : '-';
+      // Removed pieces result
       card.querySelector('.area-ft2-result').textContent = areaFt2 ? fmt.format(areaFt2) : '-';
       card.querySelector('.weight-result').textContent = weight ? fmt3.format(weight) : '-';
       card.querySelector('.total-price-result').textContent = totalPrice > 0 ? '₹' + new Intl.NumberFormat('en-IN').format(Math.round(totalPrice)) : '-';
@@ -1061,7 +1115,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function resetCardResults(card) {
       card.querySelector('.boxes-result').textContent = '-';
-      card.querySelector('.pieces-result').textContent = '-';
+      // Removed pieces result
       card.querySelector('.area-ft2-result').textContent = '-';
       card.querySelector('.weight-result').textContent = '-';
       card.querySelector('.total-price-result').textContent = '-';
@@ -1133,6 +1187,13 @@ window.addEventListener('DOMContentLoaded', () => {
               <label class="form-label">Tile Size & Thickness</label>
               <div class="input-wrapper">
                   <input type="text" class="form-input sku-search" data-card="${cardId}" placeholder="Search size (e.g. 1200)" autocomplete="off">
+                  <button class="clear-sku-btn" data-card="${cardId}" onclick="clearSkuSearch(${cardId})">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="15" y1="9" x2="9" y2="15"></line>
+                          <line x1="9" y1="9" x2="15" y2="15"></line>
+                      </svg>
+                  </button>
                   <input type="hidden" class="sku-selected-index" data-card="${cardId}" value="">
                   <div class="suggestions-list" id="suggestions-${cardId}"></div>
               </div>
@@ -1181,10 +1242,6 @@ window.addEventListener('DOMContentLoaded', () => {
           <div class="result-item">
             <div class="result-label">Boxes</div>
             <div class="result-value boxes-result">-</div>
-          </div>
-          <div class="result-item">
-            <div class="result-label">Pieces</div>
-            <div class="result-value pieces-result">-</div>
           </div>
           <div class="result-item">
             <div class="result-label">Area (ft²)</div>
@@ -1258,8 +1315,11 @@ window.addEventListener('DOMContentLoaded', () => {
       if (firstCard) {
         const skuInput = firstCard.querySelector('.sku-search');
         const hiddenSku = firstCard.querySelector('.sku-selected-index');
+        const clearBtn = firstCard.querySelector('.clear-sku-btn');
+        
         if(skuInput) skuInput.value = '';
         if(hiddenSku) hiddenSku.value = '';
+        if(clearBtn) clearBtn.classList.remove('show');
         
         firstCard.querySelector('.quantity').value = '';
         firstCard.querySelector('.price').value = '';
@@ -1314,7 +1374,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
         text = `Size: ${sku.size} (${sku.thk})
 Boxes: ${card.querySelector('.boxes-result').textContent}
-Pieces: ${card.querySelector('.pieces-result').textContent}
 Area: ${card.querySelector('.area-ft2-result').textContent} (sq feet)
 Weight: ${card.querySelector('.weight-result').textContent} tons`;
 
@@ -1347,7 +1406,6 @@ Weight: ${card.querySelector('.weight-result').textContent} tons`;
             text += `ITEM ${index + 1}:\n`;
             text += `Size: ${sku.size} (${sku.thk})\n`;
             text += `Boxes: ${card.querySelector('.boxes-result').textContent}\n`;
-            text += `Pieces: ${card.querySelector('.pieces-result').textContent}\n`;
             text += `Area: ${card.querySelector('.area-ft2-result').textContent} (sq feet)\n`;
             text += `Weight: ${card.querySelector('.weight-result').textContent} tons\n`;
             
@@ -1413,11 +1471,14 @@ Weight: ${card.querySelector('.weight-result').textContent} tons`;
         card.querySelector('.price').value = '';
         card.querySelector('.gst').selectedIndex = 0;
         
-        // Clear Search Input
+        // Clear Search Input and Button
         const skuInput = card.querySelector('.sku-search');
         const hiddenSku = card.querySelector('.sku-selected-index');
+        const clearBtn = card.querySelector('.clear-sku-btn');
+        
         if(skuInput) skuInput.value = '';
         if(hiddenSku) hiddenSku.value = '';
+        if(clearBtn) clearBtn.classList.remove('show');
 
         const cardId = parseInt(card.dataset.cardId);
         calculateCard(cardId);
@@ -1476,7 +1537,7 @@ Weight: ${card.querySelector('.weight-result').textContent} tons`;
     calculateCard(0);
 
    
-    console.log('TilesPro Calculator - Search & Box Logic Updated! ⚡🚀');
+    console.log('TilesPro Calculator - Pieces Removed & Clear Button Added! ⚡🚀');
 
   </script>
 
