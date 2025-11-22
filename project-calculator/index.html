@@ -11,7 +11,7 @@
   
   <style>
     :root {
-      /* --- NEW THEME MAPPED FROM LANDING PAGE (index (53)) --- */
+      /* --- THEME VARIABLES --- */
       --primary: #6366f1; 
       --primary-light: #a855f7;
       
@@ -53,43 +53,18 @@
       top: 0;
       width: 100%;
       padding: 15px 20px;
-      border-bottom: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--glass-border);
       z-index: 100;
       overflow: hidden; 
       transition: transform 0.3s ease-out;
       will-change: transform;
+      background: rgba(10, 10, 11, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
     .app-header.header-hidden {
         transform: translateY(-100%);
-    }
-
-    .app-header::before {
-        content: '';
-        position: absolute;
-        z-index: -2;
-        top: -100%; 
-        left: -100%;
-        width: 300%;
-        height: 300%;
-        background: conic-gradient(
-            from 180deg at 50% 50%,
-            var(--primary-glow-1) 0%, 
-            var(--primary-glow-2) 33%, 
-            var(--primary-glow-3) 66%, 
-            var(--primary-glow-1) 100%
-        );
-        opacity: 0.3;
-    }
-
-    .app-header::after {
-        content: '';
-        position: absolute;
-        z-index: -1;
-        inset: 0; 
-        background: var(--header-glass); 
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
     }
 
     .header-content {
@@ -254,6 +229,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
       margin-bottom: 1rem;
+      transition: opacity 0.3s ease; /* Added for disable effect */
     }
     .form-group { position: relative; }
     .form-group.full-width { grid-column: span 2; }
@@ -294,6 +270,11 @@
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
+    }
+    
+    .form-input:disabled, .form-select:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
     }
 
     /* Custom Select */
@@ -438,7 +419,7 @@
       border-radius: var(--border-radius-sm);
       padding: 1rem;
       margin-bottom: 1.5rem;
-      transition: background 0.2s ease;
+      transition: all 0.3s ease; /* Changed for disable effect */
     }
     .price-section:hover { background: var(--glass-hover); }
 
@@ -659,9 +640,9 @@
     .bottom-nav {
         position: fixed; bottom: 0; left: 0; right: 0;
         height: calc(65px + var(--safe-area-bottom));
-        background: var(--header-glass);
+        background: var(--glass);
         backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-        border-top: 1px solid var(--card-border);
+        border-top: 1px solid var(--glass-border);
         display: flex; z-index: 1000;
         padding-bottom: var(--safe-area-bottom);
     }
@@ -885,44 +866,36 @@
 
   
   <script>
-    // --- Naya Header JS ---
-window.addEventListener('DOMContentLoaded', () => {
-
-    try {
-        if (typeof logoA_base64 !== 'undefined') {
-            document.getElementById('logoA').src = logoA_base64;
-        }
-        if (typeof logoGranicer2_base64 !== 'undefined') {
-            document.getElementById('logoGranicer2').src = logoGranicer2_base64;
-        }
-    } catch (e) {
-        console.error("Logo base64 data nahi mila. imagedata.js loaded hai?", e);
-    }
-
-    document.getElementById('refresh-btn').addEventListener('click', () => {
-        location.reload();
-    });
-
-    const header = document.querySelector('.app-header');
-    if (header) {
-        let lastScrollY = window.scrollY;
-
-        window.addEventListener('scroll', () => {
-            const currentScrollY = window.scrollY;
-
-            if (currentScrollY > lastScrollY && currentScrollY > 50) {
-                header.classList.add('header-hidden');
-            } else {
-                header.classList.remove('header-hidden');
+    window.addEventListener('DOMContentLoaded', () => {
+        try {
+            if (typeof logoA_base64 !== 'undefined') {
+                document.getElementById('logoA').src = logoA_base64;
             }
+            if (typeof logoGranicer2_base64 !== 'undefined') {
+                document.getElementById('logoGranicer2').src = logoGranicer2_base64;
+            }
+        } catch (e) {
+            console.error("Logo error", e);
+        }
 
-            lastScrollY = currentScrollY;
-        }, { passive: true });
-    }
+        document.getElementById('refresh-btn').addEventListener('click', () => {
+            location.reload();
+        });
 
-}); 
-// --- End Naya Header JS ---
-
+        const header = document.querySelector('.app-header');
+        if (header) {
+            let lastScrollY = window.scrollY;
+            window.addEventListener('scroll', () => {
+                const currentScrollY = window.scrollY;
+                if (currentScrollY > lastScrollY && currentScrollY > 50) {
+                    header.classList.add('header-hidden');
+                } else {
+                    header.classList.remove('header-hidden');
+                }
+                lastScrollY = currentScrollY;
+            }, { passive: true });
+        }
+    }); 
     
     // SKU Master Data
     const SKU_MASTER = [
@@ -949,6 +922,36 @@ window.addEventListener('DOMContentLoaded', () => {
 
     SKU_MASTER.sort((a, b) => a.ft2 - b.ft2);
 
+    // --- NEW FUNCTION: Controls enable/disable state ---
+    function toggleDependentFields(cardId, shouldEnable) {
+        const card = document.querySelector(`[data-card-id="${cardId}"]`);
+        if (!card) return;
+
+        // 1. Target elements
+        const inputs = card.querySelectorAll('.quantity, .price, .gst');
+        const modeButtons = card.querySelectorAll('.mode-option');
+        
+        // 2. Disable/Enable inputs
+        inputs.forEach(input => {
+            input.disabled = !shouldEnable;
+        });
+
+        // 3. Mode buttons visuals
+        modeButtons.forEach(btn => {
+            btn.style.pointerEvents = shouldEnable ? 'auto' : 'none';
+            btn.style.opacity = shouldEnable ? '1' : '0.5';
+        });
+
+        // 4. Visual Opacity for Sections
+        const formRows = card.querySelectorAll('.form-section .form-row:not(:first-child)'); 
+        const priceSec = card.querySelector('.price-section');
+
+        const opacity = shouldEnable ? '1' : '0.5';
+        
+        formRows.forEach(row => row.style.opacity = opacity);
+        if(priceSec) priceSec.style.opacity = opacity;
+    }
+
     const fmt = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 });
     const fmt3 = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 3 });
 
@@ -961,24 +964,18 @@ window.addEventListener('DOMContentLoaded', () => {
       return nums && nums.length ? parseFloat(nums[0]) : NaN;
     }
 
-    function initializeSelect(cardId) {
-      // Only clears the input, actual search is dynamic
-      const input = document.querySelector(`[data-card="${cardId}"].sku-search`);
-      if(input) input.value = '';
-      const hiddenInput = document.querySelector(`[data-card="${cardId}"].sku-selected-index`);
-      if(hiddenInput) hiddenInput.value = '';
-      
-      // Hide clear button
-      const clearBtn = document.querySelector(`[data-card="${cardId}"].clear-sku-btn`);
-      if(clearBtn) clearBtn.classList.remove('show');
-    }
-
     function handleSkuSearch(event, cardId) {
         const query = event.target.value.toLowerCase();
         const suggestionsList = document.getElementById(`suggestions-${cardId}`);
         const clearBtn = document.querySelector(`[data-card="${cardId}"].clear-sku-btn`);
+        const hiddenInput = document.querySelector(`[data-card="${cardId}"].sku-selected-index`);
         
-        // Toggle clear button visibility
+        // --- LOCK FIELDS WHEN TYPING ---
+        hiddenInput.value = ''; 
+        resetCardResults(document.querySelector(`[data-card-id="${cardId}"]`));
+        toggleDependentFields(cardId, false); 
+        // -------------------------------
+
         if (query.length > 0) {
             clearBtn.classList.add('show');
         } else {
@@ -1006,6 +1003,9 @@ window.addEventListener('DOMContentLoaded', () => {
         if(hiddenInput) hiddenInput.value = '';
         if(suggestionsList) suggestionsList.style.display = 'none';
         if(clearBtn) clearBtn.classList.remove('show');
+        
+        // --- LOCK FIELDS ON CLEAR ---
+        toggleDependentFields(cardId, false);
         
         calculateCard(cardId);
         input.focus();
@@ -1041,10 +1041,12 @@ window.addEventListener('DOMContentLoaded', () => {
         hiddenInput.value = index;
         suggestionsList.style.display = 'none';
 
+        // --- UNLOCK FIELDS ON SELECTION ---
+        toggleDependentFields(cardId, true);
+
         calculateCard(cardId);
     }
 
-    // Close suggestions when clicking outside
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.input-wrapper')) {
             document.querySelectorAll('.suggestions-list').forEach(list => list.style.display = 'none');
@@ -1073,25 +1075,22 @@ window.addEventListener('DOMContentLoaded', () => {
       }
 
       const pcsPerBox = sku.pcs;
-      const kgPerBox = parseKgMin(sku.kg); // Total weight of a box
-      const ft2PerBox = sku.ft2; // Total area of a box
+      const kgPerBox = parseKgMin(sku.kg); 
+      const ft2PerBox = sku.ft2; 
 
       let numBoxes = 0, pieces = 0, areaFt2 = 0, weight = 0, totalPrice = 0;
       const mode = cardModes[cardId] || 'area';
 
       if (quantity > 0) {
         if (mode === 'area') {
-          // Input is Area in ft2. Calculate full boxes needed to cover this area.
           numBoxes = Math.ceil(quantity / ft2PerBox);
         } else {
-          // Input is Number of Boxes.
           numBoxes = Math.ceil(quantity);
         }
         
-        // Calculate totals based on full boxes
         pieces = numBoxes * pcsPerBox;
         areaFt2 = numBoxes * ft2PerBox;
-        weight = (numBoxes * kgPerBox) / 1000; // Convert kg to tons
+        weight = (numBoxes * kgPerBox) / 1000; 
         
         if (pricePerFt2 > 0) {
           const basePrice = areaFt2 * pricePerFt2;
@@ -1101,7 +1100,6 @@ window.addEventListener('DOMContentLoaded', () => {
       }
 
       card.querySelector('.boxes-result').textContent = numBoxes ? fmt.format(numBoxes) : '-';
-      // Removed pieces result
       card.querySelector('.area-ft2-result').textContent = areaFt2 ? fmt.format(areaFt2) : '-';
       card.querySelector('.weight-result').textContent = weight ? fmt3.format(weight) : '-';
       card.querySelector('.total-price-result').textContent = totalPrice > 0 ? '₹' + new Intl.NumberFormat('en-IN').format(Math.round(totalPrice)) : '-';
@@ -1115,7 +1113,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function resetCardResults(card) {
       card.querySelector('.boxes-result').textContent = '-';
-      // Removed pieces result
       card.querySelector('.area-ft2-result').textContent = '-';
       card.querySelector('.weight-result').textContent = '-';
       card.querySelector('.total-price-result').textContent = '-';
@@ -1263,8 +1260,11 @@ window.addEventListener('DOMContentLoaded', () => {
       cardsContainer.appendChild(newCard);
       
       cardModes[cardId] = 'area';
-      // initializeSelect(cardId); // Not needed as it's now empty input
       setupCardEventListeners(cardId);
+      
+      // --- LOCK NEW CARD DEFAULT ---
+      toggleDependentFields(cardId, false);
+
       calculateCard(cardId);
     }
 
@@ -1326,6 +1326,10 @@ window.addEventListener('DOMContentLoaded', () => {
         firstCard.querySelector('.gst').selectedIndex = 0;
         cardModes[0] = 'area';
         setCardMode(0, 'area');
+
+        // --- LOCK ON RESET ---
+        toggleDependentFields(0, false);
+
         calculateCard(0);
       }
       
@@ -1471,7 +1475,6 @@ Weight: ${card.querySelector('.weight-result').textContent} tons`;
         card.querySelector('.price').value = '';
         card.querySelector('.gst').selectedIndex = 0;
         
-        // Clear Search Input and Button
         const skuInput = card.querySelector('.sku-search');
         const hiddenSku = card.querySelector('.sku-selected-index');
         const clearBtn = card.querySelector('.clear-sku-btn');
@@ -1481,6 +1484,10 @@ Weight: ${card.querySelector('.weight-result').textContent} tons`;
         if(clearBtn) clearBtn.classList.remove('show');
 
         const cardId = parseInt(card.dataset.cardId);
+        
+        // --- LOCK ON CLEAR ALL ---
+        toggleDependentFields(cardId, false);
+
         calculateCard(cardId);
       });
     }
@@ -1518,7 +1525,7 @@ Weight: ${card.querySelector('.weight-result').textContent} tons`;
     `;
     document.head.appendChild(style);
 
-    // Event Listeners - optimized
+    // Event Listeners
     document.getElementById('modeSwitch').addEventListener('click', (e) => {
       const option = e.target.closest('.mode-switch-option');
       if (option) switchMode(option.dataset.mode);
@@ -1532,12 +1539,14 @@ Weight: ${card.querySelector('.weight-result').textContent} tons`;
     document.getElementById('shareEmail').addEventListener('click', shareEmail);
 
     // Initialize
-    // initializeSelect(0); // Removed, as we now start with empty search
     setupCardEventListeners(0);
+    
+    // --- INITIAL LOCK ---
+    toggleDependentFields(0, false);
+    
     calculateCard(0);
 
-   
-    console.log('TilesPro Calculator - Pieces Removed & Clear Button Added! ⚡🚀');
+    console.log('TilesPro Calculator - Smart Lock Active 🔒');
 
   </script>
 
