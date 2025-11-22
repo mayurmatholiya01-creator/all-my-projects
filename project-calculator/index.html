@@ -11,7 +11,7 @@
   
   <style>
     :root {
-      /* --- NEW THEME MAPPED FROM LANDING PAGE (index (53)) --- */
+      /* --- THEME VARIABLES --- */
       --primary: #6366f1; 
       --primary-light: #a855f7;
       
@@ -53,7 +53,7 @@
       top: 0;
       width: 100%;
       padding: 15px 20px;
-      border-bottom: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--glass-border);
       z-index: 100;
       overflow: hidden; 
       transition: transform 0.3s ease-out;
@@ -74,10 +74,10 @@
         height: 300%;
         background: conic-gradient(
             from 180deg at 50% 50%,
-            var(--primary-glow-1) 0%, 
-            var(--primary-glow-2) 33%, 
-            var(--primary-glow-3) 66%, 
-            var(--primary-glow-1) 100%
+            var(--primary) 0%, 
+            var(--primary-light) 33%, 
+            #ec4899 66%, 
+            var(--primary) 100%
         );
         opacity: 0.3;
     }
@@ -87,7 +87,7 @@
         position: absolute;
         z-index: -1;
         inset: 0; 
-        background: var(--header-glass); 
+        background: rgba(10, 10, 11, 0.7); 
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
     }
@@ -296,6 +296,21 @@
       appearance: none;
     }
 
+    /* LOCK STYLE - IMPORTANT */
+    .form-input:disabled, .form-select:disabled {
+        background: rgba(20, 20, 25, 0.4);
+        color: var(--text-muted);
+        border-color: transparent;
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+    
+    /* Locked mode toggle */
+    .mode-toggle.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
     /* Custom Select */
     .form-select {
       background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23d1d5db' stroke-width='2' fill='none'/></svg>");
@@ -332,7 +347,7 @@
         position: relative;
     }
     .sku-search {
-        padding-right: 35px; /* Make space for clear button */
+        padding-right: 35px;
     }
     .clear-sku-btn {
         position: absolute;
@@ -343,7 +358,7 @@
         border: none;
         color: var(--text-muted);
         cursor: pointer;
-        display: none; /* Hidden by default */
+        display: none;
         padding: 5px;
         z-index: 5;
     }
@@ -371,7 +386,7 @@
         display: none;
     }
     .suggestion-item {
-        padding: 10px 15px;
+        padding: 12px 15px;
         color: var(--text-primary);
         font-size: 0.9rem;
         border-bottom: 1px solid var(--glass-border);
@@ -400,6 +415,7 @@
       padding: 4px;
       position: relative;
       border: 1px solid var(--glass-border);
+      transition: opacity 0.2s ease;
     }
     .mode-option {
       flex: 1;
@@ -442,10 +458,10 @@
     }
     .price-section:hover { background: var(--glass-hover); }
 
-    /* Results grid */
+    /* Results grid - UPDATED to 4 columns */
     .results-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr; /* 2 columns for mobile readability */
       gap: 0.875rem;
       margin-bottom: 1rem;
     }
@@ -568,7 +584,7 @@
     }
     .grand-total-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr; /* Adjusted to 2 col for balance */
       gap: 0.875rem;
     }
     .grand-total-item {
@@ -792,479 +808,15 @@
         </div>
 
         <div class="results-meta">Select tile specifications to see calculations</div>
-
-        <div class="basic-share-section">
-          <button class="share-btn share-whatsapp" onclick="shareWhatsApp()">
-            <svg class="share-icon" viewBox="0 0 24 24">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.891 3.486"/>
-            </svg>
-          </button>
-          <button class="share-btn share-sms" onclick="shareSMS()">
-            <svg class="share-icon" viewBox="0 0 24 24">
-              <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0 -1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z"/>
-            </svg>
-          </button>
-          <button class="share-btn share-email" onclick="shareEmail()">
-            <svg class="share-icon" viewBox="0 0 24 24">
-              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-            </svg>
-          </button>
-          <button class="share-btn share-copy" onclick="copyToClipboard()">
-            <svg class="share-icon" viewBox="0 0 24 24">
-              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-            </svg>
-          </button>
-          <button class="share-btn share-clear" onclick="clearAll()">
-            <svg class="share-icon" viewBox="0 0 24 24">
-              <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <button class="add-more-btn" id="addMoreBtn">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;">
-        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-      </svg>
-      Add More Item
-    </button>
-
-    <div class="grand-total">
-      <div class="grand-total-header">Grand Total</div>
-      <div class="grand-total-grid">
-        <div class="grand-total-item">
-          <div class="grand-total-label">Total Boxes</div>
-          <div class="grand-total-value" id="grandTotalBoxes">-</div>
-        </div>
-        <div class="grand-total-item">
-          <div class="grand-total-label">Total Area</div>
-          <div class="grand-total-value" id="grandTotalArea">-</div>
-        </div>
-        <div class="grand-total-item">
-          <div class="grand-total-label">Total Weight</div>
-          <div class="grand-total-value" id="grandTotalWeight">-</div>
-        </div>
-        <div class="grand-total-item">
-          <div class="grand-total-label">Final Amount</div>
-          <div class="grand-total-value" id="grandFinalAmount">-</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="share-section">
-      <button class="share-btn share-whatsapp" id="shareWhatsapp">
-        <svg class="share-icon" viewBox="0 0 24 24">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.891 3.486"/>
-        </svg>
-      </button>
-      <button class="share-btn share-sms" id="shareSMS">
-        <svg class="share-icon" viewBox="0 0 24 24">
-          <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0 -1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z"/>
-        </svg>
-      </button>
-      <button class="share-btn share-email" id="shareEmail">
-        <svg class="share-icon" viewBox="0 0 24 24">
-          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-        </svg>
-      </button>
-      <button class="share-btn share-copy" id="copyBtn">
-        <svg class="share-icon" viewBox="0 0 24 24">
-          <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-        </svg>
-      </button>
-      <button class="share-btn share-clear" id="clearBtn">
-        <svg class="share-icon" viewBox="0 0 24 24">
-          <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-        </svg>
-      </button>
-    </div>
-  </div>
-
-  <div class="copy-message" id="copyMessage">✓ Details copied to clipboard!</div>
-
-  
-  <script>
-    // --- Naya Header JS ---
-window.addEventListener('DOMContentLoaded', () => {
-
-    try {
-        if (typeof logoA_base64 !== 'undefined') {
-            document.getElementById('logoA').src = logoA_base64;
-        }
-        if (typeof logoGranicer2_base64 !== 'undefined') {
-            document.getElementById('logoGranicer2').src = logoGranicer2_base64;
-        }
-    } catch (e) {
-        console.error("Logo base64 data nahi mila. imagedata.js loaded hai?", e);
-    }
-
-    document.getElementById('refresh-btn').addEventListener('click', () => {
-        location.reload();
-    });
-
-    const header = document.querySelector('.app-header');
-    if (header) {
-        let lastScrollY = window.scrollY;
-
-        window.addEventListener('scroll', () => {
-            const currentScrollY = window.scrollY;
-
-            if (currentScrollY > lastScrollY && currentScrollY > 50) {
-                header.classList.add('header-hidden');
-            } else {
-                header.classList.remove('header-hidden');
-            }
-
-            lastScrollY = currentScrollY;
-        }, { passive: true });
-    }
-
-}); 
-// --- End Naya Header JS ---
-
-    
-    // SKU Master Data
-    const SKU_MASTER = [
-      {size:"1200x1200",thk:"9MM",pcs:2,kg:"61",ft2:31.0,m2:2.88},
-      {size:"1200x1790",thk:"9MM",pcs:2,kg:"91",ft2:46.242,m2:4.296},
-      {size:"1200x1800",thk:"9MM",pcs:2,kg:"91 TO 96.5",ft2:46.5,m2:4.32},
-      {size:"1200x2400",thk:"9MM",pcs:1,kg:"62",ft2:31.0,m2:2.88},
-      {size:"1200x2800",thk:"6MM",pcs:1,kg:"50.5",ft2:36.167,m2:3.36},
-      {size:"1200x3180",thk:"15MM",pcs:1,kg:"136",ft2:41.075,m2:3.816},
-      {size:"1200x3200",thk:"15MM",pcs:1,kg:"136",ft2:41.337,m2:3.84},
-      {size:"1600x1600",thk:"9MM",pcs:1,kg:"55",ft2:27.556,m2:2.56},
-      {size:"1600x3200",thk:"6MM",pcs:1,kg:"74",ft2:55.116,m2:5.12},
-      {size:"1600x3200",thk:"12MM",pcs:1,kg:"148",ft2:55.116,m2:5.12},
-      {size:"1620x3240",thk:"12MM",pcs:1,kg:"150",ft2:56.5,m2:5.249},
-      {size:"790x2980",thk:"15MM",pcs:1,kg:"87",ft2:25.338,m2:2.354},
-      {size:"800x3000",thk:"15MM",pcs:1,kg:"84.5",ft2:25.834,m2:2.4},
-      {size:"800x2400",thk:"15MM",pcs:1,kg:"67.5",ft2:20.67,m2:1.9},
-      {size:"1000x3000",thk:"5MM",pcs:1,kg:"35.5",ft2:32.29,m2:3.0},
-      {size:"1200x2600",thk:"6MM",pcs:1,kg:"42.5",ft2:33.58,m2:3.1},
-      {size:"1200x3000",thk:"9MM",pcs:1,kg:"77.5",ft2:38.75,m2:3.6},
-      {size:"1200x3200",thk:"15MM",pcs:1,kg:"136",ft2:41.33,m2:3.8},
-      {size:"800x3200",thk:"15MM",pcs:1,kg:"74",ft2:27.56,m2:2.6},
-    ];
-
-    SKU_MASTER.sort((a, b) => a.ft2 - b.ft2);
-
-    const fmt = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 });
-    const fmt3 = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 3 });
-
-    let currentAppMode = 'basic';
-    let cardCounter = 1;
-    let cardModes = { 0: 'area' };
-
-    function parseKgMin(value) {
-      const nums = String(value).match(/[\d.]+/g);
-      return nums && nums.length ? parseFloat(nums[0]) : NaN;
-    }
-
-    function initializeSelect(cardId) {
-      // Only clears the input, actual search is dynamic
-      const input = document.querySelector(`[data-card="${cardId}"].sku-search`);
-      if(input) input.value = '';
-      const hiddenInput = document.querySelector(`[data-card="${cardId}"].sku-selected-index`);
-      if(hiddenInput) hiddenInput.value = '';
-      
-      // Hide clear button
-      const clearBtn = document.querySelector(`[data-card="${cardId}"].clear-sku-btn`);
-      if(clearBtn) clearBtn.classList.remove('show');
-    }
-
-    function handleSkuSearch(event, cardId) {
-        const query = event.target.value.toLowerCase();
-        const suggestionsList = document.getElementById(`suggestions-${cardId}`);
-        const clearBtn = document.querySelector(`[data-card="${cardId}"].clear-sku-btn`);
-        
-        // Toggle clear button visibility
-        if (query.length > 0) {
-            clearBtn.classList.add('show');
-        } else {
-            clearBtn.classList.remove('show');
-        }
-        
-        if (!query) {
-            suggestionsList.style.display = 'none';
-            return;
-        }
-
-        const matches = SKU_MASTER.map((sku, index) => ({ sku, index }))
-            .filter(item => item.sku.size.toLowerCase().includes(query));
-
-        renderSuggestions(cardId, matches);
-    }
-    
-    function clearSkuSearch(cardId) {
-        const input = document.querySelector(`[data-card="${cardId}"].sku-search`);
-        const hiddenInput = document.querySelector(`[data-card="${cardId}"].sku-selected-index`);
-        const suggestionsList = document.getElementById(`suggestions-${cardId}`);
-        const clearBtn = document.querySelector(`[data-card="${cardId}"].clear-sku-btn`);
-        
-        if(input) input.value = '';
-        if(hiddenInput) hiddenInput.value = '';
-        if(suggestionsList) suggestionsList.style.display = 'none';
-        if(clearBtn) clearBtn.classList.remove('show');
-        
-        calculateCard(cardId);
-        input.focus();
-    }
-
-    function renderSuggestions(cardId, matches) {
-        const suggestionsList = document.getElementById(`suggestions-${cardId}`);
-        suggestionsList.innerHTML = '';
-
-        if (matches.length === 0) {
-            suggestionsList.style.display = 'none';
-            return;
-        }
-
-        matches.forEach(match => {
-            const div = document.createElement('div');
-            div.className = 'suggestion-item';
-            div.textContent = `${match.sku.size} (${match.sku.thk})`;
-            div.onclick = () => selectSku(cardId, match.index);
-            suggestionsList.appendChild(div);
-        });
-
-        suggestionsList.style.display = 'block';
-    }
-
-    function selectSku(cardId, index) {
-        const sku = SKU_MASTER[index];
-        const input = document.querySelector(`[data-card="${cardId}"].sku-search`);
-        const hiddenInput = document.querySelector(`[data-card="${cardId}"].sku-selected-index`);
-        const suggestionsList = document.getElementById(`suggestions-${cardId}`);
-
-        input.value = `${sku.size} (${sku.thk})`;
-        hiddenInput.value = index;
-        suggestionsList.style.display = 'none';
-
-        calculateCard(cardId);
-    }
-
-    // Close suggestions when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.input-wrapper')) {
-            document.querySelectorAll('.suggestions-list').forEach(list => list.style.display = 'none');
-        }
-    });
-
-    function getSelectedSKU(cardId) {
-      const hiddenInput = document.querySelector(`[data-card="${cardId}"].sku-selected-index`);
-      if (!hiddenInput || hiddenInput.value === '') return null;
-      const index = parseInt(hiddenInput.value);
-      return SKU_MASTER[index];
-    }
-
-    function calculateCard(cardId) {
-      const card = document.querySelector(`[data-card-id="${cardId}"]`);
-      if (!card) return;
-
-      const sku = getSelectedSKU(cardId);
-      const quantity = parseFloat(card.querySelector('.quantity').value || 0);
-      const pricePerFt2 = parseFloat(card.querySelector('.price').value || 0);
-      const gstRate = parseFloat(card.querySelector('.gst').value || 0);
-      
-      if (!sku) {
-        resetCardResults(card);
-        return;
-      }
-
-      const pcsPerBox = sku.pcs;
-      const kgPerBox = parseKgMin(sku.kg); // Total weight of a box
-      const ft2PerBox = sku.ft2; // Total area of a box
-
-      let numBoxes = 0, pieces = 0, areaFt2 = 0, weight = 0, totalPrice = 0;
-      const mode = cardModes[cardId] || 'area';
-
-      if (quantity > 0) {
-        if (mode === 'area') {
-          // Input is Area in ft2. Calculate full boxes needed to cover this area.
-          numBoxes = Math.ceil(quantity / ft2PerBox);
-        } else {
-          // Input is Number of Boxes.
-          numBoxes = Math.ceil(quantity);
-        }
-        
-        // Calculate totals based on full boxes
-        pieces = numBoxes * pcsPerBox;
-        areaFt2 = numBoxes * ft2PerBox;
-        weight = (numBoxes * kgPerBox) / 1000; // Convert kg to tons
-        
-        if (pricePerFt2 > 0) {
-          const basePrice = areaFt2 * pricePerFt2;
-          const gstAmount = basePrice * (gstRate / 100);
-          totalPrice = basePrice + gstAmount;
-        }
-      }
-
-      card.querySelector('.boxes-result').textContent = numBoxes ? fmt.format(numBoxes) : '-';
-      // Removed pieces result
-      card.querySelector('.area-ft2-result').textContent = areaFt2 ? fmt.format(areaFt2) : '-';
-      card.querySelector('.weight-result').textContent = weight ? fmt3.format(weight) : '-';
-      card.querySelector('.total-price-result').textContent = totalPrice > 0 ? '₹' + new Intl.NumberFormat('en-IN').format(Math.round(totalPrice)) : '-';
-      
-      card.querySelector('.results-meta').textContent = `${pcsPerBox} pcs/box • ${sku.ft2} ft²/box • ${sku.m2} m²/box • ~${parseKgMin(sku.kg)} kg/box`;
-      
-      if (currentAppMode === 'advanced') {
-        updateGrandTotal();
-      }
-    }
-
-    function resetCardResults(card) {
-      card.querySelector('.boxes-result').textContent = '-';
-      // Removed pieces result
-      card.querySelector('.area-ft2-result').textContent = '-';
-      card.querySelector('.weight-result').textContent = '-';
-      card.querySelector('.total-price-result').textContent = '-';
-      card.querySelector('.results-meta').textContent = 'Select tile specifications to see calculations';
-    }
-
-    function updateGrandTotal() {
-      const cards = document.querySelectorAll('.calculator-card');
-      let totalBoxes = 0, totalArea = 0, totalWeight = 0, totalFinalAmount = 0;
-
-      cards.forEach(card => {
-        const boxes = parseFloat(card.querySelector('.boxes-result').textContent.replace(/[^0-9.-]+/g,"") || 0);
-        const area = parseFloat(card.querySelector('.area-ft2-result').textContent.replace(/[^0-9.-]+/g,"") || 0);
-        const weight = parseFloat(card.querySelector('.weight-result').textContent.replace(/[^0-9.-]+/g,"") || 0);
-        const finalAmount = parseFloat(card.querySelector('.total-price-result').textContent.replace(/[^0-9.-]+/g,"") || 0);
-        
-        totalBoxes += boxes;
-        totalArea += area;
-        totalWeight += weight;
-        totalFinalAmount += finalAmount;
-      });
-
-      document.getElementById('grandTotalBoxes').textContent = totalBoxes > 0 ? fmt.format(totalBoxes) : '-';
-      document.getElementById('grandTotalArea').textContent = totalArea > 0 ? fmt.format(totalArea) + ' ft²' : '-';
-      document.getElementById('grandTotalWeight').textContent = totalWeight > 0 ? fmt3.format(totalWeight) + ' tons' : '-';
-      document.getElementById('grandFinalAmount').textContent = totalFinalAmount > 0 ? '₹' + new Intl.NumberFormat('en-IN').format(Math.round(totalFinalAmount)) : '-';
-    }
-
-    function setCardMode(cardId, mode) {
-      cardModes[cardId] = mode;
-      const card = document.querySelector(`[data-card-id="${cardId}"]`);
-      const modeToggle = card.querySelector('.mode-toggle');
-      const inputLabel = card.querySelector('.input-label');
-      const quantityInput = card.querySelector('.quantity');
-      
-      modeToggle.classList.toggle('boxes-mode', mode === 'boxes');
-      
-      const options = modeToggle.querySelectorAll('.mode-option');
-      options.forEach(opt => {
-        opt.classList.toggle('active', opt.dataset.mode === mode);
-      });
-      
-      inputLabel.textContent = mode === 'area' ? 'Area (ft²)' : 'Boxes';
-      quantityInput.placeholder = mode === 'area' ? 'e.g. 2000' : 'e.g. 50';
-      
-      calculateCard(cardId);
-    }
-
-    function addMoreCard() {
-      if (currentAppMode !== 'advanced') return;
-      
-      const cardId = cardCounter++;
-      const cardsContainer = document.getElementById('calculatorCards');
-      
-      const newCard = document.createElement('div');
-      newCard.className = 'calculator-card';
-      newCard.dataset.cardId = cardId;
-      
-      newCard.innerHTML = `
-        <button class="delete-card-btn" onclick="deleteCard(${cardId})">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-          </svg>
-        </button>
-
-        <div class="form-section">
-          <div class="form-row">
-            <div class="form-group full-width" style="position: relative;">
-              <label class="form-label">Tile Size & Thickness</label>
-              <div class="input-wrapper">
-                  <input type="text" class="form-input sku-search" data-card="${cardId}" placeholder="Search size (e.g. 1200)" autocomplete="off">
-                  <button class="clear-sku-btn" data-card="${cardId}" onclick="clearSkuSearch(${cardId})">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <circle cx="12" cy="12" r="10"></circle>
-                          <line x1="15" y1="9" x2="9" y2="15"></line>
-                          <line x1="9" y1="9" x2="15" y2="15"></line>
-                      </svg>
-                  </button>
-                  <input type="hidden" class="sku-selected-index" data-card="${cardId}" value="">
-                  <div class="suggestions-list" id="suggestions-${cardId}"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group full-width">
-              <label class="form-label">Calculation Mode</label>
-              <div class="mode-toggle" data-card="${cardId}">
-                <button class="mode-option active" data-mode="area">Area (ft²)</button>
-                <button class="mode-option" data-mode="boxes">Boxes</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group full-width">
-              <label class="form-label input-label">Area (ft²)</label>
-              <input type="number" class="form-input quantity" data-card="${cardId}" placeholder="Enter value..." min="0" step="0.01" inputmode="decimal">
-            </div>
-          </div>
-        </div>
-
-        <div class="price-section">
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">Price/sq feet</label>
-              <div class="price-input-container">
-                <input type="number" class="form-input price-input price" data-card="${cardId}" placeholder="Enter price..." min="0" step="0.01" inputmode="decimal">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="gst-label-centered">GST</div>
-              <select class="form-select gst" data-card="${cardId}">
-                <option value="0">Without GST</option>
-                <option value="18">18%</option>
-                <option value="12">12%</option>
-                <option value="5">5%</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="results-grid">
-          <div class="result-item">
-            <div class="result-label">Boxes</div>
-            <div class="result-value boxes-result">-</div>
-          </div>
-          <div class="result-item">
-            <div class="result-label">Area (ft²)</div>
-            <div class="result-value area-ft2-result">-</div>
-          </div>
-          <div class="result-item">
-            <div class="result-label">Weight (tons)</div>
-            <div class="result-value weight-result">-</div>
-          </div>
-          <div class="result-item">
-            <div class="result-label">Total Amount</div>
-            <div class="result-value total-price-result">-</div>
-          </div>
-        </div>
-
-        <div class="results-meta">Select tile specifications to see calculations</div>
       `;
       
       cardsContainer.appendChild(newCard);
       
       cardModes[cardId] = 'area';
-      // initializeSelect(cardId); // Not needed as it's now empty input
       setupCardEventListeners(cardId);
+      
+      // Initially lock
+      toggleCardInputs(cardId, false);
       calculateCard(cardId);
     }
 
@@ -1289,6 +841,10 @@ window.addEventListener('DOMContentLoaded', () => {
       const searchInput = card.querySelector('.sku-search');
       if(searchInput) {
           searchInput.addEventListener('input', (e) => handleSkuSearch(e, cardId));
+          // Prevent form submission on enter
+          searchInput.addEventListener('keydown', (e) => {
+              if(e.key === 'Enter') e.preventDefault();
+          });
       }
 
       card.querySelector('.quantity').addEventListener('input', () => calculateCard(cardId));
@@ -1298,7 +854,10 @@ window.addEventListener('DOMContentLoaded', () => {
       card.querySelector('.mode-toggle').addEventListener('click', (e) => {
         const option = e.target.closest('.mode-option');
         if (option) {
-          setCardMode(cardId, option.dataset.mode);
+          const modeToggle = card.querySelector('.mode-toggle');
+          if(modeToggle.style.pointerEvents !== 'none') {
+              setCardMode(cardId, option.dataset.mode);
+          }
         }
       });
     }
@@ -1326,6 +885,8 @@ window.addEventListener('DOMContentLoaded', () => {
         firstCard.querySelector('.gst').selectedIndex = 0;
         cardModes[0] = 'area';
         setCardMode(0, 'area');
+        
+        toggleCardInputs(0, false);
         calculateCard(0);
       }
       
@@ -1471,7 +1032,7 @@ Weight: ${card.querySelector('.weight-result').textContent} tons`;
         card.querySelector('.price').value = '';
         card.querySelector('.gst').selectedIndex = 0;
         
-        // Clear Search Input and Button
+        // Clear Search
         const skuInput = card.querySelector('.sku-search');
         const hiddenSku = card.querySelector('.sku-selected-index');
         const clearBtn = card.querySelector('.clear-sku-btn');
@@ -1481,6 +1042,7 @@ Weight: ${card.querySelector('.weight-result').textContent} tons`;
         if(clearBtn) clearBtn.classList.remove('show');
 
         const cardId = parseInt(card.dataset.cardId);
+        toggleCardInputs(cardId, false);
         calculateCard(cardId);
       });
     }
@@ -1518,7 +1080,7 @@ Weight: ${card.querySelector('.weight-result').textContent} tons`;
     `;
     document.head.appendChild(style);
 
-    // Event Listeners - optimized
+    // Event Listeners
     document.getElementById('modeSwitch').addEventListener('click', (e) => {
       const option = e.target.closest('.mode-switch-option');
       if (option) switchMode(option.dataset.mode);
@@ -1532,12 +1094,12 @@ Weight: ${card.querySelector('.weight-result').textContent} tons`;
     document.getElementById('shareEmail').addEventListener('click', shareEmail);
 
     // Initialize
-    // initializeSelect(0); // Removed, as we now start with empty search
     setupCardEventListeners(0);
+    toggleCardInputs(0, false);
     calculateCard(0);
 
    
-    console.log('TilesPro Calculator - Pieces Removed & Clear Button Added! ⚡🚀');
+    console.log('TilesPro Calculator - Strict Validation & Locked Mode Active! ⚡🚀');
 
   </script>
 
